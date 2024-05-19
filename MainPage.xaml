@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ScannerAndDistributionOfQRCodes.MainPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:cv ="clr-namespace:Camera.MAUI;assembly=Camera.MAUI">
+
+    <Grid ColumnDefinitions="*,*">
+        <StackLayout Grid.Column="1">
+            <Image x:Name="resalQrCodeImage" WidthRequest="300" HeightRequest="300"/>
+            <Editor x:Name="editor" Completed ="editor_Completed"  HorizontalOptions="CenterAndExpand"/>
+            <Button Text="Tap" Clicked="Button_Clicked" />
+            <Button Text="stop" Clicked="Button_Clicked_1" />
+        </StackLayout>
+
+        <StackLayout Grid.Column="0">
+            <Image  x:Name="caemtra" Source="{Binding QRImage}" WidthRequest="300" HeightRequest="300"/>
+            <Image x:Name="QrCodeImage" WidthRequest="100" HeightRequest="100"/>
+
+            <TimePicker x:Name="timer" Time="1"    />
+        </StackLayout>
+    </Grid>
+
+</ContentPage>

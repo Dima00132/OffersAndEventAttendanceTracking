@@ -7,17 +7,37 @@
 
     <Grid ColumnDefinitions="*,*">
         <StackLayout Grid.Column="1">
+            <Image x:Name="QrCodeImage" WidthRequest="100" HeightRequest="100"/>
             <Image x:Name="resalQrCodeImage" WidthRequest="300" HeightRequest="300"/>
-            <Editor x:Name="editor" Completed ="editor_Completed"  HorizontalOptions="CenterAndExpand"/>
-            <Button Text="Tap" Clicked="Button_Clicked" />
-            <Button Text="stop" Clicked="Button_Clicked_1" />
+           
+         
         </StackLayout>
 
         <StackLayout Grid.Column="0">
-            <Image  x:Name="caemtra" Source="{Binding QRImage}" WidthRequest="300" HeightRequest="300"/>
-            <Image x:Name="QrCodeImage" WidthRequest="100" HeightRequest="100"/>
+            <Picker  ItemsSource="{Binding ItemsPicker}" SelectedIndex="{Binding CurrentDeviceCameraName}" TextColor="Black" Title="Выбор камеры"/>
 
-            <TimePicker x:Name="timer" Time="1"    />
+            <Image  x:Name="caemtra" Source="{Binding QRImage}" WidthRequest="300" HeightRequest="300"/>
+            <Button Command="{Binding StartScannerCommand}">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button"
+                      Binding="{Binding IsCameraLaunched, Mode=TwoWay}"
+                      Value="True">
+                        <Setter  Property="Text"
+                      Value="Прекратить сканирование"/>
+                        <Setter  Property="BackgroundColor"
+                      Value="Red"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Button"
+                      Binding="{Binding IsCameraLaunched, Mode=TwoWay}"
+                      Value="false">
+                        <Setter  Property="Text"
+                      Value="Начать сканирование"/>
+                        <Setter  Property="BackgroundColor"
+                      Value="Green"/>
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+
         </StackLayout>
     </Grid>
 

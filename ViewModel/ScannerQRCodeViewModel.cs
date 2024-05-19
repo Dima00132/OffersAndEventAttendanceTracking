@@ -15,6 +15,13 @@ using ZXing.Common;
 using ZXing.Windows.Compatibility;
 using ZXing;
 using ScannerAndDistributionOfQRCodes.ViewModel.Base;
+using ScannerAndDistributionOfQRCodes.Model.QRCode;
+using ScannerAndDistributionOfQRCodes.Model.Interface;
+using System.Reflection;
+using AForge.Video.DirectShow;
+using System.Threading;
+using System.Collections.ObjectModel;
+
 
 namespace ScannerAndDistributionOfQRCodes
 {
@@ -22,132 +29,158 @@ namespace ScannerAndDistributionOfQRCodes
     {
         [ObservableProperty]
         private ImageSource _qRImage;
+        [ObservableProperty]
+        private ObservableCollection<string> _itemsPicker = [];
+        [ObservableProperty]
+        private bool _isCameraLaunched = false;
 
-        public MainPage MainPage;
-        public IDispatcherTimer timer1;
+        private string _currentDeviceCameraName;
+        public string CurrentDeviceCameraName
+        {
+            get => _currentDeviceCameraName;
+            set
+            {
+                SetProperty(ref _currentDeviceCameraName, value);
+                _isChangesDeviceCamera = true;
+            }
+
+        }
+
+        private bool _isChangesDeviceCamera = false;
+        private bool _isConnecting = false;
+
+        private string GetMonikerString(string currentDeviceCameraName)
+        {
+            if (string.IsNullOrEmpty(currentDeviceCameraName))
+                return string.Empty;
+            return MonikerStringName[_itemsPicker[int.Parse(currentDeviceCameraName)]];
+        }
+
+
+
+        private ScannerQR _scannerQR;
+        private IDecodeQRCode _decodeQRCode;
+        private IEncodeQRCode _encodeQRCode;
+        
+
+        Dictionary<string, string> MonikerStringName = new();
 
         public ScannerQRCodeViewModel()
         {
-
-           
-        }
-
-
-        //    //public IAsyncRelayCommand UpdateQrCodeCommand => new AsyncRelayCommand(UpdateQrCodeAsync);
-
-        //    public async void CaptureDevice_NewFrame(object sender, NewFrameEventArgs eventArgs)
-        //    {
-        //        UpdateQrCodeAsync(eventArgs);
+            _scannerQR = new ScannerQR(UpdateQrCodeAsync);
+            var filterInfoCollection = _scannerQR.GetVideoInputDevice();
+            SetMonikerStringName(filterInfoCollection);
+            SetItemsPicker();
 
 
-        public async void Toma()
-        {
-            //IDispatcherTimer timer;
-
-            //timer1 = Threading.DispatcherTimer();
-            //timer1.Interval = TimeSpan.FromMilliseconds(1000);
-            //timer1.Tick += MainPage.Timer_Tick;
             
 
-            //timer1 = Application.Current.Dispatcher.CreateTimer();
-            //timer1.Interval = TimeSpan.FromSeconds(1);
-            //timer1.Tick += MainPage.Timer_Tick;
+            _decodeQRCode = new DecodeQRCode();
+            _encodeQRCode = new EncodeQRCode();
+            SetImageOfCameraOn();
         }
 
-        //    }
+        private bool CheckingConnectionAndChangingCamera() 
+            => _isConnecting & !_isChangesDeviceCamera;
 
-
-        private async Task<byte[]> Get(Bitmap bitmap)
+        private bool CameraNameValidityCheck(string currentCameraName)
         {
+            if (!string.IsNullOrEmpty(currentCameraName))
+                return false;
+            Application.Current.MainPage.DisplayAlert("Уведомление", "Выберите камеру!", "ОK");
+            return true;
+        }
+        private bool  ConnectingCamera()
+        {
+            if (CheckingConnectionAndChangingCamera())
+                return false;
 
-            MemoryStream stream = new MemoryStream();
-            bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
-            var old = stream.ToArray();
-            var newB = new byte[old.Length];
+            var currentCameraName = GetMonikerString(CurrentDeviceCameraName);
+            if (CameraNameValidityCheck(currentCameraName))
+                return true;
+       
+                    
+            _scannerQR.ConnectingCamera(currentCameraName);
+            _isConnecting = true;
+            _isChangesDeviceCamera = false;
 
-            for (int i = 0; i < old.Length; i++)
-            {
-                newB[i] = old[i];
-            }
-
-            return newB;
+            return false;
+        }
+        private void SetItemsPicker()
+        {
+            for (int i = 0; i < MonikerStringName.Count; i++)
+                ItemsPicker.Add(MonikerStringName.ElementAt(i).Key);
+        }
+        private void SetMonikerStringName(FilterInfoCollection filterInfoCollection)
+        {
+            for (int i = 0; i < filterInfoCollection.Count; i++)
+                MonikerStringName[filterInfoCollection[i].Name] = filterInfoCollection[i].MonikerString;
+           // CurrentDeviceCameraName = filterInfoCollection[0].MonikerString;
+        }
+         
+        private  bool CheckingAvailabilityOfCameras()
+        {
+            if (ItemsPicker.Count != 0)
+                return false;
+            Application.Current.MainPage.DisplayAlert("Уведомление", "Отсутствует модуль камеры!", "ОK");
+            return true;
         }
 
-        //    private void GenerateQRCode(string text)
-        //    {
-        //        if (string.IsNullOrEmpty(text))
-        //            text = string.Empty;
-        //        QRCodeGenerator generator = new QRCodeGenerator();
-        //        QRCodeData codeData = generator.CreateQrCode(text, QRCodeGenerator.ECCLevel.L);
-        //        PngByteQRCode qRCode = new PngByteQRCode(codeData);
-
-        //        byte[] qrCodeBytes = qRCode.GetGraphic(20);
-
-        //        MainThread.BeginInvokeOnMainThread(async () =>
-        //        {
-        //            QrCodeImage.Source = ImageSource.FromStream(() => new MemoryStream(qrCodeBytes));
-
-        //        });
-
-        //    }
-
-
-        private void Button_Clicked_1(Bitmap image)
+        [RelayCommand]
+        public  void StartScanner()
         {
-
-
+            if (CheckingAvailabilityOfCameras())
+                return;
            
+            if (ConnectingCamera())
+                return;
 
-
-        
-            //using (var ms = new MemoryStream(byr.Result))
-            //{
-            //    image = new Bitmap(ms);
-            //}
-
-            using (image)
+            if (IsCameraLaunched)
             {
-                LuminanceSource source;
-                source = new BitmapLuminanceSource(image);
-                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-                Result result = new MultiFormatReader().decode(bitmap);
-                if (result != null)
-                {
-                    //editor.Text = result.Text;
-                    //_captureDevice.Stop();
-                    timer1.Stop();
-                }
-
-
+                TurnOffCamera();
             }
-
-            //(sender, EventArgs.Empty);
+            else
+            {
+                TurnOnCamera();
+            }
+           
         }
-        public async void UpdateQrCodeAsync(object gg,NewFrameEventArgs eventArgs)
+        private void TurnOnCamera()
+        {
+            _scannerQR.StartCamera();
+            IsCameraLaunched = true;
+        }
+        private void TurnOffCamera()
+        {
+            SetImageOfCameraOn();
+            _scannerQR.StopCamera();
+            IsCameraLaunched = false;
+        }
+
+        private void SetImageOfCameraOn()
+            =>QRImage = ImageSource.FromFile("camera_is_on.png");
+       
+
+
+        private void UpdateQrCodeAsync(object obj,NewFrameEventArgs eventArgs)
         {
             var bitmap = (Bitmap)eventArgs.Frame.Clone();
-            //var imageBytes =  Get(bitmap);
-            MemoryStream stream = new MemoryStream();
+            using MemoryStream stream = new MemoryStream();
             bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
             var old = stream.ToArray();
-
             if (old is not null)
             {
+                using Stream streami = new MemoryStream(old);
+                QRImage = ImageSource.FromStream(() => streami);
+                var result = _decodeQRCode.Decode(bitmap);
+                if (!string.IsNullOrEmpty(result))
+                {
+                    ///camera_is_on.png
 
-
-
-                //QRImage = ImageSource.FromStream(() => new MemoryStream(by));
-                //using var stream = new MemoryStream(imageBytes);
-                //QRImage = ImageSource.FromStream(() => stream); // <--- this doesn't work
-
-                //var stream = new MemoryStream(by.Result);
-                //QRImage = ImageSource.FromStream(() => stream); // <--- this works
-
-                 QRImage =  ImageSource.FromStream(() => new MemoryStream(old));
-                Button_Clicked_1(bitmap);// <--- this works
-                //var reader = new ZXing.Windows.Compatibility.BarcodeReader();
-                //var res = reader.Decode((Bitmap)QRImage);
+                    TurnOffCamera();
+                }
             }
         }
+       
     }
 }

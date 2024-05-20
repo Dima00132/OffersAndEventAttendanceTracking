@@ -3,42 +3,45 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ScannerAndDistributionOfQRCodes.MainPage"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:cv ="clr-namespace:Camera.MAUI;assembly=Camera.MAUI">
+             xmlns:cv ="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
+             xmlns:model = "clr-namespace:ScannerAndDistributionOfQRCodes.Model"
+             xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel">
 
-    <Grid ColumnDefinitions="*,*">
-        <StackLayout Grid.Column="1">
-            <Image x:Name="QrCodeImage" WidthRequest="100" HeightRequest="100"/>
-            <Image x:Name="resalQrCodeImage" WidthRequest="300" HeightRequest="300"/>
-           
-         
-        </StackLayout>
 
-        <StackLayout Grid.Column="0">
-            <Picker  ItemsSource="{Binding ItemsPicker}" SelectedIndex="{Binding CurrentDeviceCameraName}" TextColor="Black" Title="Выбор камеры"/>
+    <CollectionView AbsoluteLayout.LayoutFlags="All"
+                 Grid.Row="0"
+                     BindableLayout.ItemsSource="{Binding Scheduleds}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type model:ScheduledEvent}">
+                    <SwipeView>
+                        <Frame>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer
+                                Command="{Binding  Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}} , Path=TapCommand}"
+                                CommandParameter="{Binding .}" />
+                            </Frame.GestureRecognizers>
 
-            <Image  x:Name="caemtra" Source="{Binding QRImage}" WidthRequest="300" HeightRequest="300"/>
-            <Button Command="{Binding StartScannerCommand}">
-                <Button.Triggers>
-                    <DataTrigger TargetType="Button"
-                      Binding="{Binding IsCameraLaunched, Mode=TwoWay}"
-                      Value="True">
-                        <Setter  Property="Text"
-                      Value="Прекратить сканирование"/>
-                        <Setter  Property="BackgroundColor"
-                      Value="Red"/>
-                    </DataTrigger>
-                    <DataTrigger TargetType="Button"
-                      Binding="{Binding IsCameraLaunched, Mode=TwoWay}"
-                      Value="false">
-                        <Setter  Property="Text"
-                      Value="Начать сканирование"/>
-                        <Setter  Property="BackgroundColor"
-                      Value="Green"/>
-                    </DataTrigger>
-                </Button.Triggers>
-            </Button>
+                            <StackLayout>
+                                <Grid >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="60"/>
+                                    </Grid.ColumnDefinitions>
 
-        </StackLayout>
-    </Grid>
+                                    <Label Grid.Column="1" 
+                                       TextColor="Green"
+                                       FontSize="Subtitle"  
+                                       
+                                       Text="{Binding Date, StringFormat='{0}%'}" />
+                                <Label Grid.Column="0" Text="{Binding  NameEvent , Mode=TwoWay}"/>
+                                </Grid>
+                            </StackLayout>
+                        </Frame>
+                    </SwipeView>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </CollectionView>
+
+
 
 </ContentPage>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ScannerAndDistributionOfQRCodes.View.ScannerQRCodePage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:cv ="clr-namespace:Camera.MAUI;assembly=Camera.MAUI">
+
+    <Grid ColumnDefinitions="800,*">
+        <Frame Grid.Column="1" BorderColor="White"  >
+            <Frame  CornerRadius="50"  HeightRequest="650" >
+                <StackLayout>
+                    <Frame>
+                        <Label Text="{Binding Guest.Surname}"/>
+                    </Frame>
+                    <Frame>
+                        <Label Text="{Binding Guest.Name}"/>
+                    </Frame>
+                    <Frame>
+                        <Label Text="{Binding Guest.Patronymic}"/>
+                    </Frame>
+                </StackLayout>
+            </Frame>
+        </Frame>
+
+
+        <StackLayout Grid.Column="0">
+            <Picker  ItemsSource="{Binding ItemsPicker}" 
+                     SelectedIndex="{Binding CurrentDeviceCameraName}" 
+                     TextColor="Black" 
+                     Title="Выбор камеры"/>
+
+            <Image  x:Name="caemtra" 
+                    Source="{Binding QRImage}" 
+                    WidthRequest="300" HeightRequest="300"/>
+            <Button Command="{Binding StartScannerCommand}">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button"
+                      Binding="{Binding IsCameraLaunched, Mode=TwoWay}"
+                      Value="True">
+                        <Setter  Property="Text"
+                      Value="Прекратить сканирование"/>
+                        <Setter  Property="BackgroundColor"
+                      Value="Red"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Button"
+                      Binding="{Binding IsCameraLaunched, Mode=TwoWay}"
+                      Value="false">
+                        <Setter  Property="Text"
+                      Value="Начать сканирование"/>
+                        <Setter  Property="BackgroundColor"
+                      Value="Green"/>
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+
+        </StackLayout>
+    </Grid>
+</ContentPage>

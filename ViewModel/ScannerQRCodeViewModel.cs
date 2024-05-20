@@ -25,12 +25,18 @@ using System.Collections.ObjectModel;
 
 namespace ScannerAndDistributionOfQRCodes
 {
-    public partial class ScannerQRCodeViewModel : BaseViewModel
+    public partial class ScannerQRCodeViewModel : ViewModelBase
     {
         [ObservableProperty]
         private ImageSource _qRImage;
         [ObservableProperty]
         private ObservableCollection<string> _itemsPicker = [];
+
+        //[ObservableProperty]
+        //private Guest _guest;
+
+
+
         [ObservableProperty]
         private bool _isCameraLaunched = false;
 
@@ -43,20 +49,10 @@ namespace ScannerAndDistributionOfQRCodes
                 SetProperty(ref _currentDeviceCameraName, value);
                 _isChangesDeviceCamera = true;
             }
-
         }
 
         private bool _isChangesDeviceCamera = false;
         private bool _isConnecting = false;
-
-        private string GetMonikerString(string currentDeviceCameraName)
-        {
-            if (string.IsNullOrEmpty(currentDeviceCameraName))
-                return string.Empty;
-            return MonikerStringName[_itemsPicker[int.Parse(currentDeviceCameraName)]];
-        }
-
-
 
         private ScannerQR _scannerQR;
         private IDecodeQRCode _decodeQRCode;
@@ -65,6 +61,9 @@ namespace ScannerAndDistributionOfQRCodes
 
         Dictionary<string, string> MonikerStringName = new();
 
+
+
+
         public ScannerQRCodeViewModel()
         {
             _scannerQR = new ScannerQR(UpdateQrCodeAsync);
@@ -72,24 +71,12 @@ namespace ScannerAndDistributionOfQRCodes
             SetMonikerStringName(filterInfoCollection);
             SetItemsPicker();
 
-
-            
-
             _decodeQRCode = new DecodeQRCode();
             _encodeQRCode = new EncodeQRCode();
             SetImageOfCameraOn();
         }
 
-        private bool CheckingConnectionAndChangingCamera() 
-            => _isConnecting & !_isChangesDeviceCamera;
 
-        private bool CameraNameValidityCheck(string currentCameraName)
-        {
-            if (!string.IsNullOrEmpty(currentCameraName))
-                return false;
-            Application.Current.MainPage.DisplayAlert("Уведомление", "Выберите камеру!", "ОK");
-            return true;
-        }
         private bool  ConnectingCamera()
         {
             if (CheckingConnectionAndChangingCamera())
@@ -106,6 +93,13 @@ namespace ScannerAndDistributionOfQRCodes
 
             return false;
         }
+
+        private string GetMonikerString(string currentDeviceCameraName)
+        {
+            if (string.IsNullOrEmpty(currentDeviceCameraName))
+                return string.Empty;
+            return MonikerStringName[_itemsPicker[int.Parse(currentDeviceCameraName)]];
+        }
         private void SetItemsPicker()
         {
             for (int i = 0; i < MonikerStringName.Count; i++)
@@ -115,9 +109,18 @@ namespace ScannerAndDistributionOfQRCodes
         {
             for (int i = 0; i < filterInfoCollection.Count; i++)
                 MonikerStringName[filterInfoCollection[i].Name] = filterInfoCollection[i].MonikerString;
-           // CurrentDeviceCameraName = filterInfoCollection[0].MonikerString;
         }
-         
+
+        private bool CheckingConnectionAndChangingCamera()
+    => _isConnecting & !_isChangesDeviceCamera;
+
+        private bool CameraNameValidityCheck(string currentCameraName)
+        {
+            if (!string.IsNullOrEmpty(currentCameraName))
+                return false;
+            Application.Current.MainPage.DisplayAlert("Уведомление", "Выберите камеру!", "ОK");
+            return true;
+        }
         private  bool CheckingAvailabilityOfCameras()
         {
             if (ItemsPicker.Count != 0)

@@ -21,6 +21,9 @@ using System.Reflection;
 using AForge.Video.DirectShow;
 using System.Threading;
 using System.Collections.ObjectModel;
+using ScannerAndDistributionOfQRCodes.Model;
+using ScannerAndDistributionOfQRCodes.Navigation;
+using ScannerAndDistributionOfQRCodes.Service.Interface;
 
 
 namespace ScannerAndDistributionOfQRCodes
@@ -32,16 +35,18 @@ namespace ScannerAndDistributionOfQRCodes
         [ObservableProperty]
         private ObservableCollection<string> _itemsPicker = [];
 
-        //[ObservableProperty]
-        //private Guest _guest;
+        [ObservableProperty]
+        private Guest _guest;
+        [ObservableProperty]
+        private ScheduledEvent _scheduledEvent;
 
 
 
         [ObservableProperty]
         private bool _isCameraLaunched = false;
 
-        private string _currentDeviceCameraName;
-        public string CurrentDeviceCameraName
+        private int _currentDeviceCameraName;
+        public int CurrentDeviceCameraName
         {
             get => _currentDeviceCameraName;
             set
@@ -50,6 +55,8 @@ namespace ScannerAndDistributionOfQRCodes
                 _isChangesDeviceCamera = true;
             }
         }
+
+        
 
         private bool _isChangesDeviceCamera = false;
         private bool _isConnecting = false;
@@ -60,11 +67,10 @@ namespace ScannerAndDistributionOfQRCodes
         
 
         Dictionary<string, string> MonikerStringName = new();
+        private readonly INavigationService _navigationService;
+        private readonly ILocalDbService _localDbService;
 
-
-
-
-        public ScannerQRCodeViewModel()
+        public ScannerQRCodeViewModel(INavigationService navigationService, ILocalDbService localDbService)
         {
             _scannerQR = new ScannerQR(UpdateQrCodeAsync);
             var filterInfoCollection = _scannerQR.GetVideoInputDevice();
@@ -74,9 +80,16 @@ namespace ScannerAndDistributionOfQRCodes
             _decodeQRCode = new DecodeQRCode();
             _encodeQRCode = new EncodeQRCode();
             SetImageOfCameraOn();
+            _navigationService = navigationService;
+            _localDbService = localDbService;
         }
 
-
+        public override Task OnNavigatingTo(object? parameter, object? parameterSecond = null)
+        {
+            if (parameter is ScheduledEvent scheduledEvent)
+                ScheduledEvent = scheduledEvent;
+            return base.OnNavigatingTo(parameter);
+        }
         private bool  ConnectingCamera()
         {
             if (CheckingConnectionAndChangingCamera())
@@ -94,11 +107,11 @@ namespace ScannerAndDistributionOfQRCodes
             return false;
         }
 
-        private string GetMonikerString(string currentDeviceCameraName)
+        private string GetMonikerString(int currentDeviceCameraName)
         {
-            if (string.IsNullOrEmpty(currentDeviceCameraName))
+            if (currentDeviceCameraName != -1)
                 return string.Empty;
-            return MonikerStringName[ItemsPicker[int.Parse(currentDeviceCameraName)]];
+            return MonikerStringName[ItemsPicker[currentDeviceCameraName]];
         }
         private void SetItemsPicker()
         {

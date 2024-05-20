@@ -48,11 +48,36 @@ namespace ScannerAndDistributionOfQRCodes.Model
         private string _messageText = string.Empty;
 
 
+        private int _countGuest;
+        public int CountGuest
+        {
+            get => _countGuest;
+            set => SetProperty(ref _countGuest, value);
+        }
+
         public ScheduledEvent(string nameEvent, DateTime date)
         {
             NameEvent = nameEvent;
             Date = date;
         }
+
+        public void Add(Guest guest)
+        {
+            if (Guests is null)
+                return;
+            Guests.Insert(0, guest);
+            ++CountGuest;
+        }
+
+        public void Remove(Guest guest)
+        {
+            if (Guests is null)
+                return;
+
+           Guests.Remove(guest);
+           --CountGuest;
+        }
+
 
         public ScheduledEvent()
         {

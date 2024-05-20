@@ -27,14 +27,14 @@
                                 <Grid >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
                                     <Label Grid.Column="1" 
                                        TextColor="Green"
                                        FontSize="Subtitle"  
                                        
-                                       Text="{Binding Date, StringFormat='{0}%'}" />
+                                       Text="{Binding Date, StringFormat='Дата и время проведения мероприятия {0}'}" />
                                 <Label Grid.Column="0" Text="{Binding  NameEvent , Mode=TwoWay}"/>
                                 </Grid>
                             </StackLayout>

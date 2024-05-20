@@ -49,7 +49,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         });
         public RelayCommand<ScheduledEvent> TapCommand => new(async (scheduledEvent) =>
         {
-            await _navigationService.NavigateByViewModel<ScannerQRCodeViewModel>(scheduledEvent);
+            await _navigationService.NavigateByPage<ScannerQRCodePage>(scheduledEvent);
         });
     }
 }

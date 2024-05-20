@@ -8,10 +8,12 @@
              xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel">
 
 
-    <CollectionView AbsoluteLayout.LayoutFlags="All"
-                 Grid.Row="0"
-                     BindableLayout.ItemsSource="{Binding Scheduleds}">
-            <BindableLayout.ItemTemplate>
+    <Grid RowDefinitions="100,*">
+        <Button Grid.Row="0" Text="Добавить" BackgroundColor="Green"  Command="{Binding AddCommand}" />
+        <CollectionView Grid.Row="1" 
+                        AbsoluteLayout.LayoutFlags="All"
+                        ItemsSource="{Binding Scheduleds}">
+            <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type model:ScheduledEvent}">
                     <SwipeView>
                         <Frame>
@@ -39,8 +41,9 @@
                         </Frame>
                     </SwipeView>
                 </DataTemplate>
-            </BindableLayout.ItemTemplate>
+            </CollectionView.ItemTemplate>
         </CollectionView>
+    </Grid>
 
 
 

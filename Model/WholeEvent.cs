@@ -20,6 +20,10 @@ namespace ScannerAndDistributionOfQRCodes.Model
 
         private ObservableCollection<ScheduledEvent> _scheduledEvent = [];
 
+        public WholeEvent()
+        {
+        }
+
         [Column("whole_vents")]
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public ObservableCollection<ScheduledEvent> ScheduledEvents

@@ -22,9 +22,9 @@ namespace ScannerAndDistributionOfQRCodes.Model
         [Column("Id")]
         public int Id { get; set; }
 
-        [Column("guest_id")]
-        [ForeignKey(typeof(Guest))]
-        public int GuestId { get; set; }
+        [Column("whole_event_id")]
+        [ForeignKey(typeof(WholeEvent))]
+        public int WholeEventId { get; set; }
 
         private ObservableCollection<Guest> _guests = [];
 
@@ -54,5 +54,8 @@ namespace ScannerAndDistributionOfQRCodes.Model
             Date = date;
         }
 
+        public ScheduledEvent()
+        {
+        }
     }
 }

@@ -98,7 +98,7 @@ namespace ScannerAndDistributionOfQRCodes
         {
             if (string.IsNullOrEmpty(currentDeviceCameraName))
                 return string.Empty;
-            return MonikerStringName[_itemsPicker[int.Parse(currentDeviceCameraName)]];
+            return MonikerStringName[ItemsPicker[int.Parse(currentDeviceCameraName)]];
         }
         private void SetItemsPicker()
         {

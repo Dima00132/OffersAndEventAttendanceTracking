@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ScannerAndDistributionOfQRCodes.View.AddScheduledEventPage"
+             Title="AddScheduledEventPage">
+    
+    <Grid RowDefinitions="*,50">
+        <ScrollView Grid.Row="0" >
+            <StackLayout 
+                  Orientation="Vertical"
+                 Spacing="15"
+                 Padding="5">
+
+                <Frame >
+                    <Editor Text="{Binding NameEvent,Mode=TwoWay}"
+                            Placeholder ="Название мероприятия"/>
+                </Frame>
+                <Frame >
+                    <StackLayout >
+                        <Label x:Name="labelDate" Text="Выберите дату и время мероприятия" FontSize="20" />
+                        <TimePicker x:Name="timePicker" HorizontalOptions="Start" Format="H" PropertyChanged="Date_PropertyChanged"  Time="{Binding Time}"/>
+                        <DatePicker x:Name="datePicker" HorizontalOptions="Start" MinimumDate="{Binding MinDate}" PropertyChanged="Date_PropertyChanged"  Date="{Binding Date}"/>
+                    </StackLayout>
+                </Frame>
+
+                <Frame >
+                    <Editor Text="{Binding MessageText}"
+                     Placeholder ="Укажите текст приглашения"/>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+
+        <Button Grid.Row="1"
+            
+             Text="Сохранить"
+                
+             BackgroundColor="Gray"
+             FontSize="Large"
+                
+             Command="{Binding  AddScheduledEventCommand}"  />
+    </Grid>
+</ContentPage>

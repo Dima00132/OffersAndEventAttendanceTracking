@@ -5,9 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Animations;
 using ScannerAndDistributionOfQRCodes.Model;
 using ScannerAndDistributionOfQRCodes.Navigation;
 using ScannerAndDistributionOfQRCodes.Service.Interface;
+using ScannerAndDistributionOfQRCodes.View;
 using ScannerAndDistributionOfQRCodes.ViewModel.Base;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
@@ -34,6 +36,17 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
             //Learn.SortedCategories((x) => x.LastActivity);
         }
+        public RelayCommand AddCommand => new(async () =>
+        {
+
+
+            await _navigationService.NavigateByPage<AddScheduledEventPage>(Whole);
+
+
+
+            //_localDbService.Create(learnCategory);
+            //_localDbService.Update(Learn);
+        });
         public RelayCommand<ScheduledEvent> TapCommand => new(async (scheduledEvent) =>
         {
             await _navigationService.NavigateByViewModel<ScannerQRCodeViewModel>(scheduledEvent);

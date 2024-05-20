@@ -1,10 +1,9 @@
 ﻿using ScannerAndDistributionOfQRCodes.Model;
 using ScannerAndDistributionOfQRCodes.Service.Interface;
 using Microsoft.VisualBasic;
-using SQLite;
-
-using SQLiteNetExtensions.Extensions;
 using System;
+using SQLite;
+using SQLiteNetExtensions.Extensions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -16,7 +15,7 @@ namespace ScannerAndDistributionOfQRCodes.Service
 
     public sealed class LocalDbService: ILocalDbService
     {
-        private const string DB_NAME = "data_whole_event_save_1.db3";
+        private const string DB_NAME = "data_whole_event_save_2.db3";
         private SQLiteConnection _connection;
         private const SQLiteOpenFlags Flags =
             SQLiteOpenFlags.ReadWrite |
@@ -58,7 +57,17 @@ namespace ScannerAndDistributionOfQRCodes.Service
         public WholeEvent GetWholeEvent()
         {
             Init();
-            var wholeEvent = _connection.GetAllWithChildren<WholeEvent>(recursive: true).FirstOrDefault();
+            WholeEvent wholeEvent = null;
+            try
+            {
+                wholeEvent = _connection.GetAllWithChildren<WholeEvent>(recursive: true).FirstOrDefault();
+            }
+            catch (Exception)
+            {
+
+               
+            }
+            
             if (wholeEvent is null)
             {
                 wholeEvent = new WholeEvent();

@@ -2,9 +2,14 @@ namespace ScannerAndDistributionOfQRCodes.View;
 
 public partial class ScannerQRCodePage : ContentPage
 {
-	public ScannerQRCodePage(ScannerQRCodeViewModel scannerQRCodeViewModel)
+    public ScannerQRCodePage()
+    {
+        InitializeComponent();
+    }
+
+    public ScannerQRCodePage(ScannerQRCodeViewModel scannerQRCodeViewModel):base()
 	{
-		InitializeComponent();
+		
 		BindingContext = scannerQRCodeViewModel;
 
     }

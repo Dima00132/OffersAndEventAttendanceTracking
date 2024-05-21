@@ -58,6 +58,8 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\camera_is_on.png" />
+	  <None Remove="Resources\Images\guest_list.png" />
+	  <None Remove="Resources\Images\scanner_qr_code.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -84,6 +86,12 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="View\AddScheduledEventPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\GuestListPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\GuestVerificationTablePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\ScannerQRCodePage.xaml">

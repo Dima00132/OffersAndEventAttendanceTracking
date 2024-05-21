@@ -17,7 +17,14 @@ namespace ScannerAndDistributionOfQRCodes
         {
 
             builder.Services.AddTransient<ScannerQRCodeViewModel>().AddTransient<ScannerQRCodePage>();
+            builder.Services.AddTransient<GuestListViewModel>().AddTransient<GuestListPage>();
+
+
+            //builder.Services.AddTransient<ScannerQRCodePage>();
+            //builder.Services.AddTransient<GuestListPage>();
+
             builder.Services.AddTransient<AddScheduledEventViewModel>().AddTransient<AddScheduledEventPage>();
+            builder.Services.AddTransient<GuestVerificationTableViewModel>().AddTransient<GuestVerificationTablePage>();
 
 
             builder.Services.AddSingleton<IDataService, DataService>();

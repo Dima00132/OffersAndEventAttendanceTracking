@@ -25,6 +25,7 @@ namespace ScannerAndDistributionOfQRCodes
 
     public partial class MainPage : ContentPage
     {
+        private readonly MainViewModel _mainViewModel;
         int count = 0;
 
 
@@ -41,6 +42,13 @@ namespace ScannerAndDistributionOfQRCodes
             }
            
             BindingContext = mainViewModel;
+            _mainViewModel = mainViewModel;
+        }
+
+        protected override void OnDisappearing()
+        {
+            _mainViewModel.OnUpdateDbService();
+            base.OnDisappearing();
         }
 
     }

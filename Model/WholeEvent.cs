@@ -17,12 +17,11 @@ namespace ScannerAndDistributionOfQRCodes.Model
         [PrimaryKey, AutoIncrement]
         [Column("Id")]
         public int Id { get; set; }
-
-        private ObservableCollection<ScheduledEvent> _scheduledEvent = [];
-
         public WholeEvent()
         {
         }
+
+        private ObservableCollection<ScheduledEvent> _scheduledEvent = [];
 
         [Column("whole_vents")]
         [OneToMany(CascadeOperations = CascadeOperation.All)]

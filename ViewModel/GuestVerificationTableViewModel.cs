@@ -24,15 +24,15 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         public override Task OnUpdate()
         {
-            _scannerQRCodeViewModel?.OnUpdate();
-            _guestListViewModel?.OnUpdate();
+            ScannerQRCodeViewModel?.OnUpdate();
+            GuestListViewModel?.OnUpdate();
             return base.OnUpdate();
         }
 
         public override Task OnUpdateDbService()
         {
-            _scannerQRCodeViewModel?.OnUpdateDbService();
-            _guestListViewModel?.OnUpdateDbService();
+            ScannerQRCodeViewModel?.OnUpdateDbService();
+            GuestListViewModel?.OnUpdateDbService();
             return base.OnUpdateDbService();
         }
 
@@ -40,8 +40,8 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             if (parameter is ScheduledEvent scheduledEvent)
             {
-                _scannerQRCodeViewModel?.OnNavigatingTo(scheduledEvent);
-                _guestListViewModel?.OnNavigatingTo(scheduledEvent);
+                ScannerQRCodeViewModel?.OnNavigatingTo(scheduledEvent);
+                GuestListViewModel?.OnNavigatingTo(scheduledEvent);
 
             }
             return base.OnNavigatingTo(parameter);

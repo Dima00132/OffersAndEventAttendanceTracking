@@ -2,6 +2,86 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ScannerAndDistributionOfQRCodes.View.GuestListPage"
-             Title="GuestListPage">
+             xmlns:model = "clr-namespace:ScannerAndDistributionOfQRCodes.Model"
+             xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel">
+    
+    <Grid RowDefinitions="100,*">
+        <Button Grid.Row="0" Text="Добавить" BackgroundColor="Green"  Command="{Binding AddGuestCommand}" />
 
+        <Grid Grid.Row="1" ColumnDefinitions="800,*">
+            <CollectionView Grid.Column="0" 
+            AbsoluteLayout.LayoutFlags="All"
+            ItemsSource="{Binding Guests}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type model:Guest}">
+                        <Frame CornerRadius="5">
+                            <Label>
+                                <Label.Text>
+                                    <MultiBinding StringFormat="ФИО  {0} {1} {2} Mail : {3}">
+                                        <Binding Path="Surname" Mode="TwoWay" />
+                                        <Binding Path="Name"  Mode="TwoWay" />
+                                        <Binding Path="Patronymic"  Mode="TwoWay" />
+                                        <Binding Path="Mail"  Mode="TwoWay" />
+                                    </MultiBinding>
+                                </Label.Text>
+                                <FlyoutBase.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Редектировать"
+                                                        Command="{Binding Path=ChangeCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
+                                                        CommandParameter="{Binding .}"/>
+                                        <MenuFlyoutItem Text="Удалить"
+                                                        Command="{Binding Path= DeleteCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
+                                                        CommandParameter="{Binding .}"/>
+                                    </MenuFlyout>
+                                </FlyoutBase.ContextFlyout>
+                            </Label>
+                        </Frame>
+                        
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+           
+            <Frame Grid.Column="1" IsVisible="{Binding IsEditor}" >
+                <Frame  CornerRadius="50"  HeightRequest="600" >
+                    <StackLayout>
+                        <Frame>
+                            <Editor Text="{Binding Surname}"/>
+                        </Frame>
+                        <Frame>
+                            <Editor Text="{Binding Name}"/>
+                        </Frame>
+                        <Frame>
+                            <Editor Text="{Binding Patronymic}"/>
+                        </Frame>
+                        <Frame>
+                            <Editor Text="{Binding Mail}"/>
+                        </Frame>
+                        <Button Grid.Row="0" Text="Сохранить" BackgroundColor="Green"  Command="{Binding SaveCommand}" />
+                    </StackLayout>
+                    
+                </Frame>
+            </Frame>
+            
+            <!--<Frame Grid.Column="1" IsVisible="{Binding IsVisibleChangeGuest}"   >
+                <Frame  CornerRadius="50"  HeightRequest="600" >
+                    <StackLayout>
+                        <Frame>
+                            <Editor Text="{Binding Surname}"/>
+                        </Frame>
+                        <Frame>
+                            <Editor Text="{Binding Name}"/>
+                        </Frame>
+                        <Frame>
+                            <Editor Text="{Binding Patronymic}"/>
+                        </Frame>
+                        <Frame>
+                            <Editor Text="{Binding Mail}"/>
+                        </Frame>
+                </StackLayout>
+                </Frame>
+            </Frame>-->
+
+        </Grid>
+        
+    </Grid>
 </ContentPage>

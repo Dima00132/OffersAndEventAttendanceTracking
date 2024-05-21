@@ -1,4 +1,5 @@
-﻿using ScannerAndDistributionOfQRCodes.Model.QRCode;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ScannerAndDistributionOfQRCodes.Model.QRCode;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 using System;
@@ -11,7 +12,7 @@ namespace ScannerAndDistributionOfQRCodes.Model
 {
 
     [Table("guest")]
-    public class Guest
+    public partial class Guest:ObservableObject
     {
         [PrimaryKey, AutoIncrement]
         [Column("Id")]
@@ -21,11 +22,38 @@ namespace ScannerAndDistributionOfQRCodes.Model
         [ForeignKey(typeof(ScheduledEvent))]
         public int ScheduledEventId { get; set; }
 
-        public string Surname { get;private set; }
-        public string Name { get; private set; }
-        public string Patronymic { get; private set; }
-        public string Mail { get; private set; }
-        public string QRHashCode { get; private set; }
+        
+        private string _surname;
+        public string Surname  
+        { 
+            get => _surname;
+            set=>SetProperty(ref _surname, value); 
+        }
+
+
+        private string _name;
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        }
+
+        private string _patronymic;
+        public string Patronymic
+        {
+            get => _patronymic;
+            set => SetProperty(ref _patronymic, value);
+        }
+    
+        private string _mail;
+        public string Mail
+        {
+            get => _mail;
+            set => SetProperty(ref _mail, value);
+        }
+        public string QRHashCode { get;  set; }
+
+        public bool IsMessageSent { get; set; }
 
         private Image _qRCodeImge;
 
@@ -48,12 +76,16 @@ namespace ScannerAndDistributionOfQRCodes.Model
             Patronymic = RemoveSpaces(patronymic);
             return this;
         }
-        public void SetMail(string mail)
+        public Guest SetMail(string mail)
         {
+
+            if (!string.IsNullOrEmpty(Mail))
+                IsMessageSent = false;
             var mailWithoutSpaces = RemoveSpaces(mail);
             //Проверка валидности посты
             Mail = mailWithoutSpaces;
             QRHashCode = GenerateQRHashCode();
+            return this;
         }
 
         private string GenerateQRHashCode()
@@ -74,6 +106,11 @@ namespace ScannerAndDistributionOfQRCodes.Model
            var encodeQRCode = new EncodeQRCode();
             _qRCodeImge = encodeQRCode.Encode(QRHashCode);
 
+
+
+            ////
+            ///
+            IsMessageSent = true;
         }
     }
 }

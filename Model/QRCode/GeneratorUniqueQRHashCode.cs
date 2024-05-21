@@ -7,15 +7,15 @@ namespace ScannerAndDistributionOfQRCodes.Model
         public static string Generate(params string[] strings)
         {
             StringBuilder builder = new StringBuilder();
-            checked
+            unchecked
             {
                 int hash = 0;
                 foreach (var item in strings)
                 {
                     var itemHash = item.GetHashCode();
                     hash += itemHash;
-                    var newHash = hash * itemHash;
-                    builder.Append(newHash);
+                    var newHash = hash + itemHash;
+                    builder.Append(hash);
                 }
                 builder.Append(hash);
             }

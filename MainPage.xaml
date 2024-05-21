@@ -15,31 +15,29 @@
                         ItemsSource="{Binding Scheduleds}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type model:ScheduledEvent}">
-                    <SwipeView>
-                        <Frame>
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer
+                    <Frame>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer
                                 Command="{Binding  Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}} , Path=TapCommand}"
                                 CommandParameter="{Binding .}" />
-                            </Frame.GestureRecognizers>
+                        </Frame.GestureRecognizers>
 
-                            <StackLayout>
-                                <Grid >
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
+                        <StackLayout>
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                                    <Label Grid.Column="1" 
+                                <Label Grid.Column="1" 
                                        TextColor="Green"
                                        FontSize="Subtitle"  
                                        
                                        Text="{Binding Date, StringFormat='Дата и время проведения мероприятия {0}'}" />
                                 <Label Grid.Column="0" Text="{Binding  NameEvent , Mode=TwoWay}"/>
-                                </Grid>
-                            </StackLayout>
-                        </Frame>
-                    </SwipeView>
+                            </Grid>
+                        </StackLayout>
+                    </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

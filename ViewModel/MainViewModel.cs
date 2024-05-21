@@ -51,5 +51,11 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             await _navigationService.NavigateByPage<GuestVerificationTablePage>(scheduledEvent);
         });
+
+        public override Task OnUpdateDbService()
+        {
+            _localDbService.Update(Whole);
+            return base.OnUpdateDbService();
+        }
     }
 }

@@ -17,71 +17,54 @@
                         <Frame CornerRadius="5">
                             <Label>
                                 <Label.Text>
-                                    <MultiBinding StringFormat="ФИО  {0} {1} {2} Mail : {3}">
+                                    <MultiBinding StringFormat="ФИО:{0} {1} {2}">
                                         <Binding Path="Surname" Mode="TwoWay" />
                                         <Binding Path="Name"  Mode="TwoWay" />
                                         <Binding Path="Patronymic"  Mode="TwoWay" />
-                                        <Binding Path="Mail"  Mode="TwoWay" />
                                     </MultiBinding>
                                 </Label.Text>
                                 <FlyoutBase.ContextFlyout>
                                     <MenuFlyout>
-                                        <MenuFlyoutItem Text="Редектировать"
+                                        <MenuFlyoutItem Text="Редектировать" 
                                                         Command="{Binding Path=ChangeCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
                                                         CommandParameter="{Binding .}"/>
-                                        <MenuFlyoutItem Text="Удалить"
+                                        <MenuFlyoutItem Text="Удалить" 
                                                         Command="{Binding Path= DeleteCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
                                                         CommandParameter="{Binding .}"/>
                                     </MenuFlyout>
                                 </FlyoutBase.ContextFlyout>
                             </Label>
                         </Frame>
-                        
+
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-           
-            <Frame Grid.Column="1" IsVisible="{Binding IsEditor}" >
-                <Frame  CornerRadius="50"  HeightRequest="600" >
-                    <StackLayout>
+
+            <Frame Grid.Column="1" IsVisible="{Binding IsEditor}"  BorderColor="White">
+                <Frame  CornerRadius="50" BorderColor="#00cfff" HeightRequest="520" >
+                    <StackLayout Spacing="20">
                         <Frame>
-                            <Editor Text="{Binding Surname}"/>
+                            <Entry  Text="{Binding Surname}" MaxLength="40"/>
                         </Frame>
                         <Frame>
-                            <Editor Text="{Binding Name}"/>
+                            <Entry  Text="{Binding Name}" MaxLength="40"/>
                         </Frame>
                         <Frame>
-                            <Editor Text="{Binding Patronymic}"/>
+                            <Entry  Text="{Binding Patronymic}" MaxLength="40"/>
                         </Frame>
                         <Frame>
-                            <Editor Text="{Binding Mail}"/>
+                            <Entry  Text="{Binding Mail}" MaxLength="40"/>
                         </Frame>
-                        <Button Grid.Row="0" Text="Сохранить" BackgroundColor="Green"  Command="{Binding SaveCommand}" />
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                            <Button Grid.Column="0" Text="Отменить" VerticalOptions="Start" BackgroundColor="Gray"  Command="{Binding CancelCommand}" />
+                            <Button Grid.Column="1" Text="Сохранить"  VerticalOptions="End" BackgroundColor="Green"  Command="{Binding SaveCommand}" />
+                        </Grid>
+
+
                     </StackLayout>
-                    
+
                 </Frame>
             </Frame>
-            
-            <!--<Frame Grid.Column="1" IsVisible="{Binding IsVisibleChangeGuest}"   >
-                <Frame  CornerRadius="50"  HeightRequest="600" >
-                    <StackLayout>
-                        <Frame>
-                            <Editor Text="{Binding Surname}"/>
-                        </Frame>
-                        <Frame>
-                            <Editor Text="{Binding Name}"/>
-                        </Frame>
-                        <Frame>
-                            <Editor Text="{Binding Patronymic}"/>
-                        </Frame>
-                        <Frame>
-                            <Editor Text="{Binding Mail}"/>
-                        </Frame>
-                </StackLayout>
-                </Frame>
-            </Frame>-->
-
         </Grid>
-        
     </Grid>
 </ContentPage>

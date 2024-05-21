@@ -60,6 +60,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         public RelayCommand<Guest> ChangeCommand => new(async (guest) =>
         {
+            Cancel();
             Guest = guest;
             InstallationValues(guest);
             IsVisibleChangeGuest = true;
@@ -68,6 +69,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         public RelayCommand AddGuestCommand => new(async () =>
         {
+            Cancel();
             IsVisibleAddGuest = true;
             IsEditor = true;
         });
@@ -85,13 +87,14 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             _localDbService.Update(_scheduledEvent);
         }
 
-        public RelayCommand CancelCommand => new(async () =>
+        [RelayCommand]
+        public void Cancel()
         {
             IsVisibleAddGuest = false;
             IsVisibleChangeGuest = false;
             IsEditor = false;
             ClearValues();
-        });
+        }
 
         public RelayCommand<Guest> DeleteCommand => new(async (guest) =>
         {

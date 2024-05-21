@@ -58,6 +58,8 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\camera_is_on.png" />
+	  <None Remove="Resources\Images\delete_image.png" />
+	  <None Remove="Resources\Images\editor_image.png" />
 	  <None Remove="Resources\Images\guest_list.png" />
 	  <None Remove="Resources\Images\scanner_qr_code.png" />
 	</ItemGroup>

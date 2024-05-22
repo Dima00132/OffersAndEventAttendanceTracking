@@ -6,7 +6,12 @@
              xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel">
     
     <Grid RowDefinitions="100,*">
-        <Button Grid.Row="0" Text="Добавить" BackgroundColor="Green"  Command="{Binding AddGuestCommand}" />
+        <Grid   Grid.Row="0" ColumnDefinitions="*,*">
+            <Button Grid.Column="0" Text="Добавить" BackgroundColor="Green"  Command="{Binding AddGuestCommand}" />
+            <Button Grid.Column="1" Text="Отправить приглашение" BackgroundColor="#0000ff"  Command="{Binding SendCommand}" />
+        </Grid>
+        
+        
 
         <Grid Grid.Row="1" ColumnDefinitions="800,*">
             <CollectionView Grid.Column="0" 

@@ -21,8 +21,17 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         private readonly ILocalDbService _localDbService;
 
         private ScheduledEvent _scheduledEvent;
-        [ObservableProperty]
+       
         private ObservableCollection<Guest> _guests;
+        public ObservableCollection<Guest> Guests
+        {
+            get => _guests;
+            set => SetProperty(ref _guests, value);
+
+        }
+
+    
+
 
         [ObservableProperty]
         private Guest _guest;
@@ -75,6 +84,12 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         });
 
 
+        public RelayCommand SendCommand => new(async () =>
+        {
+            _scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent,EventArgs.Empty);
+        });
+
+
         [RelayCommand(CanExecute = nameof(CheckNameEvent))]
         public async Task Save()
         {
@@ -98,6 +113,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         public RelayCommand<Guest> DeleteCommand => new(async (guest) =>
         {
+            _scheduledEvent.SendMessageEvent -= guest.GetUpSubscriptionForSendingMessages();
             Guests.Remove(guest);
             _localDbService.Update(_scheduledEvent);
         });
@@ -106,6 +122,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             IsVisibleAddGuest = false;
             var guest = new Guest().SetSurname(Surname).SetPatronymic(Patronymic).SetName(Name).SetMail(Mail);
+            _scheduledEvent.SendMessageEvent += guest.GetUpSubscriptionForSendingMessages();
             _localDbService.Create(guest);
             return guest;
         }
@@ -139,12 +156,24 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                 & !string.IsNullOrEmpty(Patronymic) & !string.IsNullOrEmpty(Mail);
         }
 
+        private void SubscribingToMessageSendingEvents(ScheduledEvent scheduled, ObservableCollection<Guest> guests)
+        {
+            isStart = false;
+            foreach (var item in guests.Where(x => !x.IsMessageSent))
+                scheduled.SendMessageEvent += item.GetUpSubscriptionForSendingMessages();
+
+        }
+
+
+        private bool isStart = true;
+
         public override Task OnNavigatingTo(object? parameter, object? parameterSecond = null)
         {
             if (parameter is ScheduledEvent scheduledEvent)
             {
                 _scheduledEvent = scheduledEvent;
                 Guests = scheduledEvent.Guests;
+                SubscribingToMessageSendingEvents(_scheduledEvent, Guests);
             }
             return base.OnNavigatingTo(parameter);
         }

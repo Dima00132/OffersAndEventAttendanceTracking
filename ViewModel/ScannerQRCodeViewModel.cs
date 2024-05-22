@@ -109,7 +109,7 @@ namespace ScannerAndDistributionOfQRCodes
 
         private string GetMonikerString(int currentDeviceCameraName)
         {
-            if (currentDeviceCameraName != -1)
+            if (currentDeviceCameraName == -1)
                 return string.Empty;
             return MonikerStringName[ItemsPicker[currentDeviceCameraName]];
         }

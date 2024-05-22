@@ -47,6 +47,8 @@ namespace ScannerAndDistributionOfQRCodes.Model
         [ObservableProperty]
         private string _messageText = string.Empty;
 
+        [Ignore]
+        public EventHandler SendMessageEvent { get; set; }
 
         private int _countGuest;
         public int CountGuest

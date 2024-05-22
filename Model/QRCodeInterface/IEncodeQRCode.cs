@@ -5,5 +5,6 @@ namespace ScannerAndDistributionOfQRCodes.Model.Interface
     public interface IEncodeQRCode
     {
         Image Encode(string text);
+        Stream EncodeStream(string text);
     }
 }

@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ScannerAndDistributionOfQRCodes.Model.Message;
 
 namespace ScannerAndDistributionOfQRCodes.Model
 {
@@ -22,6 +23,11 @@ namespace ScannerAndDistributionOfQRCodes.Model
         }
 
         private ObservableCollection<ScheduledEvent> _scheduledEvent = [];
+
+
+        
+
+
 
         [Column("whole_vents")]
         [OneToMany(CascadeOperations = CascadeOperation.All)]

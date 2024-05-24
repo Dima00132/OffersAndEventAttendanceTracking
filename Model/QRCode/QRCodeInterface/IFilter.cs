@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScannerAndDistributionOfQRCodes.Model.Interface
+namespace ScannerAndDistributionOfQRCodes.Model.QRCode.QRCodeInterface
 {
     public interface IFilter
     {

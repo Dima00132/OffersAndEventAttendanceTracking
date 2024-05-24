@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace ScannerAndDistributionOfQRCodes.Model.Interface
+namespace ScannerAndDistributionOfQRCodes.Model.QRCode.QRCodeInterface
 {
     public interface IDecodeQRCode
     {

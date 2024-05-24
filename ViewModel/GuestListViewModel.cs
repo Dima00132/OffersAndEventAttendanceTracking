@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ScannerAndDistributionOfQRCodes.Model;
+using ScannerAndDistributionOfQRCodes.Model.Message;
+using ScannerAndDistributionOfQRCodes.Model.Parser;
 using ScannerAndDistributionOfQRCodes.Navigation;
 using ScannerAndDistributionOfQRCodes.Service.Interface;
 using ScannerAndDistributionOfQRCodes.View;
@@ -41,12 +43,15 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
         private string _surname;
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
         private string _name;
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
         private string _patronymic;
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
         private string _mail;
@@ -88,6 +93,13 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             _scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent,EventArgs.Empty);
         });
+
+        public RelayCommand ParseCommand => new(async () =>
+        {
+            var pars = new XlsxParser();
+            pars.Pars("C:\\Users\\dima7\\OneDrive\\Рабочий стол\\TestPars.xlsx");
+        });
+
 
 
         [RelayCommand(CanExecute = nameof(CheckNameEvent))]
@@ -137,9 +149,9 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         private void InstallationValues(Guest guest)
         {
-            Surname = guest.Surname.ToString();
-            Name = guest.Name.ToString();
-            Patronymic = guest.Patronymic.ToString();
+            Surname = guest.User.Surname.ToString();
+            Name = guest.User.Name.ToString();
+            Patronymic = guest.User.Patronymic.ToString();
             Mail = guest.Mail.ToString();
         }
         private void ClearValues()
@@ -153,7 +165,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         public bool CheckNameEvent()
         {
             return !string.IsNullOrEmpty(Surname) & !string.IsNullOrEmpty(Name)
-                & !string.IsNullOrEmpty(Patronymic) & !string.IsNullOrEmpty(Mail);
+                & !string.IsNullOrEmpty(Patronymic) & EmailValidator.CheckEmailValidator(Mail);
         }
 
         private void SubscribingToMessageSendingEvents(ScheduledEvent scheduled, ObservableCollection<Guest> guests)

@@ -14,6 +14,8 @@ using MimeKit;
 using MailKit.Security;
 using MimeKit.Utils;
 using ScannerAndDistributionOfQRCodes.Model.Message;
+using Bytescout.Spreadsheet.Charts;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 
 namespace ScannerAndDistributionOfQRCodes.Model
@@ -30,28 +32,35 @@ namespace ScannerAndDistributionOfQRCodes.Model
         [ForeignKey(typeof(ScheduledEvent))]
         public int ScheduledEventId { get; set; }
 
-        
-        private string _surname;
-        public string Surname  
-        { 
-            get => _surname;
-            set=>SetProperty(ref _surname, value); 
-        }
-
-
-        private string _name;
-        public string Name
+        private User _user = new User();
+        [Column("user")]
+        [OneToOne(CascadeOperations = CascadeOperation.All)]
+        public User User
         {
-            get => _name;
-            set => SetProperty(ref _name, value);
+            get => _user;
+            set => SetProperty(ref _user, value);
         }
+        //private string _surname;
+        //public string Surname  
+        //{ 
+        //    get => _surname;
+        //    set=>SetProperty(ref _surname, value); 
+        //}
 
-        private string _patronymic;
-        public string Patronymic
-        {
-            get => _patronymic;
-            set => SetProperty(ref _patronymic, value);
-        }
+
+        //private string _name;
+        //public string Name
+        //{
+        //    get => _name;
+        //    set => SetProperty(ref _name, value);
+        //}
+
+        //private string _patronymic;
+        //public string Patronymic
+        //{
+        //    get => _patronymic;
+        //    set => SetProperty(ref _patronymic, value);
+        //}
     
         private string _mail;
         public string Mail
@@ -59,37 +68,60 @@ namespace ScannerAndDistributionOfQRCodes.Model
             get => _mail;
             set => SetProperty(ref _mail, value);
         }
-        public string QRHashCode { get;  set; }
 
-        public bool IsMessageSent { get; set; }
-
-        private Image _qRCodeImge;
-
-        public Guest()
+        private bool _isVerifiedQRCode;
+        public bool IsVerifiedQRCode
         {
+            get => _isVerifiedQRCode;
+            set => SetProperty(ref _isVerifiedQRCode, value);
         }
+
+        private bool _isValidMail;
+        public bool IsValidMail
+        {
+            get => _isValidMail;
+            set => SetProperty(ref _isValidMail, value);
+        }
+
+        private bool _isMessageSent;
+        public bool IsMessageSent
+        {
+            get => _isMessageSent;
+            set => SetProperty(ref _isMessageSent, value);
+        }
+
+        public string QRHashCode { get; set; }
+
+        public Guest(){}
 
         public Guest SetSurname(string surname)
         {
-            Surname = RemoveSpaces(surname);
+            User.Surname = RemoveSpaces(surname);
+           // Surname = RemoveSpaces(surname);
             return this;
         }
         public Guest SetName(string name)
         {
-            Name =  RemoveSpaces(name);
+            User.Name = RemoveSpaces(name);
+            //Name =  RemoveSpaces(name);
             return this;
         }
         public Guest SetPatronymic(string patronymic)
         {
-            Patronymic = RemoveSpaces(patronymic);
+            User.Patronymic = RemoveSpaces(patronymic);
+            //Patronymic = RemoveSpaces(patronymic);
             return this;
         }
         public Guest SetMail(string mail)
         {
+            if (Mail.Equals(mail))
+                return this;
 
             if (!string.IsNullOrEmpty(Mail))
                 IsMessageSent = false;
             var mailWithoutSpaces = RemoveSpaces(mail);
+
+            IsValidMail = EmailValidator.CheckEmailValidator(mailWithoutSpaces);
             //Проверка валидности посты
             Mail = mailWithoutSpaces;
             QRHashCode = GenerateQRHashCode();
@@ -99,7 +131,7 @@ namespace ScannerAndDistributionOfQRCodes.Model
         private string GenerateQRHashCode()
         {
             var uniqueQR = GeneratorUniqueQRHashCode
-                .Generate(Name, Surname, Patronymic, Mail, DateTime.Now.ToString());
+                .Generate(User.Name, User.Surname, User.Patronymic, Mail, DateTime.Now.ToString());
             return uniqueQR;
         }
 
@@ -120,106 +152,13 @@ namespace ScannerAndDistributionOfQRCodes.Model
 
                 var stream = encodeQRCode.EncodeStream(QRHashCode);
 
-                var emailSetnd = new EmailYandexMessage(scheduled.MessageText, scheduled.NameEvent, $"{Surname} {Name} {Patronymic}", Mail,
-                    new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr",new UserData("1","1","1")), stream);
-            ///
-            IsMessageSent = emailSetnd.Send(); 
+                var emailSetnd = new EmailYandexMessage(scheduled.MessageText, scheduled.NameEvent, $"{User}", Mail,
+                    new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr", new User("1", "1", "1")), stream);
+                //var emailSetnd = new EmailYandexMessage(scheduled.MessageText, scheduled.NameEvent, $"{Surname} {Name} {Patronymic}", Mail,
+                //    new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr",new User("1","1","1")), stream);
+                ///
+                IsMessageSent = emailSetnd.Send(); 
             }
         }
-
-
-        //private AlternateView GetEmbeddedImage(Stream stream)
-        //{
-        //    LinkedResource res = new LinkedResource(stream);
-        //    res.ContentId = Guid.NewGuid().ToString();
-        //    string htmlBody = @"<img src='cid:" + res.ContentId + @"'/>";
-        //    AlternateView alternateView = AlternateView.CreateAlternateViewFromString(htmlBody, null, MediaTypeNames.Text.Html);
-        //    alternateView.LinkedResources.Add(res);
-        //    return alternateView;
-        //}
-
-        //private bool Send(Stream stream)
-        //{
-        //    try
-        //    {
-        //        var message = new MimeMessage();
-        //        message.From.Add(new MailboxAddress("От органезаторов", "TestMailSendr@yandex.ru"));
-        //        message.To.Add(new MailboxAddress($"{Surname} {Name} {Patronymic}",Mail));
-        //        message.Subject = NameEvent;
-
-        //        var body = new BodyBuilder();
-        //        //{
-        //        //    HtmlBody = $"<html><body>Test messe</body></html>"
-        //        //};
-                
-
-        //        var imageFoot = body.LinkedResources.Add("qr",stream);
-
-        //        imageFoot.ContentId = MimeUtils.GenerateMessageId();
-        //        body.HtmlBody = $@"<img src=""cid:{imageFoot.ContentId}"" /><br /><div style=""border-top:3px solid #61028d"">&nbsp;</div><p>{(object)MessageText}</p>";
-
-
-        //        message.Body = body.ToMessageBody();
-
-
-
-        //        using var client = new SmtpClient();
-        //        client.Connect("smtp.yandex.ru", 465, true);
-
-        //        // Note: only needed if the SMTP server requires authentication cwufaysygkohokyr
-        //        client.Authenticate("TestMailSendr@yandex.ru", "cwufaysygkohokyr");
-
-        //        client.Send(message);
-        //        client.Disconnect(true);
-
-
-
-
-        //        ////smtp.yandex.ru = определяет сам про почте 
-        //        //SmtpClient smtpClient = new SmtpClient("smtp.yandex.com.tr", 465);
-        //        //smtpClient.UseDefaultCredentials = true ;
-        //        //smtpClient.EnableSsl = true;
-
-
-
-        //        ////mlrulbmzwliwnpqf
-
-        //        ////"TestMailSendr@yandex.ru" почта через аккаунт 
-        //        //System.Net.NetworkCredential baseAuthenticationInfo =
-        //        //    new System.Net.NetworkCredential("TestMailSendr@yandex.ru", "mlrulbmzwliwnpqf");
-        //        //smtpClient.Credentials = baseAuthenticationInfo;
-
-        //        ////"TestMailSendr@yandex.ru" почта через аккаунт 
-        //        //MailAddress from = new MailAddress("TestMailSendr@yandex.ru", "От органезаторов");
-        //        //MailAddress to = new MailAddress("dima79346@gmail.com", "Грстю");
-
-        //        //MailMessage message = new MailMessage(from, to);
-
-        //        ////куда придет ответ 
-        //        //MailAddress replyTo = new MailAddress("TestMailSendr@yandex.ru");
-        //        //message.ReplyToList.Add(replyTo);
-
-        //        ////тема определяется от мероприятия 
-        //        //message.Subject = "Test MailMessage";
-        //        //message.SubjectEncoding = System.Text.Encoding.UTF8;
-
-        //        //message.Body = "Текст прихода на события";
-        //        //message.BodyEncoding = System.Text.Encoding.UTF8;
-        //        //message.IsBodyHtml = true;
-
-        //        //message.Priority = MailPriority.Normal;
-
-        //        //message.AlternateViews.Add(GetEmbeddedImage(stream));
-
-
-        //        //smtpClient.Send(message);
-        //    }
-        //    catch (Exception)
-        //    {
-
-        //        return false;
-        //    }  
-        //    return true;
-        //}
     }
 }

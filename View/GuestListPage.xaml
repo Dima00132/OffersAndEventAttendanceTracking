@@ -6,9 +6,15 @@
              xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel">
     
     <Grid RowDefinitions="100,*">
-        <Grid   Grid.Row="0" ColumnDefinitions="*,*">
+        <Grid   Grid.Row="0" ColumnDefinitions="*,*,*,*">
             <Button Grid.Column="0" Text="Добавить" BackgroundColor="Green"  Command="{Binding AddGuestCommand}" />
             <Button Grid.Column="1" Text="Отправить приглашение" BackgroundColor="#0000ff"  Command="{Binding SendCommand}" />
+            <Button Grid.Column="2" Text="Pars" Command="{Binding ParseCommand}"/>
+            <Frame Margin="20" Grid.Column="3">
+                <Frame.GestureRecognizers>
+                    <DropGestureRecognizer AllowDrop="True" Drop="DropGestureRecognizer_Drop_1" />
+                </Frame.GestureRecognizers>
+            </Frame>
         </Grid>
         
         
@@ -20,27 +26,62 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type model:Guest}">
                         <Frame CornerRadius="5">
-                            <Label>
-                                <Label.Text>
-                                    <MultiBinding StringFormat="ФИО:{0} {1} {2}">
-                                        <Binding Path="Surname" Mode="TwoWay" />
-                                        <Binding Path="Name"  Mode="TwoWay" />
-                                        <Binding Path="Patronymic"  Mode="TwoWay" />
-                                    </MultiBinding>
-                                </Label.Text>
-                                <FlyoutBase.ContextFlyout>
-                                    <MenuFlyout>
-                                        <MenuFlyoutItem Text="Редектировать" 
-                                                        Command="{Binding Path=ChangeCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
-                                                        CommandParameter="{Binding .}"/>
-                                        <MenuFlyoutItem Text="Удалить" 
-                                                        Command="{Binding Path= DeleteCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
-                                                        CommandParameter="{Binding .}"/>
-                                    </MenuFlyout>
-                                </FlyoutBase.ContextFlyout>
-                            </Label>
-                        </Frame>
+                            <Grid ColumnDefinitions="*,100">
+                                <Label Grid.Column="0">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="ФИО:{0} {1} {2}">
+                                            <Binding Path="User.Surname" Mode="TwoWay" />
+                                            <Binding Path="User.Name"  Mode="TwoWay" />
+                                            <Binding Path="User.Patronymic"  Mode="TwoWay" />
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                                <HorizontalStackLayout Grid.Column="1">
+                                    <Image x:Name="imageValidMail">
+                                        <Image.Triggers>
+                                            <DataTrigger TargetType="Image"
+                                                         Binding="{Binding  Mode=TwoWay, Path=IsValidMail}" Value="False">
+                                                <Setter  Property="Source" Value="dont_valid_mail.png" />
+                                                <Setter  Property="ToolTipProperties.Text" Value="Неправильно указана почта!"/>
 
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Image"
+                                                         Binding="{Binding  Mode=TwoWay, Path=IsValidMail}" Value="True">
+                                                <Setter  Property="Source" Value="valid_mail.png" />
+                                                <Setter  Property="ToolTipProperties.Text" Value="Почта указана правильно!" />
+
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                    </Image>
+                                    <Image x:Name="imageSendQRCode">
+                                        <Image.Triggers>
+                                            <DataTrigger TargetType="Image"
+                                                         Binding="{Binding  Mode=TwoWay, Path=IsMessageSent}" Value="False">
+                                                <Setter  Property="Source" Value="dont_qr_code_send.png" />
+                                                <Setter  Property="ToolTipProperties.Text" Value="QR-код не отправлен!" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Image"
+                                                         Binding="{Binding  Mode=TwoWay, Path=IsMessageSent}" Value="True">
+                                                <Setter  Property="Source" Value="qr_code_send.png" />
+                                                <Setter  Property="ToolTipProperties.Text" Value="QR-код  отправлен!" />
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                    </Image>
+
+                                    <Image x:Name="isScannerQRCode" IsVisible="{Binding IsVerifiedQRCode}" Source="scanner_qr_code.png" ToolTipProperties.Text ="QR-код проверен!"/>
+                                </HorizontalStackLayout>
+                            </Grid>
+                            <FlyoutBase.ContextFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="Редектировать" 
+                         Command="{Binding Path=ChangeCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
+                         CommandParameter="{Binding .}"/>
+                                    <MenuFlyoutItem Text="Удалить" 
+                         Command="{Binding Path= DeleteCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
+                         CommandParameter="{Binding .}"/>
+                                </MenuFlyout>
+                            </FlyoutBase.ContextFlyout>
+                        </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

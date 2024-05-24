@@ -12,7 +12,7 @@ using ZXing.Windows.Compatibility;
 using ZXing;
 using Image = Microsoft.Maui.Controls.Image;
 using BitMiracle.LibTiff.Classic;
-using ScannerAndDistributionOfQRCodes.Model.Interface;
+using ScannerAndDistributionOfQRCodes.Model.QRCode.QRCodeInterface;
 
 namespace ScannerAndDistributionOfQRCodes.Model.QRCode
 {

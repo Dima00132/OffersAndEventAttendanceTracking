@@ -1,6 +1,6 @@
 ﻿using Image = Microsoft.Maui.Controls.Image;
 
-namespace ScannerAndDistributionOfQRCodes.Model.Interface
+namespace ScannerAndDistributionOfQRCodes.Model.QRCode.QRCodeInterface
 {
     public interface IEncodeQRCode
     {

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Maui.Animations;
+using ScannerAndDistributionOfQRCodes.Service.Interface;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 using System;
@@ -15,6 +16,8 @@ using TableAttribute = SQLite.TableAttribute;
 
 namespace ScannerAndDistributionOfQRCodes.Model
 {
+    public delegate void SendMessage(string nameEvent,string messageText,ILocalDbService localDbService,bool resendMessage = false);
+
     [Table("scheduled_event")]
     public sealed partial class ScheduledEvent : ObservableObject
     {
@@ -48,7 +51,9 @@ namespace ScannerAndDistributionOfQRCodes.Model
         private string _messageText = string.Empty;
 
         [Ignore]
-        public EventHandler SendMessageEvent { get; set; }
+        public SendMessage SendMessageEvent { get; set; }
+
+        
 
         private int _countGuest;
         public int CountGuest
@@ -61,6 +66,15 @@ namespace ScannerAndDistributionOfQRCodes.Model
         {
             NameEvent = nameEvent;
             Date = date;
+        }
+
+        public IEnumerable<Guest> FindsQuestionByRequest(string request)
+        {
+            var learnQuestions = Guests;
+            var result = learnQuestions
+                .Where(x => x.User.ToString().Length >= request.Length)
+                .Where(x => String.Compare(x.User.ToString(), 0, request, 0, request.Length, StringComparison.OrdinalIgnoreCase) == 0);
+            return result;
         }
 
         public void Add(Guest guest)

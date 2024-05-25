@@ -3,88 +3,118 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ScannerAndDistributionOfQRCodes.View.GuestListPage"
              xmlns:model = "clr-namespace:ScannerAndDistributionOfQRCodes.Model"
-             xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel">
-    
+             xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+
+    <!--[ObservableProperty]
+ private int _countGuest;
+ [ObservableProperty]
+ private int _countSendMessage;-->
+
     <Grid RowDefinitions="100,*">
         <Grid   Grid.Row="0" ColumnDefinitions="*,*,*,*">
             <Button Grid.Column="0" Text="Добавить" BackgroundColor="Green"  Command="{Binding AddGuestCommand}" />
-            <Button Grid.Column="1" Text="Отправить приглашение" BackgroundColor="#0000ff"  Command="{Binding SendCommand}" />
-            <Button Grid.Column="2" Text="Pars" Command="{Binding ParseCommand}"/>
+            <Button Grid.Column="1" TextColor="White"  ImageSource="sending_messages.png" BackgroundColor="#0000ff"  Command="{Binding SendCommand}">
+                <Button.Text>
+                    <MultiBinding StringFormat="Отправить приглашение {0} из {1}">
+                        <Binding Path="CountSendMessage" />
+                        <Binding Path="CountGuest"  />
+                    </MultiBinding>
+                </Button.Text>
+            </Button>
+            <ImageButton Grid.Column="2" ToolTipProperties.Text="Выбрать файл" Source="file_selection.png" Command="{Binding ParseCommand}"/>
             <Frame Margin="20" Grid.Column="3">
                 <Frame.GestureRecognizers>
                     <DropGestureRecognizer AllowDrop="True" Drop="DropGestureRecognizer_Drop_1" />
                 </Frame.GestureRecognizers>
+                <Label Text="Вставьте файл"/>
             </Frame>
         </Grid>
         
         
 
         <Grid Grid.Row="1" ColumnDefinitions="800,*">
-            <CollectionView Grid.Column="0" 
+
+            <Grid Grid.Column="0"  RowDefinitions="50,*">
+                <SearchBar Grid.Row="0" 
+                           x:Name="CompanySearch"
+                           Placeholder="Поиск..">
+                 <SearchBar.Behaviors>
+                       <toolkit:EventToCommandBehavior
+                                EventName="TextChanged"
+                                Command="{Binding PerformSearchCommand}"
+                                CommandParameter="{Binding Text, Source={x:Reference CompanySearch}}"/>
+                        </SearchBar.Behaviors>
+                </SearchBar>
+               
+            
+
+            <CollectionView Grid.Row="1" 
             AbsoluteLayout.LayoutFlags="All"
             ItemsSource="{Binding Guests}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type model:Guest}">
                         <Frame CornerRadius="5">
-                            <Grid ColumnDefinitions="*,100">
-                                <Label Grid.Column="0">
-                                    <Label.Text>
-                                        <MultiBinding StringFormat="ФИО:{0} {1} {2}">
-                                            <Binding Path="User.Surname" Mode="TwoWay" />
-                                            <Binding Path="User.Name"  Mode="TwoWay" />
-                                            <Binding Path="User.Patronymic"  Mode="TwoWay" />
-                                        </MultiBinding>
-                                    </Label.Text>
-                                </Label>
-                                <HorizontalStackLayout Grid.Column="1">
-                                    <Image x:Name="imageValidMail">
-                                        <Image.Triggers>
-                                            <DataTrigger TargetType="Image"
+                                <Grid ColumnDefinitions="*,100">
+                                    <Label Grid.Column="0">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{} {0} {1} {2} ">
+                                                <Binding Path="User.Surname" Mode="TwoWay" />
+                                                <Binding Path="User.Name"  Mode="TwoWay" />
+                                                <Binding Path="User.Patronymic"  Mode="TwoWay" />
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+
+                                    <HorizontalStackLayout Grid.Column="1">
+                                        <Image x:Name="imageValidMail" IsVisible="False" Source="dont_valid_mail" ToolTipProperties.Text="Неправильно указана почта!">
+                                            <Image.Triggers>
+                                                <DataTrigger TargetType="Image"
                                                          Binding="{Binding  Mode=TwoWay, Path=IsValidMail}" Value="False">
-                                                <Setter  Property="Source" Value="dont_valid_mail.png" />
-                                                <Setter  Property="ToolTipProperties.Text" Value="Неправильно указана почта!"/>
-
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Image"
-                                                         Binding="{Binding  Mode=TwoWay, Path=IsValidMail}" Value="True">
-                                                <Setter  Property="Source" Value="valid_mail.png" />
-                                                <Setter  Property="ToolTipProperties.Text" Value="Почта указана правильно!" />
-
-                                            </DataTrigger>
-                                        </Image.Triggers>
-                                    </Image>
-                                    <Image x:Name="imageSendQRCode">
-                                        <Image.Triggers>
-                                            <DataTrigger TargetType="Image"
+                                                    <Setter  Property="IsVisible" Value="True" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Image"
+                                                         Binding="{Binding Source={x:Reference isScannerQRCode}, Mode=TwoWay, Path=IsVisible}" Value="True">
+                                                    <Setter  Property="IsVisible" Value="False" />
+                                                </DataTrigger>
+                                            </Image.Triggers>
+                                        </Image>
+                                        <Image x:Name="imageSendQRCode" IsVisible="False" Source="dont_qr_code_send.png" ToolTipProperties.Text="QR-код не отправлен!" >
+                                            <Image.Triggers>
+                                                <DataTrigger TargetType="Image"
                                                          Binding="{Binding  Mode=TwoWay, Path=IsMessageSent}" Value="False">
-                                                <Setter  Property="Source" Value="dont_qr_code_send.png" />
-                                                <Setter  Property="ToolTipProperties.Text" Value="QR-код не отправлен!" />
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Image"
-                                                         Binding="{Binding  Mode=TwoWay, Path=IsMessageSent}" Value="True">
-                                                <Setter  Property="Source" Value="qr_code_send.png" />
-                                                <Setter  Property="ToolTipProperties.Text" Value="QR-код  отправлен!" />
-                                            </DataTrigger>
-                                        </Image.Triggers>
-                                    </Image>
+                                                    <Setter  Property="IsVisible" Value="True" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Image"
+                                                         Binding="{Binding Source={x:Reference isScannerQRCode}, Mode=TwoWay, Path=IsVisible}" Value="True">
+                                                    <Setter  Property="IsVisible" Value="False" />
+                                                </DataTrigger>
+                                            </Image.Triggers>
+                                        </Image>
 
-                                    <Image x:Name="isScannerQRCode" IsVisible="{Binding IsVerifiedQRCode}" Source="scanner_qr_code.png" ToolTipProperties.Text ="QR-код проверен!"/>
-                                </HorizontalStackLayout>
-                            </Grid>
-                            <FlyoutBase.ContextFlyout>
-                                <MenuFlyout>
-                                    <MenuFlyoutItem Text="Редектировать" 
-                         Command="{Binding Path=ChangeCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
-                         CommandParameter="{Binding .}"/>
-                                    <MenuFlyoutItem Text="Удалить" 
-                         Command="{Binding Path= DeleteCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
-                         CommandParameter="{Binding .}"/>
-                                </MenuFlyout>
-                            </FlyoutBase.ContextFlyout>
-                        </Frame>
+                                        <Image x:Name="isScannerQRCode" IsVisible="{Binding IsVerifiedQRCode}" Source="scanner_qr_code.png" ToolTipProperties.Text ="QR-код проверен!"/>
+                                    </HorizontalStackLayout>
+
+                                    <FlyoutBase.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="Редектировать" 
+                                                    Command="{Binding Path=ChangeCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
+                                                    CommandParameter="{Binding .}"/>
+                                            <MenuFlyoutItem Text="Отправить приглашение" 
+                                                    Command="{Binding Path=SendGuestCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
+                                                    CommandParameter="{Binding .}"/>
+                                            <MenuFlyoutItem Text="Удалить" 
+                                                    Command="{Binding Path= DeleteCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
+                                                    CommandParameter="{Binding .}"/>
+
+                                        </MenuFlyout>
+                                    </FlyoutBase.ContextFlyout>
+                                </Grid>
+                            </Frame>
                     </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
 
             <Frame Grid.Column="1" IsVisible="{Binding IsEditor}"  BorderColor="White">
                 <Frame  CornerRadius="50" BorderColor="#00cfff" HeightRequest="520" >

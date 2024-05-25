@@ -64,12 +64,40 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         [ObservableProperty]
         private bool _isVisibleChangeGuest = false;
 
+        [ObservableProperty]
+        private int _countGuest;
+        [ObservableProperty]
+        private int _countSendMessage;
+
+
         public GuestListViewModel(INavigationService navigationService, ILocalDbService localDbService)
         {
             _navigationService = navigationService;
             _localDbService = localDbService;
 
         }
+
+
+        private async Task OnSearchTextChangedAsync(object keyword)
+        {
+            var query = keyword as string;
+            if (string.IsNullOrEmpty(query))
+            {
+                Guests = _scheduledEvent.Guests;
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(query) && query.Length >= 1)
+            {
+                var data = await Task.FromResult(_scheduledEvent.FindsQuestionByRequest(query));
+                if (data is not null)
+                    Guests = new ObservableCollection<Guest>(data);
+            }
+        }
+
+        public RelayCommand<string?> PerformSearchCommand => new(async (string? query) => await OnSearchTextChangedAsync(query));
+
+
 
 
         public RelayCommand<Guest> ChangeCommand => new(async (guest) =>
@@ -88,16 +116,50 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             IsEditor = true;
         });
 
+        public RelayCommand SendGuestCommand => new(async () =>
+        {
+            SendMessage(true);
+        });
+
+        private void SendMessage(bool resendMessage)
+        {
+            if (!InternetCS.IsConnectedToInternet())
+            {
+                Application.Current.MainPage.DisplayAlert("Предупреждение", "Отсутствует доступ к интернету!", "ОK");
+                return;
+            }
+            _scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
+            _localDbService.Update(_scheduledEvent);
+        }
 
         public RelayCommand SendCommand => new(async () =>
         {
-            _scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent,EventArgs.Empty);
+            SendMessage(false);
         });
 
-        public RelayCommand ParseCommand => new(async () =>
+        public  RelayCommand ParseCommand => new(async () =>
         {
+            FilePickerFileType? customFileType =
+            new(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.WinUI, new[] { ".xlsx" } }
+            });
+
+            var result = await FilePicker.PickAsync(new PickOptions 
+            { 
+                FileTypes = customFileType
+            });
+
+            if (result is null)
+                return;
+
+            var stream = await result.OpenReadAsync();
+            
+
             var pars = new XlsxParser();
-            pars.Pars("C:\\Users\\dima7\\OneDrive\\Рабочий стол\\TestPars.xlsx");
+
+            var newGuest =  pars.Pars(stream);
+            //pars.Pars("C:\\Users\\dima7\\OneDrive\\Рабочий стол\\TestPars.xlsx");
         });
 
 
@@ -127,6 +189,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             _scheduledEvent.SendMessageEvent -= guest.GetUpSubscriptionForSendingMessages();
             Guests.Remove(guest);
+            CountGuest--;
             _localDbService.Update(_scheduledEvent);
         });
 
@@ -136,6 +199,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             var guest = new Guest().SetSurname(Surname).SetPatronymic(Patronymic).SetName(Name).SetMail(Mail);
             _scheduledEvent.SendMessageEvent += guest.GetUpSubscriptionForSendingMessages();
             _localDbService.Create(guest);
+            CountGuest++;
             return guest;
         }
         private void ChangeGuest(Guest guest)
@@ -171,9 +235,12 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         private void SubscribingToMessageSendingEvents(ScheduledEvent scheduled, ObservableCollection<Guest> guests)
         {
             isStart = false;
-            foreach (var item in guests.Where(x => !x.IsMessageSent))
+            foreach (var item in guests)
+            {
+                CountSendMessage += item.IsMessageSent ? 1 : 0;
                 scheduled.SendMessageEvent += item.GetUpSubscriptionForSendingMessages();
-
+            }
+           CountGuest = guests.Count;
         }
 
 

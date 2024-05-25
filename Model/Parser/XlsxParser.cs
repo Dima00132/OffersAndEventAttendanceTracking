@@ -17,21 +17,41 @@ namespace ScannerAndDistributionOfQRCodes.Model.Parser
     public interface IParser
     {
         public List<Guest> Pars(string filePath);
+
+        public List<Guest> Pars(Stream stream);
     }
     public class XlsxParser : IParser
     {
 
         private readonly List<Guest> _guests = [];
 
+
+       
+
+        public List<Guest> Pars(Stream stream)
+        {
+            using SpreadsheetDocument document = SpreadsheetDocument.Open(stream, false);
+            StartPars(document);
+            return _guests;
+        }
+
         public List<Guest> Pars(string filePath)
         {
             using SpreadsheetDocument document = SpreadsheetDocument.Open(filePath, false);
-            SharedStringTable sharedStringTable = document.WorkbookPart.SharedStringTablePart.SharedStringTable;
-            
-            foreach (WorksheetPart worksheetPart in document.WorkbookPart.WorksheetParts)
-                IterateThroughSheetData(worksheetPart, sharedStringTable);
+            StartPars(document);
+            //SharedStringTable sharedStringTable = document.WorkbookPart.SharedStringTablePart.SharedStringTable;
+
+            //foreach (WorksheetPart worksheetPart in document.WorkbookPart.WorksheetParts)
+            //    IterateThroughSheetData(worksheetPart, sharedStringTable);
 
             return _guests;
+        }
+
+        private void StartPars(SpreadsheetDocument document)
+        {
+            SharedStringTable sharedStringTable = document.WorkbookPart.SharedStringTablePart.SharedStringTable;
+            foreach (WorksheetPart worksheetPart in document.WorkbookPart.WorksheetParts)
+                IterateThroughSheetData(worksheetPart, sharedStringTable);
         }
 
         private Dictionary<string, Action<Guest, string>> _columnCommand = new()

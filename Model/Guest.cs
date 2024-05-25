@@ -16,6 +16,7 @@ using MimeKit.Utils;
 using ScannerAndDistributionOfQRCodes.Model.Message;
 using Bytescout.Spreadsheet.Charts;
 using DocumentFormat.OpenXml.Wordprocessing;
+using ScannerAndDistributionOfQRCodes.Service.Interface;
 
 
 namespace ScannerAndDistributionOfQRCodes.Model
@@ -114,7 +115,7 @@ namespace ScannerAndDistributionOfQRCodes.Model
         }
         public Guest SetMail(string mail)
         {
-            if (Mail.Equals(mail))
+            if (Mail is not null && Mail.Equals(mail))
                 return this;
 
             if (!string.IsNullOrEmpty(Mail))
@@ -138,27 +139,27 @@ namespace ScannerAndDistributionOfQRCodes.Model
         private string RemoveSpaces(string value)
             =>value.Replace(" ", "");
 
-        public EventHandler GetUpSubscriptionForSendingMessages()
+        public SendMessage GetUpSubscriptionForSendingMessages()
             => SendingMessages;
 
-        private void SendingMessages(object obj,EventArgs eventArgs)
+        private void SendingMessages(string nameEvent, string messageText, ILocalDbService localDbService, bool resendMessage = false)
         {
+            if (IsMessageSent & !resendMessage)
+                return;
 
-            if (obj is ScheduledEvent scheduled) 
-            {
+            var encodeQRCode = new EncodeQRCode();
+            // _qRCodeImge = encodeQRCode.Encode(QRHashCode);
 
-                var encodeQRCode = new EncodeQRCode();
-                // _qRCodeImge = encodeQRCode.Encode(QRHashCode);
+            var stream = encodeQRCode.EncodeStream(QRHashCode);
 
-                var stream = encodeQRCode.EncodeStream(QRHashCode);
-
-                var emailSetnd = new EmailYandexMessage(scheduled.MessageText, scheduled.NameEvent, $"{User}", Mail,
-                    new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr", new User("1", "1", "1")), stream);
-                //var emailSetnd = new EmailYandexMessage(scheduled.MessageText, scheduled.NameEvent, $"{Surname} {Name} {Patronymic}", Mail,
-                //    new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr",new User("1","1","1")), stream);
-                ///
-                IsMessageSent = emailSetnd.Send(); 
-            }
+            var emailSetnd = new EmailYandexMessage(messageText, nameEvent, $"{User}", Mail,
+                new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr", new User("1", "1", "1")), stream);
+            //var emailSetnd = new EmailYandexMessage(scheduled.MessageText, scheduled.NameEvent, $"{Surname} {Name} {Patronymic}", Mail,
+            //    new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr",new User("1","1","1")), stream);
+            ///
+            IsMessageSent = emailSetnd.Send();
+            localDbService.Update(this);
+            //}
         }
     }
 }

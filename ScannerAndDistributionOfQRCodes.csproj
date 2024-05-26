@@ -98,7 +98,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="View\GuestListFromDocumentPopup.xaml.cs">
+	    <DependentUpon>GuestListFromDocumentPopup.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="View\AddScheduledEventPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\GuestListFromDocumentPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\GuestListPage.xaml">

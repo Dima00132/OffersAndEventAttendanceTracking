@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 using Microsoft.Maui.Animations;
 using ScannerAndDistributionOfQRCodes.Model;
 using ScannerAndDistributionOfQRCodes.Navigation;
@@ -50,6 +51,14 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         public RelayCommand<ScheduledEvent> TapCommand => new(async (scheduledEvent) =>
         {
             await _navigationService.NavigateByPage<GuestVerificationTablePage>(scheduledEvent);
+        });
+
+        public RelayCommand<ScheduledEvent> DeleteCommand => new(async (scheduledEvent) =>
+        {
+            Whole.ScheduledEvents.Remove(scheduledEvent);
+            Scheduleds.Remove(scheduledEvent);
+
+            _localDbService.Update(Whole);
         });
 
         public override Task OnUpdateDbService()

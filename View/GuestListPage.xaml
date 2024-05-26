@@ -12,7 +12,7 @@
  private int _countSendMessage;-->
 
     <Grid RowDefinitions="100,*">
-        <Grid   Grid.Row="0" ColumnDefinitions="*,*,*,*">
+        <Grid   Grid.Row="0" ColumnDefinitions="*,*,*,*" ColumnSpacing="10">
             <Button Grid.Column="0" Text="Добавить" BackgroundColor="Green"  Command="{Binding AddGuestCommand}" />
             <Button Grid.Column="1" TextColor="White"  ImageSource="sending_messages.png" BackgroundColor="#0000ff"  Command="{Binding SendCommand}">
                 <Button.Text>
@@ -33,9 +33,9 @@
         
         
 
-        <Grid Grid.Row="1" ColumnDefinitions="800,*">
+        <Grid Grid.Row="1" ColumnDefinitions="800,*" >
 
-            <Grid Grid.Column="0"  RowDefinitions="50,*">
+            <Grid Grid.Column="0"  RowDefinitions="50,*" RowSpacing="5">
                 <SearchBar Grid.Row="0" 
                            x:Name="CompanySearch"
                            Placeholder="Поиск..">
@@ -54,7 +54,7 @@
             ItemsSource="{Binding Guests}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type model:Guest}">
-                        <Frame CornerRadius="5">
+                        <Frame CornerRadius="5" MaximumHeightRequest="70"  MinimumHeightRequest="70">
                                 <Grid ColumnDefinitions="*,100">
                                     <Label Grid.Column="0">
                                         <Label.Text>
@@ -66,7 +66,7 @@
                                         </Label.Text>
                                     </Label>
 
-                                    <HorizontalStackLayout Grid.Column="1">
+                                    <HorizontalStackLayout Grid.Column="1" VerticalOptions="Start" HorizontalOptions="End">
                                         <Image x:Name="imageValidMail" IsVisible="False" Source="dont_valid_mail" ToolTipProperties.Text="Неправильно указана почта!">
                                             <Image.Triggers>
                                                 <DataTrigger TargetType="Image"
@@ -92,7 +92,7 @@
                                             </Image.Triggers>
                                         </Image>
 
-                                        <Image x:Name="isScannerQRCode" IsVisible="{Binding IsVerifiedQRCode}" Source="scanner_qr_code.png" ToolTipProperties.Text ="QR-код проверен!"/>
+                                        <Image x:Name="isScannerQRCode" IsVisible="{Binding IsVerifiedQRCode}" Source="qr_code_send.png" ToolTipProperties.Text ="QR-код проверен!"/>
                                     </HorizontalStackLayout>
 
                                     <FlyoutBase.ContextFlyout>

@@ -18,7 +18,7 @@
 
 
             <Grid Grid.Row="1"  ColumnDefinitions="800,*">
-                <Frame Grid.Column="1" BorderColor="White"  >
+                <!--<Frame Grid.Column="1" BorderColor="White"  >
                     <Frame  CornerRadius="50"  HeightRequest="650" >
                 <StackLayout>
                     <Frame>
@@ -32,10 +32,33 @@
                     </Frame>
                     </StackLayout>
                  </Frame>
+                </Frame>-->
+
+            <Frame Grid.Column="1" IsVisible="{Binding IsEditor}"  BorderColor="White">
+                <Frame  CornerRadius="50" BorderColor="#00cfff" HeightRequest="520" >
+                    <StackLayout Spacing="20">
+                        <Frame>
+                            <Label  Text="{Binding Guest.User.Surname}" />
+                        </Frame>
+                        <Frame>
+                            <Label  Text="{Binding Guest.User.Name}"/>
+                        </Frame>
+                        <Frame>
+                            <Label  Text="{Binding Guest.User.Patronymic}" />
+                        </Frame>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                            <Button Grid.Column="0" Text="Подтвердить" VerticalOptions="Start" BackgroundColor="Gray"  Command="{Binding CnfirmCommand}" />
+                            <!--<Button Grid.Column="1" Text="Сохранить"  VerticalOptions="End" BackgroundColor="Green"  Command="{Binding SaveCommand}" />-->
+                        </Grid>
+
+
+                    </StackLayout>
+
                 </Frame>
+            </Frame>
 
 
-                <StackLayout Grid.Column="0">
+            <StackLayout Grid.Column="0">
                     <Picker  ItemsSource="{Binding ItemsPicker}" 
                      SelectedIndex="{Binding CurrentDeviceCameraName}" 
                      TextColor="Black" 

@@ -36,6 +36,17 @@
                                        Text="{Binding Date, StringFormat='Дата и время проведения мероприятия {0}'}" />
                                 <Label Grid.Column="0" Text="{Binding  NameEvent , Mode=TwoWay}"/>
                             </Grid>
+                            <FlyoutBase.ContextFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="Редектировать" 
+                        Command="{Binding Path=ChangeCommand, Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}}"
+                        CommandParameter="{Binding .}"/>
+                                    <MenuFlyoutItem Text="Удалить" 
+                        Command="{Binding Path= DeleteCommand, Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}}"
+                        CommandParameter="{Binding .}"/>
+
+                                </MenuFlyout>
+                            </FlyoutBase.ContextFlyout>
                         </StackLayout>
                     </Frame>
                 </DataTemplate>

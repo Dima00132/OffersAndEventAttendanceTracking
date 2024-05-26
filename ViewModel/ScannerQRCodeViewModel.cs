@@ -24,6 +24,7 @@ using ScannerAndDistributionOfQRCodes.Model;
 using ScannerAndDistributionOfQRCodes.Navigation;
 using ScannerAndDistributionOfQRCodes.Service.Interface;
 using ScannerAndDistributionOfQRCodes.Model.QRCode.QRCodeInterface;
+using System.Security.Policy;
 
 
 namespace ScannerAndDistributionOfQRCodes
@@ -37,10 +38,12 @@ namespace ScannerAndDistributionOfQRCodes
 
         [ObservableProperty]
         private Guest _guest;
+
         [ObservableProperty]
         private ScheduledEvent _scheduledEvent;
 
-
+        [ObservableProperty]
+        private bool _isEditor = false;
 
         [ObservableProperty]
         private bool _isCameraLaunched = false;
@@ -175,7 +178,14 @@ namespace ScannerAndDistributionOfQRCodes
 
         private void SetImageOfCameraOn()
             =>QRImage = ImageSource.FromFile("camera_is_on.png");
-       
+
+        public RelayCommand CnfirmCommand => new(() =>
+        {
+            IsEditor = false;
+            Guest.IsVerifiedQRCode = true;
+            _localDbService.Update(Guest);
+        });
+
 
 
         private void UpdateQrCodeAsync(object obj,NewFrameEventArgs eventArgs)
@@ -192,10 +202,26 @@ namespace ScannerAndDistributionOfQRCodes
                 if (!string.IsNullOrEmpty(result))
                 {
                     ///camera_is_on.png
-
-                    TurnOffCamera();
+                    if (SearchByQRHash(result))
+                    {
+                        IsEditor = true;
+                        TurnOffCamera();
+                    }
                 }
             }
+        }
+
+        private bool SearchByQRHash(string hash)
+        {
+            foreach (var item in ScheduledEvent.Guests)
+            {
+                if (item.QRHashCode.Equals(hash))
+                {
+                    Guest = item;
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

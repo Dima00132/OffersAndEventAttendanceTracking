@@ -1,5 +1,6 @@
 ﻿using Camera.MAUI;
 using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Core;
 using Microsoft.Extensions.Logging;
 using ScannerAndDistributionOfQRCodes;
 using ScannerAndDistributionOfQRCodes.Navigation;
@@ -18,6 +19,10 @@ namespace ScannerAndDistributionOfQRCodes
 
             builder.Services.AddTransient<ScannerQRCodeViewModel>().AddTransient<ScannerQRCodePage>();
             builder.Services.AddTransient<GuestListViewModel>().AddTransient<GuestListPage>();
+
+
+            builder.Services.AddSingleton<IPopupService, PopupService>().AddTransientPopup<GuestListFromDocumentPopup, GuestListFromDocumentViewModel>();
+            //builder.Services .AddTransient<GuestListFromDocumentViewModel>().AddTransient<GuestListFromDocumentPopup>();
 
 
             //builder.Services.AddTransient<ScannerQRCodePage>();

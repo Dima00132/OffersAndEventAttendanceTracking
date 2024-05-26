@@ -41,27 +41,7 @@ namespace ScannerAndDistributionOfQRCodes.Model
             get => _user;
             set => SetProperty(ref _user, value);
         }
-        //private string _surname;
-        //public string Surname  
-        //{ 
-        //    get => _surname;
-        //    set=>SetProperty(ref _surname, value); 
-        //}
 
-
-        //private string _name;
-        //public string Name
-        //{
-        //    get => _name;
-        //    set => SetProperty(ref _name, value);
-        //}
-
-        //private string _patronymic;
-        //public string Patronymic
-        //{
-        //    get => _patronymic;
-        //    set => SetProperty(ref _patronymic, value);
-        //}
     
         private string _mail;
         public string Mail

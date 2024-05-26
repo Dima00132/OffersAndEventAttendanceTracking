@@ -16,18 +16,13 @@ namespace ScannerAndDistributionOfQRCodes
            
         }
 
-        //protected override void OnStart()
+        //protected override Window CreateWindow(IActivationState activationState)
         //{
-        //    _settingsApplication.InstallApplicationTheme();
-        //    _settingsApplication.InstallNavigationAnimated();
-        //    base.OnStart();
-        //}
-        //public App()
-        //{
+        //    Window window = base.CreateWindow(activationState);
 
-        //    InitializeComponent();
+        //    // Manipulate Window object
 
-        //    MainPage = new MainPage(new ScannerQRCodeViewModel());
+        //    return window;
         //}
 
         protected override Window CreateWindow(IActivationState activationState) =>
@@ -37,7 +32,7 @@ namespace ScannerAndDistributionOfQRCodes
                 MaximumWidth = 1300,
                 MinimumHeight = 750,
                 MinimumWidth = 1300,
-               
+
             };
     }
 }

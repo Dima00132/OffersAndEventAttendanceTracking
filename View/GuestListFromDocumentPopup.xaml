@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ScannerAndDistributionOfQRCodes.View.GuestListFromDocumentPopup"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:model = "clr-namespace:ScannerAndDistributionOfQRCodes.Model"
+               xmlns:view ="clr-namespace:ScannerAndDistributionOfQRCodes.View"
+             xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel"
+               x:Name="guestListFromDocumentPopup">
+
+    <toolkit:Popup.Resources>
+        <Style TargetType="{x:Type view:GuestListFromDocumentPopup}">
+            <Setter Property="Size" Value="500,700" />
+            <Setter Property="Color" Value="Green" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="Start" />
+            <Setter Property="CanBeDismissedByTappingOutsideOfPopup" Value="True" />
+        </Style>
+    </toolkit:Popup.Resources>
+
+    <Frame>
+
+        <Grid RowDefinitions="50,*,50" RowSpacing="5">
+            <Label Grid.Row="0" Text="{Binding CountGuest,StringFormat='Количество гостей {0}'}"/>
+            <CollectionView Grid.Row="1" 
+                        AbsoluteLayout.LayoutFlags="All"
+                        ItemsSource="{Binding Guests}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type model:Guest}">
+                        <Frame Padding="5">
+                            <Label Text="{Binding User}"/>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+            <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="5">
+                <Button Grid.Column="1" Text="Сохранить" Command="{Binding SaveCommand}" CommandParameter="{Binding Source={x:Reference guestListFromDocumentPopup}}" />
+                <Button Grid.Column="0" Text="отменить" Command="{Binding CancelCommand}" CommandParameter="{Binding Source={x:Reference guestListFromDocumentPopup}}"/>
+            </Grid>
+        </Grid>
+    </Frame>
+</toolkit:Popup>

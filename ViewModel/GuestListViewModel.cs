@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ScannerAndDistributionOfQRCodes.Model;
 using ScannerAndDistributionOfQRCodes.Model.Message;
@@ -10,6 +12,7 @@ using ScannerAndDistributionOfQRCodes.ViewModel.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +24,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
     {
         private readonly INavigationService _navigationService;
         private readonly ILocalDbService _localDbService;
-
+        private readonly IPopupService popupService;
         private ScheduledEvent _scheduledEvent;
        
         private ObservableCollection<Guest> _guests;
@@ -70,11 +73,11 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         private int _countSendMessage;
 
 
-        public GuestListViewModel(INavigationService navigationService, ILocalDbService localDbService)
+        public GuestListViewModel(INavigationService navigationService, ILocalDbService localDbService, IPopupService popupService)
         {
             _navigationService = navigationService;
             _localDbService = localDbService;
-
+            this.popupService = popupService;
         }
 
 
@@ -156,12 +159,18 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             var stream = await result.OpenReadAsync();
             
 
-            var pars = new XlsxParser();
+            await ShowPopup(stream);
 
-            var newGuest =  pars.Pars(stream);
-            //pars.Pars("C:\\Users\\dima7\\OneDrive\\Рабочий стол\\TestPars.xlsx");
+     
         });
 
+        public async Task ShowPopup(Stream stream)
+        {
+            var pars = new XlsxParser();
+            var newGuest = pars.Pars(stream);
+            await popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.GuestList(_scheduledEvent, newGuest));
+            
+        }
 
 
         [RelayCommand(CanExecute = nameof(CheckNameEvent))]

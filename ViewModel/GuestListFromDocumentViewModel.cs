@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using ScannerAndDistributionOfQRCodes.Model;
 using ScannerAndDistributionOfQRCodes.Service.Interface;
 using ScannerAndDistributionOfQRCodes.ViewModel.Base;
@@ -30,9 +31,15 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         public RelayCommand<Popup> SaveCommand => new(async (popup) =>
         {
+            ///
+
             foreach (var item in Guests)
             {
-                _scheduledEvent.SendMessageEvent += item.GetUpSubscriptionForSendingMessages();
+                ////
+                var isGuestOnList = _scheduledEvent.Guests.Where(x => x.QRHashCode.Equals(item.QRHashCode)).Count() != 0?true:false;
+                if (isGuestOnList)
+                    continue;
+               // _scheduledEvent.SendMessageEvent += item.GetUpSubscriptionForSendingMessages();
                 _scheduledEvent.Guests.Add(item);
                 _localDbService.Create(item);
             }

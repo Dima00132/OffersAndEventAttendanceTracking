@@ -38,9 +38,9 @@
                             </Grid>
                             <FlyoutBase.ContextFlyout>
                                 <MenuFlyout>
-                                    <MenuFlyoutItem Text="Редектировать" 
+                                    <!--<MenuFlyoutItem Text="Редектировать" 
                         Command="{Binding Path=ChangeCommand, Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}}"
-                        CommandParameter="{Binding .}"/>
+                        CommandParameter="{Binding .}"/>-->
                                     <MenuFlyoutItem Text="Удалить" 
                         Command="{Binding Path= DeleteCommand, Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}}"
                         CommandParameter="{Binding .}"/>

@@ -119,19 +119,38 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             IsEditor = true;
         });
 
-        public RelayCommand SendGuestCommand => new(async () =>
+        public RelayCommand<Guest> SendGuestCommand => new(async (gueet) =>
         {
-            SendMessage(true);
+            SendGuestMessage(gueet,true);
         });
 
-        private void SendMessage(bool resendMessage)
+
+        private void SendGuestMessage(Guest gueet, bool resendMessage)
         {
             if (!InternetCS.IsConnectedToInternet())
             {
                 Application.Current.MainPage.DisplayAlert("Предупреждение", "Отсутствует доступ к интернету!", "ОK");
                 return;
             }
-            _scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
+
+            gueet.SendingMessages(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
+            ///////
+           // _scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
+            _localDbService.Update(_scheduledEvent);
+        }
+
+        private void SendMessage( bool resendMessage)
+        {
+            if (!InternetCS.IsConnectedToInternet())
+            {
+                Application.Current.MainPage.DisplayAlert("Предупреждение", "Отсутствует доступ к интернету!", "ОK");
+                return;
+            }
+            ///////
+            ///
+            foreach (var item in Guests)
+                item.SendingMessages(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
+            //_scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
             _localDbService.Update(_scheduledEvent);
         }
 

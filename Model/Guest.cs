@@ -112,7 +112,7 @@ namespace ScannerAndDistributionOfQRCodes.Model
         private string GenerateQRHashCode()
         {
             var uniqueQR = GeneratorUniqueQRHashCode
-                .Generate(User.Name, User.Surname, User.Patronymic, Mail, DateTime.Now.ToString());
+                .Generate(User.Name, User.Surname, User.Patronymic, Mail);
             return uniqueQR;
         }
 
@@ -122,7 +122,7 @@ namespace ScannerAndDistributionOfQRCodes.Model
         public SendMessage GetUpSubscriptionForSendingMessages()
             => SendingMessages;
 
-        private void SendingMessages(string nameEvent, string messageText, ILocalDbService localDbService, bool resendMessage = false)
+        public void SendingMessages(string nameEvent, string messageText, ILocalDbService localDbService, bool resendMessage = false)
         {
             if (IsMessageSent & !resendMessage)
                 return;

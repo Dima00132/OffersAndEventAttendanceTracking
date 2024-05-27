@@ -13,9 +13,9 @@ namespace ScannerAndDistributionOfQRCodes.Model
                 foreach (var item in strings)
                 {
                     var itemHash = item.GetHashCode();
-                    hash += itemHash;
-                    var newHash = hash + itemHash;
-                    builder.Append(hash);
+                    //hash += itemHash;
+                    //var newHash = hash + itemHash;
+                    builder.Append(itemHash);
                 }
                 builder.Append(hash);
             }

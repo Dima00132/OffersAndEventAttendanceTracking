@@ -1,6 +1,13 @@
 ﻿namespace ScannerAndDistributionOfQRCodes.Model.Message
 {
-    public class MailAccount
+    public interface IMailAccount
+    {
+        string MailAddress { get; }
+        string Password { get; }
+        User UserData { get; }
+    }
+
+    public class MailAccount: IMailAccount
     {
         public MailAccount()
         {

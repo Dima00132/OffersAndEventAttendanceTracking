@@ -182,8 +182,8 @@ namespace ScannerAndDistributionOfQRCodes
         public RelayCommand CnfirmCommand => new(() =>
         {
             IsEditor = false;
-            Guest.IsVerifiedQRCode = true;
-            _localDbService.Update(Guest);
+            Guest.VrificatQRCode.IsVerifiedQRCode = true;
+            _localDbService.Update(Guest.VrificatQRCode);
         });
 
 
@@ -213,14 +213,20 @@ namespace ScannerAndDistributionOfQRCodes
 
         private bool SearchByQRHash(string hash)
         {
-            foreach (var item in ScheduledEvent.Guests)
+            if(ScheduledEvent.SearchForGuestByQRHashCode(hash) is Guest guest)
             {
-                if (item.QRHashCode.Equals(hash))
-                {
-                    Guest = item;
-                    return true;
-                }
+                Guest = guest;
+                return true;
             }
+
+            //foreach (var item in ScheduledEvent.Guests)
+            //{
+            //    if (item.VrificatQRCode.QRHashCode.Equals(hash))
+            //    {
+            //        Guest = item;
+            //        return true;
+            //    }
+            //}
             return false;
         }
     }

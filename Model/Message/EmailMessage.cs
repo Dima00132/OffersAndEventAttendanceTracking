@@ -12,7 +12,7 @@ namespace ScannerAndDistributionOfQRCodes.Model.Message
 {
     public class EmailYandexMessage : IEmailMessage, IImageMessage
     {
-        public EmailYandexMessage(string text, string subject,string receiverName ,string toAddress, MailAccount from, Stream sreamImage)
+        public EmailYandexMessage(string text, string subject,string receiverName ,string toAddress, IMailAccount from, Stream sreamImage)
         {
             Text = text;
             Subject = subject;
@@ -25,7 +25,7 @@ namespace ScannerAndDistributionOfQRCodes.Model.Message
         public string Text { get; }
         public string Subject { get; }
         public string ReceiverName { get; }
-        public MailAccount From { get; }
+        public IMailAccount From { get; }
         public string ToAddress { get;  }
         public Stream SreamImage { get; }
 

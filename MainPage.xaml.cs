@@ -45,11 +45,11 @@ namespace ScannerAndDistributionOfQRCodes
             _mainViewModel = mainViewModel;
         }
 
-        protected override void OnDisappearing()
-        {
-            _mainViewModel.OnUpdateDbService();
-            base.OnDisappearing();
-        }
+        //protected override void OnDisappearing()
+        //{
+        //    _mainViewModel.OnUpdateDbService();
+        //    base.OnDisappearing();
+        //}
 
     }
     

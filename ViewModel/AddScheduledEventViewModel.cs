@@ -55,9 +55,9 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             };
             _whole.Add(sheduledEvent);
 
-            _localDbService.CreateAndUpdate(sheduledEvent, _whole);
-            //_localDbService.Create(question);
-            //_localDbService.Update(_category);
+            //_localDbService.CreateAndUpdate(sheduledEvent, _whole);
+            _localDbService.Create(sheduledEvent);
+            _localDbService.Update(_whole);
 
             await _navigationService.NavigateBackUpdate();
         }

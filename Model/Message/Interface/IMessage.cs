@@ -8,6 +8,6 @@ namespace ScannerAndDistributionOfQRCodes.Model.Message
     {
         bool Send();
         string ToAddress { get;  }
-        MailAccount From { get; }
+        IMailAccount From { get; }
     }
 }

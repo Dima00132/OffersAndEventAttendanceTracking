@@ -36,10 +36,9 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             foreach (var item in Guests)
             {
                 ////
-                var isGuestOnList = _scheduledEvent.Guests.Where(x => x.QRHashCode.Equals(item.QRHashCode)).Count() != 0?true:false;
+                var isGuestOnList = _scheduledEvent.Guests.Where(x => x.VrificatQRCode.QRHashCode.Equals(item.VrificatQRCode.QRHashCode)).Count() != 0?true:false;
                 if (isGuestOnList)
                     continue;
-               // _scheduledEvent.SendMessageEvent += item.GetUpSubscriptionForSendingMessages();
                 _scheduledEvent.Guests.Add(item);
                 _localDbService.Create(item);
             }

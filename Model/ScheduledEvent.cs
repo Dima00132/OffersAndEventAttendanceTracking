@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using ColumnAttribute = SQLite.ColumnAttribute;
@@ -92,6 +93,20 @@ namespace ScannerAndDistributionOfQRCodes.Model
 
            Guests.Remove(guest);
            --CountGuest;
+        }
+
+        public Guest? SearchForGuestByQRHashCode(string hash)
+        {
+            return Guests.FirstOrDefault(x => x.VrificatQRCode.CompareQRHashCode(hash),null);
+
+            //foreach (var item in Guests.Where())
+            //{
+            //    if (item.VrificatQRCode.QRHashCode.Equals(hash))
+            //    {
+            //        Guest = item;
+            //        return true;
+            //    }
+            //}
         }
 
 

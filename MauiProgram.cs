@@ -1,8 +1,11 @@
 ﻿using Camera.MAUI;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Core;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ScannerAndDistributionOfQRCodes;
+using ScannerAndDistributionOfQRCodes.Model;
+using ScannerAndDistributionOfQRCodes.Model.Message;
 using ScannerAndDistributionOfQRCodes.Navigation;
 using ScannerAndDistributionOfQRCodes.Service;
 using ScannerAndDistributionOfQRCodes.Service.Interface;
@@ -20,7 +23,10 @@ namespace ScannerAndDistributionOfQRCodes
             builder.Services.AddTransient<ScannerQRCodeViewModel>().AddTransient<ScannerQRCodePage>();
             builder.Services.AddTransient<GuestListViewModel>().AddTransient<GuestListPage>();
 
+            var mailAccaunt = new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr", new User("Иванов", "Иван", "Иванович"));
 
+
+            builder.Services.AddSingleton<IMailAccount, MailAccount>((x)=>mailAccaunt);
             builder.Services.AddSingleton<IPopupService, PopupService>().AddTransientPopup<GuestListFromDocumentPopup, GuestListFromDocumentViewModel>();
             //builder.Services .AddTransient<GuestListFromDocumentViewModel>().AddTransient<GuestListFromDocumentPopup>();
 
@@ -61,9 +67,9 @@ namespace ScannerAndDistributionOfQRCodes
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-#if DEBUG
-            builder.Logging.AddDebug();
-#endif
+//#if DEBUG
+//            builder.Logging.AddDebug();
+//#endif
 
             return builder.Build();
         }

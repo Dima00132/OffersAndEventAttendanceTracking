@@ -2,6 +2,7 @@
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Org.BouncyCastle.Tsp;
 using ScannerAndDistributionOfQRCodes.Model;
 using ScannerAndDistributionOfQRCodes.Model.Message;
 using ScannerAndDistributionOfQRCodes.Model.Parser;
@@ -25,6 +26,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         private readonly INavigationService _navigationService;
         private readonly ILocalDbService _localDbService;
         private readonly IPopupService popupService;
+        private readonly IMailAccount _mailAccount;
         private ScheduledEvent _scheduledEvent;
        
         private ObservableCollection<Guest> _guests;
@@ -73,11 +75,12 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         private int _countSendMessage;
 
 
-        public GuestListViewModel(INavigationService navigationService, ILocalDbService localDbService, IPopupService popupService)
+        public GuestListViewModel(INavigationService navigationService, ILocalDbService localDbService, IPopupService popupService, IMailAccount mailAccount)
         {
             _navigationService = navigationService;
             _localDbService = localDbService;
             this.popupService = popupService;
+            _mailAccount = mailAccount;
         }
 
 
@@ -133,9 +136,10 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                 return;
             }
 
-            gueet.SendingMessages(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
+            gueet.Mail.SendingMessagesGuest(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, gueet, _mailAccount);
             ///////
-           // _scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
+            // _scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
+            _localDbService.Update(gueet.Mail);
             _localDbService.Update(_scheduledEvent);
         }
 
@@ -148,8 +152,11 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             }
             ///////
             ///
-            foreach (var item in Guests)
-                item.SendingMessages(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
+            foreach (var item in Guests.Where(x => !x.Mail.IsMessageSent))
+            {
+                item.Mail.SendingMessagesGuest(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, item, _mailAccount);
+                _localDbService.Update(item.Mail);
+            }
             //_scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
             _localDbService.Update(_scheduledEvent);
         }
@@ -176,18 +183,25 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                 return;
 
             var stream = await result.OpenReadAsync();
-            
 
-            await ShowPopup(stream);
+           
+
+            var pars = new XlsxParser();
+
+            var newGuest = pars.Pars(stream);
+
+            await popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.GuestList(_scheduledEvent, newGuest));
+
+            //ShowPopup(stream);
 
      
         });
 
-        public async Task ShowPopup(Stream stream)
+        public void ShowPopup(Stream stream)
         {
             var pars = new XlsxParser();
             var newGuest = pars.Pars(stream);
-            await popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.GuestList(_scheduledEvent, newGuest));
+           popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.GuestList(_scheduledEvent, newGuest));
             
         }
 
@@ -215,7 +229,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         public RelayCommand<Guest> DeleteCommand => new(async (guest) =>
         {
-            _scheduledEvent.SendMessageEvent -= guest.GetUpSubscriptionForSendingMessages();
+            //_scheduledEvent.SendMessageEvent -= guest.GetUpSubscriptionForSendingMessages();
             Guests.Remove(guest);
             CountGuest--;
             _localDbService.Update(_scheduledEvent);
@@ -225,7 +239,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             IsVisibleAddGuest = false;
             var guest = new Guest().SetSurname(Surname).SetPatronymic(Patronymic).SetName(Name).SetMail(Mail);
-            _scheduledEvent.SendMessageEvent += guest.GetUpSubscriptionForSendingMessages();
+            //_scheduledEvent.SendMessageEvent += guest.GetUpSubscriptionForSendingMessages();
             _localDbService.Create(guest);
             CountGuest++;
             return guest;
@@ -244,7 +258,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             Surname = guest.User.Surname.ToString();
             Name = guest.User.Name.ToString();
             Patronymic = guest.User.Patronymic.ToString();
-            Mail = guest.Mail.ToString();
+            Mail = guest.Mail.MailAddress.ToString();
         }
         private void ClearValues()
         {
@@ -265,8 +279,8 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             isStart = false;
             foreach (var item in guests)
             {
-                CountSendMessage += item.IsMessageSent ? 1 : 0;
-                scheduled.SendMessageEvent += item.GetUpSubscriptionForSendingMessages();
+                CountSendMessage += item.Mail.IsMessageSent ? 1 : 0;
+                //scheduled.SendMessageEvent += item.GetUpSubscriptionForSendingMessages();
             }
            CountGuest = guests.Count;
         }

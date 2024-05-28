@@ -70,7 +70,7 @@
                                         <Image x:Name="imageValidMail" IsVisible="False" Source="dont_valid_mail" ToolTipProperties.Text="Неправильно указана почта!">
                                             <Image.Triggers>
                                                 <DataTrigger TargetType="Image"
-                                                         Binding="{Binding  Mode=TwoWay, Path=IsValidMail}" Value="False">
+                                                         Binding="{Binding  Mode=TwoWay, Path=Mail.IsValidMail}" Value="False">
                                                     <Setter  Property="IsVisible" Value="True" />
                                                 </DataTrigger>
                                                 <DataTrigger TargetType="Image"
@@ -82,7 +82,7 @@
                                         <Image x:Name="imageSendQRCode" IsVisible="False" Source="dont_qr_code_send.png" ToolTipProperties.Text="QR-код не отправлен!" >
                                             <Image.Triggers>
                                                 <DataTrigger TargetType="Image"
-                                                         Binding="{Binding  Mode=TwoWay, Path=IsMessageSent}" Value="False">
+                                                         Binding="{Binding  Mode=TwoWay, Path=Mail.IsMessageSent}" Value="False">
                                                     <Setter  Property="IsVisible" Value="True" />
                                                 </DataTrigger>
                                                 <DataTrigger TargetType="Image"
@@ -92,7 +92,7 @@
                                             </Image.Triggers>
                                         </Image>
 
-                                        <Image x:Name="isScannerQRCode" IsVisible="{Binding IsVerifiedQRCode}" Source="qr_code_send.png" ToolTipProperties.Text ="QR-код проверен!"/>
+                                        <Image x:Name="isScannerQRCode" IsVisible="{Binding  VrificatQRCode.IsVerifiedQRCode}" Source="qr_code_send.png" ToolTipProperties.Text ="QR-код проверен!"/>
                                     </HorizontalStackLayout>
 
                                     <FlyoutBase.ContextFlyout>

@@ -7,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MailKit.Net.Smtp;
+using ScannerAndDistributionOfQRCodes.Data.Message.Interface;
 
-namespace ScannerAndDistributionOfQRCodes.Model.Message
+namespace ScannerAndDistributionOfQRCodes.Data.Message
 {
     public class EmailYandexMessage : IEmailMessage, IImageMessage
     {
-        public EmailYandexMessage(string text, string subject,string receiverName ,string toAddress, IMailAccount from, Stream sreamImage)
+        public EmailYandexMessage(string text, string subject, string receiverName, string toAddress, IMailAccount from, Stream sreamImage)
         {
             Text = text;
             Subject = subject;
@@ -26,7 +27,7 @@ namespace ScannerAndDistributionOfQRCodes.Model.Message
         public string Subject { get; }
         public string ReceiverName { get; }
         public IMailAccount From { get; }
-        public string ToAddress { get;  }
+        public string ToAddress { get; }
         public Stream SreamImage { get; }
 
         public bool Send()
@@ -50,7 +51,7 @@ namespace ScannerAndDistributionOfQRCodes.Model.Message
                 client.Connect("smtp.yandex.ru", 465, true);
 
                 //From.MailAddress;
-               // From.Password;
+                // From.Password;
                 client.Authenticate("TestMailSendr@yandex.ru", "cwufaysygkohokyr");
 
                 client.Send(message);

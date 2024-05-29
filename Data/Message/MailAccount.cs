@@ -1,4 +1,6 @@
-﻿namespace ScannerAndDistributionOfQRCodes.Model.Message
+﻿using ScannerAndDistributionOfQRCodes.Model;
+
+namespace ScannerAndDistributionOfQRCodes.Data.Message
 {
     public interface IMailAccount
     {
@@ -7,7 +9,7 @@
         User UserData { get; }
     }
 
-    public class MailAccount: IMailAccount
+    public class MailAccount : IMailAccount
     {
         public MailAccount()
         {

@@ -1,10 +1,10 @@
 ﻿using QRCoder;
 using Image = Microsoft.Maui.Controls.Image;
-using ScannerAndDistributionOfQRCodes.Model.QRCode.QRCodeInterface;
+using ScannerAndDistributionOfQRCodes.Data.QRCode.QRCodeInterface;
 
-namespace ScannerAndDistributionOfQRCodes.Model.QRCode
+namespace ScannerAndDistributionOfQRCodes.Data.QRCode
 {
-    public sealed class EncodeQRCode:IEncodeQRCode
+    public sealed class EncodeQRCode : IEncodeQRCode
     {
         public Image Encode(string text)
         {

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 
 
 
-namespace ScannerAndDistributionOfQRCodes.Model.Message
+namespace ScannerAndDistributionOfQRCodes.Data.Message
 {
 
 
@@ -30,7 +30,7 @@ namespace ScannerAndDistributionOfQRCodes.Model.Message
     public static class EmailValidator
     {
         public static bool CheckEmailValidator(string mail)
-            =>!string.IsNullOrEmpty(mail) && CheckingEmailFormat(mail); 
+            => !string.IsNullOrEmpty(mail) && CheckingEmailFormat(mail);
 
 
 

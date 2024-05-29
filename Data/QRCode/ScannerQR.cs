@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ScannerAndDistributionOfQRCodes.Model.QRCode
+namespace ScannerAndDistributionOfQRCodes.Data.QRCode
 {
     public sealed class ScannerQR
     {
@@ -16,7 +16,7 @@ namespace ScannerAndDistributionOfQRCodes.Model.QRCode
         private VideoCaptureDevice _captureDevice;
         private readonly NewFrameEventHandler _frameEventHandler;
 
-        public bool Is { get;private set; }
+        public bool Is { get; private set; }
 
 
         public bool IsCameraLaunched { get; private set; }
@@ -31,7 +31,7 @@ namespace ScannerAndDistributionOfQRCodes.Model.QRCode
         public FilterInfoCollection GetVideoInputDevice()
         {
             _infoCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
-     
+
             return _infoCollection;
         }
         public ScannerQR ConnectingCamera(string videoDevice)
@@ -46,7 +46,7 @@ namespace ScannerAndDistributionOfQRCodes.Model.QRCode
             _captureDevice = new VideoCaptureDevice(videoDevice);
             _captureDevice.NewFrame -= _frameEventHandler;
             _captureDevice.NewFrame += _frameEventHandler;
-           
+
             return this;
         }
 
@@ -62,6 +62,6 @@ namespace ScannerAndDistributionOfQRCodes.Model.QRCode
             _captureDevice.SignalToStop();
         }
 
-    
+
     }
 }

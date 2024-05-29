@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ScannerAndDistributionOfQRCodes.Model.Message;
+using ScannerAndDistributionOfQRCodes.Data.Message;
 
 namespace ScannerAndDistributionOfQRCodes.Model
 {

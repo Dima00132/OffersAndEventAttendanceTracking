@@ -11,6 +11,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ScannerAndDistributionOfQRCodes.Data.Parser;
+using ScannerAndDistributionOfQRCodes.Service.PopupService.Interface;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
@@ -22,6 +24,9 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         [ObservableProperty]
         private int _countGuest;
+
+        [ObservableProperty]
+        private bool _isRunning = true;
 
         private ScheduledEvent _scheduledEvent;
         public GuestListFromDocumentViewModel(ILocalDbService localDbService)
@@ -61,11 +66,53 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             popup.Close();
         });
-        public void GuestList(ScheduledEvent scheduledEvent, List<Guest> guests)
+        public void GuestList(ScheduledEvent scheduledEvent, IParser parser)
         {
-            Guests = new ObservableCollection<Guest>(guests);
-            CountGuest = Guests.Count;
+            //Guests = new ObservableCollection<Guest>(guests);
+            //CountGuest = Guests.Count;
+            //_scheduledEvent = scheduledEvent;
+        }
+
+        private void ChecklistGuest(List<Guest> guests)
+        {
+          
+            foreach (var item in guests)
+            {
+                ////
+                var isGuestOnList = _scheduledEvent.Guests.Where(x => x.VrificatQRCode.QRHashCode.Equals(item.VrificatQRCode.QRHashCode)).Count() != 0 ? true : false;
+                if (isGuestOnList)
+                {
+                    Guests.Add(item);
+                    CountGuest++;
+                }
+
+
+            }
+        }
+
+        internal async void ListOfParsedGuests(ScheduledEvent scheduledEvent, FileResult result, IParser xlsxParser)
+        {
+            List<Guest> listGuest = new();
             _scheduledEvent = scheduledEvent;
+            try
+            {
+                var stream = await result.OpenReadAsync();
+                listGuest = xlsxParser.Pars(stream);
+               
+            }
+            catch(Exception  ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Ошибка чтения", $"Произлшла ошибка при чтение файла!\\n {ex}", "Ok");
+                return;
+            }
+            
+            //Thread.Sleep(10000);
+            
+            //IsRunning =false;
+            ChecklistGuest(listGuest);
+            //Guests = new ObservableCollection<Guest>(listGuest);
+           // CountGuest = Guests.Count;
+            
         }
     }
 }

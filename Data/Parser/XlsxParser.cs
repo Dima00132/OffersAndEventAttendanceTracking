@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Vml.Spreadsheet;
+using ScannerAndDistributionOfQRCodes.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 using Cell = DocumentFormat.OpenXml.Spreadsheet.Cell;
 
 
-namespace ScannerAndDistributionOfQRCodes.Model.Parser
+namespace ScannerAndDistributionOfQRCodes.Data.Parser
 {
     public interface IParser
     {
@@ -26,7 +27,7 @@ namespace ScannerAndDistributionOfQRCodes.Model.Parser
         private readonly List<Guest> _guests = [];
 
 
-       
+
 
         public List<Guest> Pars(Stream stream)
         {
@@ -75,9 +76,9 @@ namespace ScannerAndDistributionOfQRCodes.Model.Parser
         {
             Guest guest = new Guest();
             foreach (Cell cell in row.Elements<Cell>())
-                if (DeterminingCorrectColumn(cell.CellReference.Value, out string  currentReference))
+                if (DeterminingCorrectColumn(cell.CellReference.Value, out string currentReference))
                 {
-                    var text = sharedStringTable.ElementAt(Int32.Parse(cell.InnerText)).InnerText;
+                    var text = sharedStringTable.ElementAt(int.Parse(cell.InnerText)).InnerText;
                     _columnCommand[currentReference]?.Invoke(guest, text);
                 }
             _guests.Add(guest);

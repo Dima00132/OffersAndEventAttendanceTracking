@@ -15,7 +15,6 @@ using ZXing.Common;
 using ZXing.Windows.Compatibility;
 using ZXing;
 using ScannerAndDistributionOfQRCodes.ViewModel.Base;
-using ScannerAndDistributionOfQRCodes.Model.QRCode;
 using System.Reflection;
 using AForge.Video.DirectShow;
 using System.Threading;
@@ -23,8 +22,9 @@ using System.Collections.ObjectModel;
 using ScannerAndDistributionOfQRCodes.Model;
 using ScannerAndDistributionOfQRCodes.Navigation;
 using ScannerAndDistributionOfQRCodes.Service.Interface;
-using ScannerAndDistributionOfQRCodes.Model.QRCode.QRCodeInterface;
 using System.Security.Policy;
+using ScannerAndDistributionOfQRCodes.Data.QRCode;
+using ScannerAndDistributionOfQRCodes.Data.QRCode.QRCodeInterface;
 
 
 namespace ScannerAndDistributionOfQRCodes

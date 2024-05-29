@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScannerAndDistributionOfQRCodes.Model.GuestInterface
+namespace ScannerAndDistributionOfQRCodes.Data.GuestInterface
 {
-    public interface IGuest
+    internal interface IMeasure
     {
     }
 }

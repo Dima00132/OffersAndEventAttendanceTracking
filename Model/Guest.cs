@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using ScannerAndDistributionOfQRCodes.Model.QRCode;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 using System;
@@ -13,195 +12,17 @@ using MailKit;
 using MimeKit;
 using MailKit.Security;
 using MimeKit.Utils;
-using ScannerAndDistributionOfQRCodes.Model.Message;
 using Bytescout.Spreadsheet.Charts;
 using DocumentFormat.OpenXml.Wordprocessing;
 using ScannerAndDistributionOfQRCodes.Service.Interface;
-using static QRCoder.PayloadGenerator;
 using System.Net.Mail;
+using ScannerAndDistributionOfQRCodes.Data.Message;
+using ScannerAndDistributionOfQRCodes.Data.QRCode;
+using ScannerAndDistributionOfQRCodes.Data.Message.Mail;
 
 
 namespace ScannerAndDistributionOfQRCodes.Model
 {
-    [Table("mail")]
-    public partial class Mail : ObservableObject
-    {
-
-        [PrimaryKey, AutoIncrement]
-        [Column("Id")]
-        public int Id { get; set; }
-
-        [Column("guest_id")]
-        [ForeignKey(typeof(Guest))]
-        public int GuestId { get; set; }
-
-        private string _mailAddress = string.Empty;
-        public string MailAddress
-        {
-            get => _mailAddress;
-            set 
-            {
-                var address =  SetMailAddress(value);
-                    
-                SetProperty(ref _mailAddress, address); 
-            }
-        }
-
-        private bool _isValidMail;
-        public bool IsValidMail
-        {
-            get => _isValidMail;
-            set => SetProperty(ref _isValidMail, value);
-        }
-
-        private bool _isMessageSent;
-        public Mail(string mailAddress)
-        {
-            MailAddress = mailAddress;
-        }
-
-        public Mail()
-        {
-        }
-
-        public bool IsMessageSent
-        {
-            get => _isMessageSent;
-            set => SetProperty(ref _isMessageSent, value);
-        }
-
-
-        private string SetMailAddress(string mail)
-        {
-            if (!string.IsNullOrEmpty(MailAddress) & mail.Equals(MailAddress))
-                return MailAddress;
-
-            IsMessageSent = false;
-            var mailWithoutSpaces = mail.Replace(" ", "");
-
-            IsValidMail = CheckEmailValidator(mailWithoutSpaces);
-            //Проверка валидности посты
-           //MailAddress = mailWithoutSpaces;
-            return mailWithoutSpaces;
-        }
-
-
-        private bool CheckEmailValidator(string mail)
-            => !string.IsNullOrEmpty(mail) && CheckingEmailFormat(mail);
-
-        private bool CheckingEmailFormat(string mail)
-            => System.Text.RegularExpressions.Regex.IsMatch(mail, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is Mail mail)
-                return mail.MailAddress.Equals(MailAddress);
-            if (obj is string mailStr)
-                return MailAddress.Equals(mailStr);
-            return false;
-        }
-
-        public void SendingMessages(string nameEvent, string messageText, IMailAccount mailAccount, User user = null, Stream stream = null)
-        {
-            //var encodeQRCode = new EncodeQRCode();
-
-            // _qRCodeImge = encodeQRCode.Encode(QRHashCode);
-
-            //var stream = encodeQRCode.EncodeStream(QRHashCode);
-
-            // new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr", new User("1", "1", "1"))
-
-            string userName = user is null ? string.Empty : user.ToString();
-
-            var emailSetnd = new EmailYandexMessage(messageText, nameEvent, userName, MailAddress,
-                mailAccount, stream);
-            //var emailSetnd = new EmailYandexMessage(scheduled.MessageText, scheduled.NameEvent, $"{Surname} {Name} {Patronymic}", Mail,
-            //    new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr",new User("1","1","1")), stream);
-            ///
-            IsMessageSent = emailSetnd.Send();
-            //localDbService.Update(this);
-            //}
-        }
-
-        public void SendingMessagesGuest(string nameEvent, string messageText, Guest guest, IMailAccount mailAccount)
-        {
-            var encodeQRCode = new EncodeQRCode();
-
-            //_qRCodeImge = encodeQRCode.Encode(user.QRHashCode);
-
-            var stream = encodeQRCode.EncodeStream(guest.VrificatQRCode.QRHashCode);
-
-            // new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr", new User("1", "1", "1"))
-            SendingMessages(nameEvent, messageText, mailAccount, guest.User, stream);
-
-
-            //var emailSetnd = new EmailYandexMessage(messageText, nameEvent, $"{user}", MailAddress,
-            //    mailAccount, stream);
-            ////var emailSetnd = new EmailYandexMessage(scheduled.MessageText, scheduled.NameEvent, $"{Surname} {Name} {Patronymic}", Mail,
-            ////    new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr",new User("1","1","1")), stream);
-            /////
-            //IsMessageSent = emailSetnd.Send();
-            //localDbService.Update(this);
-            //}
-        }
-
-
-        //public void SendingMessages(string nameEvent, string messageText, ILocalDbService localDbService, bool resendMessage = false)
-        //{
-        //    if (IsMessageSent & !resendMessage)
-        //        return;
-
-        //    var encodeQRCode = new EncodeQRCode();
-        //    // _qRCodeImge = encodeQRCode.Encode(QRHashCode);
-
-        //    var stream = encodeQRCode.EncodeStream(QRHashCode);
-
-        //    var emailSetnd = new EmailYandexMessage(messageText, nameEvent, $"{User}", Mail,
-        //        new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr", new User("1", "1", "1")), stream);
-        //    //var emailSetnd = new EmailYandexMessage(scheduled.MessageText, scheduled.NameEvent, $"{Surname} {Name} {Patronymic}", Mail,
-        //    //    new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr",new User("1","1","1")), stream);
-        //    ///
-        //    IsMessageSent = emailSetnd.Send();
-        //    localDbService.Update(this);
-        //    //}
-        //}
-    }
-
-    [Table("verified_qr_code")]
-    public partial class VerificationQRCode : ObservableObject
-    {
-        [PrimaryKey, AutoIncrement]
-        [Column("Id")]
-        public int Id { get; set; }
-
-        [Column("guest_id")]
-        [ForeignKey(typeof(Guest))]
-        public int GuestId { get; set; }
-
-        private bool _isVerifiedQRCode;    
-        public bool IsVerifiedQRCode
-        {
-            get => _isVerifiedQRCode;
-            set => SetProperty(ref _isVerifiedQRCode, value);
-        }
-        public string QRHashCode { get; set; }
-
-        public VerificationQRCode(User user, string mailAddress)
-        {
-            QRHashCode = GenerateQRHashCode(user, mailAddress);
-        }
-
-        public VerificationQRCode()
-        {
-        }
-
-        private string GenerateQRHashCode(User user, string mailAddress)
-            =>GeneratorUniqueQRHashCode
-                .Generate(user.Name, user.Surname, user.Patronymic, mailAddress);
-
-        public bool CompareQRHashCode(string hash) =>
-            QRHashCode.Equals(hash);
-    }
 
     [Table("guest")]
     public partial class Guest:ObservableObject

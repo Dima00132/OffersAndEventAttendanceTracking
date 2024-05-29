@@ -2,10 +2,11 @@
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Animations;
 using Org.BouncyCastle.Tsp;
+using ScannerAndDistributionOfQRCodes.Data.Message;
+using ScannerAndDistributionOfQRCodes.Data.Parser;
 using ScannerAndDistributionOfQRCodes.Model;
-using ScannerAndDistributionOfQRCodes.Model.Message;
-using ScannerAndDistributionOfQRCodes.Model.Parser;
 using ScannerAndDistributionOfQRCodes.Navigation;
 using ScannerAndDistributionOfQRCodes.Service.Interface;
 using ScannerAndDistributionOfQRCodes.View;
@@ -124,11 +125,11 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         public RelayCommand<Guest> SendGuestCommand => new(async (gueet) =>
         {
-            SendGuestMessage(gueet,true);
+            SendGuestMessage(gueet);
         });
 
 
-        private void SendGuestMessage(Guest gueet, bool resendMessage)
+        private void SendGuestMessage(Guest gueet)
         {
             if (!InternetCS.IsConnectedToInternet())
             {
@@ -143,7 +144,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             _localDbService.Update(_scheduledEvent);
         }
 
-        private void SendMessage( bool resendMessage)
+        private void SendMessage()
         {
             if (!InternetCS.IsConnectedToInternet())
             {
@@ -163,7 +164,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         public RelayCommand SendCommand => new(async () =>
         {
-            SendMessage(false);
+            SendMessage();
         });
 
         public  RelayCommand ParseCommand => new(async () =>
@@ -182,26 +183,28 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             if (result is null)
                 return;
 
-            var stream = await result.OpenReadAsync();
+            //var stream = await result.OpenReadAsync();
 
            
 
-            var pars = new XlsxParser();
+            //var pars = new XlsxParser();
 
-            var newGuest = pars.Pars(stream);
+            //var newGuest = pars.Pars(stream);
 
-            await popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.GuestList(_scheduledEvent, newGuest));
+          
+
+            await popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.ListOfParsedGuests(_scheduledEvent, result, new XlsxParser()));
 
             //ShowPopup(stream);
 
-     
+
         });
 
         public void ShowPopup(Stream stream)
         {
             var pars = new XlsxParser();
             var newGuest = pars.Pars(stream);
-           popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.GuestList(_scheduledEvent, newGuest));
+           //popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.GuestList(_scheduledEvent, newGuest));
             
         }
 

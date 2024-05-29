@@ -1,13 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ScannerAndDistributionOfQRCodes.Data.Message;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 
-namespace ScannerAndDistributionOfQRCodes.Model.Message
+namespace ScannerAndDistributionOfQRCodes.Data.Message.Interface
 {
     public interface IMessage
     {
         bool Send();
-        string ToAddress { get;  }
+        string ToAddress { get; }
         IMailAccount From { get; }
     }
 }

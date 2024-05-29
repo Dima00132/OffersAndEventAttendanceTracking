@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace ScannerAndDistributionOfQRCodes.Model
+namespace ScannerAndDistributionOfQRCodes.Data.QRCode
 {
     public static class GeneratorUniqueQRHashCode
     {

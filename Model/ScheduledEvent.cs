@@ -17,7 +17,7 @@ using TableAttribute = SQLite.TableAttribute;
 
 namespace ScannerAndDistributionOfQRCodes.Model
 {
-    public delegate void SendMessage(string nameEvent,string messageText,ILocalDbService localDbService,bool resendMessage = false);
+    //public delegate void SendMessage(string nameEvent,string messageText,ILocalDbService localDbService,bool resendMessage = false);
 
     [Table("scheduled_event")]
     public sealed partial class ScheduledEvent : ObservableObject
@@ -51,8 +51,8 @@ namespace ScannerAndDistributionOfQRCodes.Model
         [ObservableProperty]
         private string _messageText = string.Empty;
 
-        [Ignore]
-        public SendMessage SendMessageEvent { get; set; }
+        //[Ignore]
+       // public SendMessage SendMessageEvent { get; set; }
 
         
 

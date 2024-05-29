@@ -12,11 +12,11 @@ using ZXing.Windows.Compatibility;
 using ZXing;
 using Image = Microsoft.Maui.Controls.Image;
 using BitMiracle.LibTiff.Classic;
-using ScannerAndDistributionOfQRCodes.Model.QRCode.QRCodeInterface;
+using ScannerAndDistributionOfQRCodes.Data.QRCode.QRCodeInterface;
 
-namespace ScannerAndDistributionOfQRCodes.Model.QRCode
+namespace ScannerAndDistributionOfQRCodes.Data.QRCode
 {
-    public sealed class DecodeQRCode: IDecodeQRCode
+    public sealed class DecodeQRCode : IDecodeQRCode
     {
         public string Decode(Bitmap image)
         {
@@ -28,10 +28,10 @@ namespace ScannerAndDistributionOfQRCodes.Model.QRCode
                 Result result = new MultiFormatReader().decode(bitmap);
                 if (result != null)
                     return result.Text;
-            
+
             }
             return string.Empty;
         }
-       
+
     }
 }

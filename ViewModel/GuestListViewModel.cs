@@ -185,13 +185,13 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
             //var stream = await result.OpenReadAsync();
 
-           
+
 
             //var pars = new XlsxParser();
 
             //var newGuest = pars.Pars(stream);
 
-          
+
 
             await popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.ListOfParsedGuests(_scheduledEvent, result, new XlsxParser()));
 

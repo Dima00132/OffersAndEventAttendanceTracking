@@ -41,5 +41,12 @@ namespace ScannerAndDistributionOfQRCodes.Data.QRCode
 
         public bool CompareQRHashCode(string hash) =>
             QRHashCode.Equals(hash);
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is VerificationQRCode verificationQRCode)
+                return verificationQRCode.QRHashCode.Equals(QRHashCode) & IsVerifiedQRCode == verificationQRCode.IsVerifiedQRCode;
+            return false;
+        }
     }
 }

@@ -13,6 +13,10 @@ using System.Text;
 using System.Threading.Tasks;
 using ScannerAndDistributionOfQRCodes.Data.Parser;
 using ScannerAndDistributionOfQRCodes.Service.PopupService.Interface;
+using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
+using System.ComponentModel;
+
+
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
@@ -20,13 +24,16 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
     {
         private readonly ILocalDbService _localDbService;
         [ObservableProperty]
-        private ObservableCollection<Guest> _guests;
+        private ObservableCollection<Guest> _guests = [];
 
         [ObservableProperty]
         private int _countGuest;
 
         [ObservableProperty]
         private bool _isRunning = true;
+
+        [ObservableProperty]
+        private bool _isError = false;
 
         private ScheduledEvent _scheduledEvent;
         public GuestListFromDocumentViewModel(ILocalDbService localDbService)
@@ -66,28 +73,33 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             popup.Close();
         });
-        public void GuestList(ScheduledEvent scheduledEvent, IParser parser)
+
+
+        private bool CheckingListFilling(List<Guest> guests)
         {
-            //Guests = new ObservableCollection<Guest>(guests);
-            //CountGuest = Guests.Count;
-            //_scheduledEvent = scheduledEvent;
+            return guests.Count == 0;
         }
 
-        private void ChecklistGuest(List<Guest> guests)
+        private void DisplayAlertError(string errorMessage)
         {
-          
+            IsError = true;
+            Application.Current.MainPage.DisplayAlert("Предупреждение", errorMessage, "Ок");
+        }
+
+        private  bool RepetitionCheck(List<Guest> guests)
+        {
+
             foreach (var item in guests)
             {
-                ////
-                var isGuestOnList = _scheduledEvent.Guests.Where(x => x.VrificatQRCode.QRHashCode.Equals(item.VrificatQRCode.QRHashCode)).Count() != 0 ? true : false;
-                if (isGuestOnList)
+                var isGuestOnList = _scheduledEvent.SearchForGuestByQRHashCode(item.VrificatQRCode.QRHashCode);
+                if (isGuestOnList is not null)
                 {
                     Guests.Add(item);
                     CountGuest++;
                 }
-
-
             }
+
+            return Guests.Count == 0;
         }
 
         internal async void ListOfParsedGuests(ScheduledEvent scheduledEvent, FileResult result, IParser xlsxParser)
@@ -97,22 +109,24 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             try
             {
                 var stream = await result.OpenReadAsync();
-                listGuest = xlsxParser.Pars(stream);
-               
+                listGuest = xlsxParser.Pars(stream);              
             }
             catch(Exception  ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Ошибка чтения", $"Произлшла ошибка при чтение файла!\\n {ex}", "Ok");
+                DisplayAlertError($"Произлшла ошибка при чтение файла!\n {ex.Message}");
                 return;
             }
-            
-            //Thread.Sleep(10000);
-            
-            //IsRunning =false;
-            ChecklistGuest(listGuest);
-            //Guests = new ObservableCollection<Guest>(listGuest);
-           // CountGuest = Guests.Count;
-            
+
+
+         
+            if (CheckingListFilling(listGuest)) 
+            {
+                DisplayAlertError($"Файл {result.FileName} не содержит необходимых данных");
+                return;
+            }
+
+            if (RepetitionCheck(listGuest))
+                DisplayAlertError("Количество уникальных гостей 0");
         }
     }
 }

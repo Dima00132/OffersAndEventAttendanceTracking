@@ -176,6 +176,8 @@ namespace ScannerAndDistributionOfQRCodes
             IsCameraLaunched = false;
         }
 
+        public void Close() => TurnOffCamera();
+
         private void SetImageOfCameraOn()
             =>QRImage = ImageSource.FromFile("camera_is_on.png");
 

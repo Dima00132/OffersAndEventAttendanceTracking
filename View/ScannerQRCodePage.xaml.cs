@@ -13,4 +13,11 @@ public partial class ScannerQRCodePage : ContentPage
 		BindingContext = scannerQRCodeViewModel;
 
     }
+
+    protected override void OnDisappearing()
+    {
+        if (BindingContext is ScannerQRCodeViewModel viewModel)
+            viewModel.Close();
+        base.OnDisappearing();
+    }
 }

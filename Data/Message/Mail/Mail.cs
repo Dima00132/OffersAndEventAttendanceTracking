@@ -118,7 +118,18 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message.Mail
             //var emailSetnd = new EmailYandexMessage(scheduled.MessageText, scheduled.NameEvent, $"{Surname} {Name} {Patronymic}", Mail,
             //    new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr",new User("1","1","1")), stream);
             ///
-            IsMessageSent = emailSetnd.Send();
+
+
+            try
+            {
+                IsMessageSent = emailSetnd.Send();
+            }
+            catch (SendMailMessageException ex)
+            {
+                IsMessageSent = false;
+                throw new SendMailMessageException(ex.Message,ex.InnerException);
+            }
+            
             //localDbService.Update(this);
             //}
         }

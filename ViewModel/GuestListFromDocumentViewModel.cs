@@ -15,11 +15,33 @@ using ScannerAndDistributionOfQRCodes.Data.Parser;
 using ScannerAndDistributionOfQRCodes.Service.PopupService.Interface;
 using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
 using System.ComponentModel;
-
-
+using System.Security.Policy;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
+    public sealed class CustomGuestMailComparer : IEqualityComparer<Guest>
+    {
+        public bool Equals(string? x, string? y)
+        {
+            if (x is null || y is null) return false;
+            return x.ToLower() == y.ToLower();
+
+        }
+
+        public bool Equals(Guest? x, Guest? y)
+        {
+            if (x is null || y is null) return false;
+            return x.Mail.MailAddress == y.Mail.MailAddress;
+        }
+
+        public int GetHashCode([DisallowNull] Guest obj)
+        {
+            return obj.Mail.GetHashCode();
+        }
+    }
+
+
     public partial class GuestListFromDocumentViewModel : ViewModelBase
     {
         private readonly ILocalDbService _localDbService;
@@ -91,8 +113,10 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
             foreach (var item in guests)
             {
-                var isGuestOnList = _scheduledEvent.SearchForGuestByQRHashCode(item.VrificatQRCode.QRHashCode);
-                if (isGuestOnList is not null)
+                //var isInMainList = _scheduledEvent.SearchForGuestByQRHashCode(item.VrificatQRCode.QRHashCode) is null?true:false;
+                var isInMainList = !_scheduledEvent.Guests.Contains(item, new CustomGuestMailComparer());
+                var isInCurrentList = !Guests.Contains(item,new  CustomGuestMailComparer());
+                if (isInMainList & isInCurrentList)
                 {
                     Guests.Add(item);
                     CountGuest++;

@@ -25,6 +25,7 @@ using ScannerAndDistributionOfQRCodes.Service.Interface;
 using System.Security.Policy;
 using ScannerAndDistributionOfQRCodes.Data.QRCode;
 using ScannerAndDistributionOfQRCodes.Data.QRCode.QRCodeInterface;
+using static SQLite.SQLite3;
 
 
 namespace ScannerAndDistributionOfQRCodes
@@ -154,29 +155,40 @@ namespace ScannerAndDistributionOfQRCodes
             if (ConnectingCamera())
                 return;
 
-            if (IsCameraLaunched)
-            {
-                TurnOffCamera();
-            }
-            else
-            {
-                TurnOnCamera();
-            }
-           
+            TurnCamera(IsCameraLaunched);
+            //if (IsCameraLaunched)
+            //    TurnOffCamera();
+            //else
+            //    TurnOnCamera();
+
+
         }
-        private void TurnOnCamera()
+
+        private void TurnCamera(bool turnOnOrOff)
+        {
+            IsCameraLaunched = turnOnOrOff ? TurnOffCamera() : TurnOnCamera();
+            //if (turnOnOrOff)
+            //    TurnOffCamera();
+            //else
+            //    TurnOnCamera();
+        }
+
+        private bool TurnOnCamera()
         {
             _scannerQR.StartCamera();
-            IsCameraLaunched = true;
+            //IsCameraLaunched = true;
+            return true;
         }
-        private void TurnOffCamera()
+        private bool TurnOffCamera()
         {
             SetImageOfCameraOn();
             _scannerQR.StopCamera();
-            IsCameraLaunched = false;
+            //IsCameraLaunched = false;
+            return false;
         }
 
-        public void Close() => TurnOffCamera();
+        public void Close() 
+            => IsCameraLaunched = TurnOffCamera();
 
         private void SetImageOfCameraOn()
             =>QRImage = ImageSource.FromFile("camera_is_on.png");
@@ -188,8 +200,6 @@ namespace ScannerAndDistributionOfQRCodes
             _localDbService.Update(Guest.VrificatQRCode);
         });
 
-
-
         private void UpdateQrCodeAsync(object obj,NewFrameEventArgs eventArgs)
         {
             var bitmap = (Bitmap)eventArgs.Frame.Clone();
@@ -198,27 +208,36 @@ namespace ScannerAndDistributionOfQRCodes
             var old = stream.ToArray();
             if (old is not null)
             {
-                using Stream streami = new MemoryStream(old);
-                QRImage = ImageSource.FromStream(() => streami);
+
+                using Stream streamImage = new MemoryStream(old);
+                QRImage = ImageSource.FromStream(() => streamImage);
                 var result = _decodeQRCode.Decode(bitmap);
                 if (!string.IsNullOrEmpty(result))
                 {
                     ///camera_is_on.png
-                    if (SearchByQRHash(result))
-                    {
-                        IsEditor = true;
-                        TurnOffCamera();
-                    }
+                    SearchByQRHash(result);    
+                    IsCameraLaunched = TurnOffCamera();
+
                 }
+
+
+
             }
         }
 
-        private bool SearchByQRHash(string hash)
+        private void CheckForRepeatedEventAttendance(VerificationQRCode verificationQR)
         {
-            if(ScheduledEvent.SearchForGuestByQRHashCode(hash) is Guest guest)
+            if (verificationQR.IsVerifiedQRCode)
+                Application.Current.MainPage.DisplayAlert("Предепреждение", "Данный гость уже присутствует на мероприятие!", "Ок");
+        }
+
+        private bool SearchByQRHash(string value)
+        {
+            if(ScheduledEvent.SearchForGuestByQRHashCode(value) is Guest guest)
             {
                 Guest = guest;
-                return true;
+                MainThread.BeginInvokeOnMainThread(()=>CheckForRepeatedEventAttendance(guest.VrificatQRCode));
+                return IsEditor = true;
             }
 
             //foreach (var item in ScheduledEvent.Guests)
@@ -229,6 +248,11 @@ namespace ScannerAndDistributionOfQRCodes
             //        return true;
             //    }
             //}
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                Application.Current.MainPage.DisplayAlert("Предепреждение", $"Данного QR-code нет в списке \n {value}", "Ок");
+            });
+            
             return false;
         }
     }

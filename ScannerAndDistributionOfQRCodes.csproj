@@ -103,6 +103,7 @@
 	  <None Remove="Resources\Images\dont_qr_code_send.png" />
 	  <None Remove="Resources\Images\dont_valid_mail.png" />
 	  <None Remove="Resources\Images\editor_image.png" />
+	  <None Remove="Resources\Images\erroe_image.png" />
 	  <None Remove="Resources\Images\file_selection.png" />
 	  <None Remove="Resources\Images\guest_list.png" />
 	  <None Remove="Resources\Images\qr_code_send.png" />
@@ -146,6 +147,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="View\AddScheduledEventPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\DisplayAlertSendingMessagesErrorPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\GuestListFromDocumentPopup.xaml">

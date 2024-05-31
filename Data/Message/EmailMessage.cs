@@ -11,6 +11,24 @@ using ScannerAndDistributionOfQRCodes.Data.Message.Interface;
 
 namespace ScannerAndDistributionOfQRCodes.Data.Message
 {
+    public class ErrorMessage<T>(T ErrorObject, string Message)
+    {
+        public T ErrorObject { get; } = ErrorObject;
+        public string Message { get; } = Message;
+    }
+
+    [Serializable]
+    public class SendMailMessageException : Exception
+    {
+        public SendMailMessageException() { }
+
+        public SendMailMessageException(string message)
+            : base(message) { }
+
+        public SendMailMessageException(string message, Exception inner)
+            : base(message, inner) { }
+    }
+
     public class EmailYandexMessage : IEmailMessage, IImageMessage
     {
         public EmailYandexMessage(string text, string subject, string receiverName, string toAddress, IMailAccount from, Stream sreamImage)
@@ -37,14 +55,14 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
                 var message = new MimeMessage();
 
                 //From.MailAddress
-                message.From.Add(new MailboxAddress($"{From.UserData.Surname} {From.UserData.Name} {From.UserData.Patronymic}", "TestMailSendr@yandex.ru"));
+                message.From.Add(new MailboxAddress($"{From.UserData.Surname} {From.UserData.Name} {From.UserData.Patronymic}", From.MailAddress));
                 message.To.Add(new MailboxAddress(ReceiverName, ToAddress));
                 message.Subject = Subject;
 
                 var body = new BodyBuilder();
                 var imageFoot = body.LinkedResources.Add("qr", SreamImage);
                 imageFoot.ContentId = MimeUtils.GenerateMessageId();
-                body.HtmlBody = $@"<img src=""cid:{imageFoot.ContentId}"" /><br /><div style=""border-top:3px solid #61028d"">&nbsp;</div><p>{Text}</p>";
+                body.HtmlBody = $@"<img src=""cid:{imageFoot.ContentId}""/><br /><div style=""border-top:3px solid #61028d"">&nbsp;</div><p>{Text}</p>";
                 message.Body = body.ToMessageBody();
 
                 using var client = new SmtpClient();
@@ -52,17 +70,18 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
 
                 //From.MailAddress;
                 // From.Password;
-                client.Authenticate("TestMailSendr@yandex.ru", "cwufaysygkohokyr");
+                client.Authenticate(From.MailAddress, From.Password);
 
                 client.Send(message);
                 client.Disconnect(true);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                return false;
+                throw new SendMailMessageException(ex.Message,ex);
             }
             return true;
+            
         }
 
     }

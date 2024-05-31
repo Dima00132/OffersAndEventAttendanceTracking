@@ -125,26 +125,11 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         public RelayCommand<Guest> SendGuestCommand => new(async (gueet) =>
         {
-            SendGuestMessage(gueet);
+            SendMessage(gueets:gueet);
         });
 
 
-        private void SendGuestMessage(Guest gueet)
-        {
-            if (!InternetCS.IsConnectedToInternet())
-            {
-                Application.Current.MainPage.DisplayAlert("Предупреждение", "Отсутствует доступ к интернету!", "ОK");
-                return;
-            }
-
-            gueet.Mail.SendingMessagesGuest(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, gueet, _mailAccount);
-            ///////
-            // _scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
-            _localDbService.Update(gueet.Mail);
-            _localDbService.Update(_scheduledEvent);
-        }
-
-        private void SendMessage()
+        private async void SendMessage(Func<Guest, bool> funcWhere = null, params Guest[] gueets)
         {
             if (!InternetCS.IsConnectedToInternet())
             {
@@ -153,18 +138,78 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             }
             ///////
             ///
-            foreach (var item in Guests.Where(x => !x.Mail.IsMessageSent))
+
+            List<ErrorMessage<Guest>> errorMessages = [];
+
+            foreach (var item in gueets.Where(funcWhere is null?(x)=>true:funcWhere))
             {
-                item.Mail.SendingMessagesGuest(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, item, _mailAccount);
-                _localDbService.Update(item.Mail);
+                try
+                {
+                    item.Mail.SendingMessagesGuest(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, item, _mailAccount);
+                    _localDbService.Update(item.Mail);
+                    throw new SendMailMessageException("Ьрей писю ");
+                }
+                catch (SendMailMessageException ex)
+                {
+                    errorMessages.Add(new ErrorMessage<Guest>(item, ex.Message));
+                }
+                
             }
+            if (errorMessages.Count != 0)
+                DisplayAlertSendingMessagesErrorAsync(errorMessages);
             //_scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
             _localDbService.Update(_scheduledEvent);
         }
+         
+        private async void DisplayAlertSendingMessagesErrorAsync(List<ErrorMessage<Guest>> errorMessages)
+        {
+            await popupService.ShowPopupAsync<DisplayAlertSendingMessagesErrorViewModel>(onPresenting: viewModel => viewModel.ListOfErrorMessage(errorMessages));
+        }
+        //private void SendMessage(Guest gueet)
+        //{
+        //    if (!InternetCS.IsConnectedToInternet())
+        //    {
+        //        Application.Current.MainPage.DisplayAlert("Предупреждение", "Отсутствует доступ к интернету!", "ОK");
+        //        return;
+        //    }
+
+        //    gueet.Mail.SendingMessagesGuest(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, gueet, _mailAccount);
+        //    ///////
+        //    // _scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
+        //    _localDbService.Update(gueet.Mail);
+        //    _localDbService.Update(_scheduledEvent);
+        //}
+
+
+        //private bool CheckConnectedToInternet()
+        //{
+        //    if (!InternetCS.IsConnectedToInternet())
+        //    {
+        //        Application.Current.MainPage.DisplayAlert("Предупреждение", "Отсутствует доступ к интернету!", "ОK");
+        //        return ;
+        //    }
+        //}
+        //private void SendMessage()
+        //{
+        //    if (!InternetCS.IsConnectedToInternet())
+        //    {
+        //        Application.Current.MainPage.DisplayAlert("Предупреждение", "Отсутствует доступ к интернету!", "ОK");
+        //        return;
+        //    }
+        //    ///////
+        //    ///
+        //    foreach (var item in Guests.Where(x => !x.Mail.IsMessageSent))
+        //    {
+        //        item.Mail.SendingMessagesGuest(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, item, _mailAccount);
+        //        _localDbService.Update(item.Mail);
+        //    }
+        //    //_scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
+        //    _localDbService.Update(_scheduledEvent);
+        //}
 
         public RelayCommand SendCommand => new(async () =>
         {
-            SendMessage();
+            SendMessage((x) => !x.Mail.IsMessageSent, [.. Guests]);
         });
 
         public  RelayCommand ParseCommand => new(async () =>

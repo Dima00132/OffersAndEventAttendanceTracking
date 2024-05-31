@@ -34,8 +34,22 @@
                  </Frame>
                 </Frame>-->
 
-            <Frame Grid.Column="1" IsVisible="{Binding IsEditor}"  BorderColor="White">
-                <Frame  CornerRadius="50" BorderColor="#00cfff" HeightRequest="520" >
+            <Frame Grid.Column="1" IsVisible="{Binding IsEditor}"  CornerRadius="70" BorderColor="White" >
+                <Frame  CornerRadius="50"  HeightRequest="520">
+                    <Frame.Triggers>
+                        <DataTrigger TargetType="Frame"
+                                     Binding="{Binding Guest.VrificatQRCode.IsVerifiedQRCode, Mode=TwoWay}"
+                                     Value="True">
+                            <Setter  Property="BorderColor"
+                                     Value="Red"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Frame"
+                                     Binding="{Binding Guest.VrificatQRCode.IsVerifiedQRCode, Mode=TwoWay}"
+                                     Value="False">
+                            <Setter  Property="BorderColor"
+                                     Value="Green"/>
+                        </DataTrigger>
+                    </Frame.Triggers>
                     <StackLayout Spacing="20">
                         <Frame>
                             <Label  Text="{Binding Guest.User.Surname}" />
@@ -46,9 +60,22 @@
                         <Frame>
                             <Label  Text="{Binding Guest.User.Patronymic}" />
                         </Frame>
-                        <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                        <Image x:Name="errorImage" WidthRequest="75" HeightRequest="75" Source="erroe_image.png">
+                            <Image.Triggers>
+                                <DataTrigger TargetType="Image"
+                                             Binding="{Binding Guest.VrificatQRCode.IsVerifiedQRCode}" Value="True">
+                                    <Setter  Property="IsVisible"
+                                             Value="True"/>
+                                </DataTrigger>
+                                <DataTrigger TargetType="Image"
+                                             Binding="{Binding Guest.VrificatQRCode.IsVerifiedQRCode}" Value="False">
+                                    <Setter  Property="IsVisible"
+                                             Value="False"/>
+                                </DataTrigger>
+                            </Image.Triggers>
+                        </Image>
+                        <Grid >
                             <Button Grid.Column="0" Text="Подтвердить" VerticalOptions="Start" BackgroundColor="Gray"  Command="{Binding CnfirmCommand}" />
-                            <!--<Button Grid.Column="1" Text="Сохранить"  VerticalOptions="End" BackgroundColor="Green"  Command="{Binding SaveCommand}" />-->
                         </Grid>
 
 
@@ -58,7 +85,7 @@
             </Frame>
 
 
-            <StackLayout Grid.Column="0">
+            <StackLayout Grid.Column="0" Spacing="10">
                     <Picker  ItemsSource="{Binding ItemsPicker}" 
                      SelectedIndex="{Binding CurrentDeviceCameraName}" 
                      TextColor="Black" 
@@ -66,7 +93,7 @@
 
                     <Image  x:Name="caemtra" 
                     Source="{Binding QRImage}" 
-                    WidthRequest="300" HeightRequest="300"/>
+                    WidthRequest="450" HeightRequest="450"/>
                     <Button Command="{Binding StartScannerCommand}">
                      <Button.Triggers>
                             <DataTrigger TargetType="Button"

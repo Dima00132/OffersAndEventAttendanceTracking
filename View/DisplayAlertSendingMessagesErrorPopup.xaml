@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ScannerAndDistributionOfQRCodes.View.DisplayAlertSendingMessagesErrorPopup"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+            xmlns:mail = "clr-namespace:ScannerAndDistributionOfQRCodes.Data.Message"
+               xmlns:model = "clr-namespace:ScannerAndDistributionOfQRCodes.Model"
+            xmlns:view ="clr-namespace:ScannerAndDistributionOfQRCodes.View"
+            xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel"
+            CanBeDismissedByTappingOutsideOfPopup ="False"
+            x:Name="displayAlertSendingMessagesErrorPopup">
+
+    <toolkit:Popup.Resources>
+        <Style TargetType="{x:Type view:DisplayAlertSendingMessagesErrorPopup}">
+            <Setter Property="Size" Value="500,700" />
+            <Setter Property="Color" Value="Red" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="Start" />
+            <Setter Property="CanBeDismissedByTappingOutsideOfPopup" Value="True" />
+        </Style>
+    </toolkit:Popup.Resources>
+
+    <Frame>
+
+        <Grid RowDefinitions="50,*,50" RowSpacing="5">
+            <Label Grid.Row="0" Text="{Binding CountGuest,StringFormat='Ошибок при отправке сообщений {0}'}"/>
+            
+            <CollectionView Grid.Row="1" 
+                    AbsoluteLayout.LayoutFlags="All"
+                    ItemsSource="{Binding Guests}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type mail:ErrorMessage( model:Guest) }">
+                        <Frame Padding="5">
+                            <Grid RowDefinitions="20,35" >
+                                <Label Grid.Row="0" FontSize="Caption">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="{}{0}  mail: {1}">
+                                            <Binding Path="ErrorObject.User" />
+                                            <Binding Path="ErrorObject.Mail.MailAddress"  />
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                                <Button Grid.Row="1" 
+                                        HorizontalOptions="Start" FontSize="Body" VerticalOptions="Start" Text="Посмотреть сообщение ошибки" BackgroundColor="White" 
+                                        ImageSource="erroe_image.png" TextColor="#ff3b1f" 
+                                        Command="{Binding Path= ViewErrorMessageCommand ,Source={RelativeSource AncestorType={x:Type viewmodel:DisplayAlertSendingMessagesErrorViewModel}}}"
+                                        CommandParameter="{Binding .}"/>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Grid Grid.Row="2"  ColumnSpacing="5">
+                <Button  Text="Назад" Command="{Binding CancelCommand}" CommandParameter="{Binding Source={x:Reference displayAlertSendingMessagesErrorPopup}}"/>
+            </Grid>
+        </Grid>
+    </Frame>
+
+</toolkit:Popup>

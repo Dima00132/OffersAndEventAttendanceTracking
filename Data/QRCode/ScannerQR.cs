@@ -54,12 +54,12 @@ namespace ScannerAndDistributionOfQRCodes.Data.QRCode
         public void StartCamera()
         {
             IsCameraLaunched = true;
-            _captureDevice.Start();
+            _captureDevice?.Start();
         }
         public void StopCamera()
         {
             IsCameraLaunched = false;
-            _captureDevice.SignalToStop();
+            _captureDevice?.SignalToStop();
         }
 
 

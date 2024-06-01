@@ -55,7 +55,7 @@ namespace ScannerAndDistributionOfQRCodes.Model
         }
 
        
-        private VerificationQRCode _verificatQRCode;
+        private VerificationQRCode _verificatQRCode = new();
         [Column("verification_qr_code")]
         [OneToOne(CascadeOperations = CascadeOperation.All)]
         public VerificationQRCode VrificatQRCode
@@ -110,12 +110,20 @@ namespace ScannerAndDistributionOfQRCodes.Model
         }
         public Guest SetMail(string mailAddress)
         {
-            var newMail  = new Mail(mailAddress);
+            //var newMail  = new Mail(mailAddress);
 
-            if (!Mail.MailAddress.Equals(newMail.MailAddress))
-                VrificatQRCode = new VerificationQRCode(User, newMail.MailAddress);
+            if (Mail.MailAddress.Equals(mailAddress))
+                return this;
 
-            Mail = newMail;
+            Mail.Change(mailAddress);
+
+
+            //var newMail = new Mail(mailAddress);
+
+            //if (!Mail.MailAddress.Equals(newMail.MailAddress))
+            VrificatQRCode.Change(User,Mail);
+
+           //Mail = newMail;
             //if (Mail is not null && Mail.Equals(mail))
             //    return this;
 

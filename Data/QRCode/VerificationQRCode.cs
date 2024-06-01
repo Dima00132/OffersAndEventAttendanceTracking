@@ -3,6 +3,7 @@ using SQLite;
 using SQLiteNetExtensions.Attributes;
 using DocumentFormat.OpenXml.Wordprocessing;
 using ScannerAndDistributionOfQRCodes.Model;
+using ScannerAndDistributionOfQRCodes.Data.Message.Mail;
 
 
 namespace ScannerAndDistributionOfQRCodes.Data.QRCode
@@ -26,13 +27,19 @@ namespace ScannerAndDistributionOfQRCodes.Data.QRCode
         }
         public string QRHashCode { get; set; }
 
-        public VerificationQRCode(User user, string mailAddress)
+        public VerificationQRCode(User user, Mail mail)
         {
-            QRHashCode = GenerateQRHashCode(user, mailAddress);
+            QRHashCode = GenerateQRHashCode(user, mail.MailAddress);
         }
 
         public VerificationQRCode()
         {
+        }
+
+
+        public void Change(User user, Mail mail)
+        {
+            QRHashCode = GenerateQRHashCode(user, mail.MailAddress);
         }
 
         private string GenerateQRHashCode(User user, string mailAddress)

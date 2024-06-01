@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using System.Net.Sockets;
+using System.Net;
 
 
 
@@ -44,11 +46,6 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
 
         private static bool CheckingEmailFormat(string mail)
             => System.Text.RegularExpressions.Regex.IsMatch(mail, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-
-        //private static bool IsEmailValid(string mail)
-        //{
-        //    var emailValid = EmailValidator.IsEmailValid(mail);
-        //    return emailValid;
-        //}
+        
     }
 }

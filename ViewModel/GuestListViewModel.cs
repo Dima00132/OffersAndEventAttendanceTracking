@@ -147,7 +147,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                 {
                     item.Mail.SendingMessagesGuest(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, item, _mailAccount);
                     _localDbService.Update(item.Mail);
-                    throw new SendMailMessageException("Ьрей писю ");
+                    //throw new SendMailMessageException("Ьрей писю ");
                 }
                 catch (SendMailMessageException ex)
                 {

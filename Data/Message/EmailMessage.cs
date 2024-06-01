@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using ScannerAndDistributionOfQRCodes.Data.Message.Interface;
+using MailKit;
+using MailKit.Security;
 
 namespace ScannerAndDistributionOfQRCodes.Data.Message
 {
@@ -48,11 +50,37 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
         public string ToAddress { get; }
         public Stream SreamImage { get; }
 
+
+        public  void VerifyAddress(IMailAccount from , string toAddress)
+        {
+            using (var client = new SmtpClient())
+            {
+                client.Connect("smtp.yandex.ru", 465,true);
+                client.Authenticate(from.MailAddress, from.Password);
+
+                try
+                {
+                    var verified = client.Verify(toAddress);
+                    Console.WriteLine($"'smith' was resolved the the following mailbox: {verified}");
+                }
+                catch (SmtpCommandException ex)
+                {
+                    Console.WriteLine($"'smith' is not a valid address: {ex.Message}");
+                }
+
+                client.Disconnect(true);
+            }
+        }
+
         public bool Send()
         {
             try
             {
-                var message = new MimeMessage();
+
+                VerifyAddress(From, ToAddress);
+    
+
+               var message = new MimeMessage();
 
                 //From.MailAddress
                 message.From.Add(new MailboxAddress($"{From.UserData.Surname} {From.UserData.Name} {From.UserData.Patronymic}", From.MailAddress));
@@ -68,11 +96,15 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
                 using var client = new SmtpClient();
                 client.Connect("smtp.yandex.ru", 465, true);
 
+
+
+           
+
                 //From.MailAddress;
                 // From.Password;
                 client.Authenticate(From.MailAddress, From.Password);
 
-                client.Send(message);
+                var t =  client.Send(message);
                 client.Disconnect(true);
             }
             catch (Exception ex)
@@ -84,5 +116,24 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
             
         }
 
+        //private void Client_MessageSent(object? sender, MessageSentEventArgs e)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //private void Client_Authenticated(object? sender, AuthenticatedEventArgs e)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //private void Client_Disconnected(object? sender, DisconnectedEventArgs e)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //private void Client_Connected(object? sender, ConnectedEventArgs e)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

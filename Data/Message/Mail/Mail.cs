@@ -66,7 +66,10 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message.Mail
         {
         }
 
-
+        public void Change(string newMailAddress)
+        {
+            MailAddress = newMailAddress;
+        }
 
 
         private string SetMailAddress(string mail)

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ScannerAndDistributionOfQRCodes.View.DisplayAlertSendMessageProgressPopup"
+              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:mail = "clr-namespace:ScannerAndDistributionOfQRCodes.Data.Message"
+             xmlns:model = "clr-namespace:ScannerAndDistributionOfQRCodes.Model"
+             xmlns:view ="clr-namespace:ScannerAndDistributionOfQRCodes.View"
+             xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel"
+             CanBeDismissedByTappingOutsideOfPopup ="False"
+             Color="Transparent"
+                x:Name="displayAlertSendMessageProgressPopup">
+
+
+    <Border Padding="0" HeightRequest="150"
+           WidthRequest="450"
+           Stroke="Transparent"
+           BackgroundColor="#FFEAE7EC">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="28"/>
+        </Border.StrokeShape>
+        <Grid RowDefinitions="*,100">
+            <Grid Grid.Row="0" ColumnDefinitions="*,*" ColumnSpacing="5">
+                <Label Grid.Column="0" TextColor="Green" VerticalOptions="End" HorizontalOptions="Center" >
+                    <Label.Text>
+                        <MultiBinding StringFormat="{} Отправлено {0} из {1}">
+                            <Binding Path="ProgressSend" />
+                            <Binding Path="CountMessages"  />
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
+                <Label Grid.Column="1" VerticalOptions="End" HorizontalOptions="Center"   Text="{Binding ProgressErrorSend, StringFormat='Ошибок при отправке - {0}'}" TextColor="Red" />
+            </Grid>
+
+            <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="5" Padding="15">
+                <Button Grid.Column="0" Text="Отправить сообщение" BackgroundColor="#d48055" WidthRequest="200" HeightRequest="50" IsEnabled="{Binding IsEnabledSend}"
+                Command="{Binding SendCommand}"/>
+                <Button Grid.Column="1" Padding="5" Text="Назад" BackgroundColor="#d48055" WidthRequest="200" HeightRequest="50" Command="{Binding CancelCommand}" CommandParameter="{Binding Source={x:Reference displayAlertSendMessageProgressPopup}}"/>
+            </Grid>
+
+        </Grid>
+    </Border>
+    
+    
+    
+    
+    <!--<Grid RowDefinitions="*,70">
+        <Grid Grid.Row="0" ColumnDefinitions="*,*" ColumnSpacing="5">
+            <Label Grid.Column="0" TextColor="Green" VerticalOptions="Center" >
+                <Label.Text>
+                    <MultiBinding StringFormat="{} отправлено {0} из {1} собщений">
+                        <Binding Path="ProgressSend" />
+                        <Binding Path="CountMessages"  />
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+            <Label Grid.Column="1" VerticalOptions="Center"  Text="{Binding ProgressErrorSend, StringFormat='Ошибок при отправке - {0}'}" TextColor="Red" />
+        </Grid>
+
+        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="5">
+            <Button Grid.Column="0" Text="Отправить сообщение" IsVisible="{Binding IsVisibleSend}"
+                    Command="{Binding SendCommand}"/>
+            <Button Grid.Column="1" Padding="5" Text="Назад" Command="{Binding CancelCommand}" CommandParameter="{Binding Source={x:Reference displayAlertSendMessageProgressPopup}}"/>
+        </Grid>
+        
+    </Grid>-->
+    
+</toolkit:Popup>

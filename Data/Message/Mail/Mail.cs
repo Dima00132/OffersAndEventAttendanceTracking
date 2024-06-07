@@ -76,23 +76,11 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message.Mail
         {
             if (!string.IsNullOrEmpty(MailAddress) & mail.Equals(MailAddress))
                 return MailAddress;
-
             IsMessageSent = false;
             var mailWithoutSpaces = mail.Replace(" ", "");
-
-            //IsValidMail = CheckEmailValidator(mailWithoutSpaces);
             IsValidMail =  EmailValidator.CheckEmailValidatorAll(mailWithoutSpaces);
-            //Проверка валидности посты
-            //MailAddress = mailWithoutSpaces;
             return mailWithoutSpaces;
         }
-
-
-        //private bool CheckEmailValidator(string mail)
-        //    => !string.IsNullOrEmpty(mail) && CheckingEmailFormat(mail);
-
-        //private bool CheckingEmailFormat(string mail)
-        //    => System.Text.RegularExpressions.Regex.IsMatch(mail, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
 
         public override bool Equals(object? obj)
         {
@@ -105,17 +93,13 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message.Mail
 
         public override int GetHashCode() => MailAddress.GetHashCode();
 
-        public SenderResponseCode SendingMessages(string subject, MessageText messageText, IMailAccount mailAccount, string userName = "", Stream stream = null)
+        public void SendingMessages(string subject, MessageText messageText, IMailAccount mailAccount, string userName = "", Stream stream = null)
         {
-            //string userName = user is null ? string.Empty : user.ToString();
             var emailSetnd = new EmailYandexMessage(subject, messageText, userName, MailAddress,
                 mailAccount, stream);
             try
             {
-                var resultSend = emailSetnd.Send();
-                if(resultSend == SenderResponseCode.MailSend)
-                    IsMessageSent = true;
-                return resultSend;
+                IsMessageSent = emailSetnd.Send();
             }
             catch (SendMailMessageException ex)
             {
@@ -123,12 +107,5 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message.Mail
                 throw new SendMailMessageException(ex.Message,ex.InnerException);
             }
         }
-
-        //public SenderResponseCode SendingMessagesGuest(string subject, string messageText, Guest guest, IMailAccount mailAccount)
-        //{
-        //    //var encodeQRCode = new EncodeQRCode();
-        //    //var stream = encodeQRCode.EncodeStream(guest.VrificatQRCode.QRHashCode);
-        //   return SendingMessages(subject, messageText, mailAccount, guest.User, stream);
-        //}
     }
 }

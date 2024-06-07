@@ -57,11 +57,3 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
         
     }
 }
-
-public enum SenderResponseCode
-{
-    MailSend = 0,
-    MailAddressFormatError = 1,
-    MailDomainFormatError = 2,
-    NaN =3
-}

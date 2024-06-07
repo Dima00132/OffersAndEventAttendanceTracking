@@ -35,7 +35,8 @@ namespace ScannerAndDistributionOfQRCodes
             builder.Services.AddSingleton<IMailAccount, MailAccount>((x)=>mailAccaunt);
             builder.Services.AddSingleton<IPopupService, PopupService>()
                 .AddTransientPopup<GuestListFromDocumentPopup, GuestListFromDocumentViewModel>()
-                .AddTransientPopup<DisplayAlertSendingMessagesErrorPopup, DisplayAlertSendingMessagesErrorViewModel>();
+                .AddTransientPopup<DisplayAlertSendingMessagesErrorPopup, DisplayAlertSendingMessagesErrorViewModel>()
+                .AddTransientPopup<DisplayAlertSendMessageProgressPopup, DisplayAlertSendMessageProgressViewModel>();
             //builder.Services.AddSingleton<IPopupService, PopupService>().AddTransientPopup<DisplayAlertSendingMessagesErrorPopup, DisplayAlertSendingMessagesErrorViewModel>();
             //builder.Services .AddTransient<GuestListFromDocumentViewModel>().AddTransient<GuestListFromDocumentPopup>();
 

@@ -2,6 +2,7 @@
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Maui.Animations;
 using Org.BouncyCastle.Tsp;
 using ScannerAndDistributionOfQRCodes.Data.Message;
@@ -38,13 +39,8 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         }
 
-    
-
-
         [ObservableProperty]
         private Guest _guest;
-
-
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
@@ -75,7 +71,6 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         [ObservableProperty]
         private int _countSendMessage;
 
-
         public GuestListViewModel(INavigationService navigationService, ILocalDbService localDbService, IPopupService popupService, IMailAccount mailAccount)
         {
             _navigationService = navigationService;
@@ -96,16 +91,13 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
             if (!string.IsNullOrEmpty(query) && query.Length >= 1)
             {
-                var data = await Task.FromResult(_scheduledEvent.FindsQuestionByRequest(query));
+                var data = await Task.FromResult(_scheduledEvent.FindsQuestionByRequest(query)).ConfigureAwait(false);
                 if (data is not null)
                     Guests = new ObservableCollection<Guest>(data);
             }
         }
 
         public RelayCommand<string?> PerformSearchCommand => new(async (string? query) => await OnSearchTextChangedAsync(query));
-
-
-
 
         public RelayCommand<Guest> ChangeCommand => new(async (guest) =>
         {
@@ -123,94 +115,62 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             IsEditor = true;
         });
 
+
+
         public RelayCommand<Guest> SendGuestCommand => new(async (gueet) =>
         {
-            SendMessage(gueets:gueet);
+            
+            //SendMessageAsync(gueets:gueet);
+            await DisplayAlertSendMessageProgressAsync(gueets: gueet).ConfigureAwait(false);
         });
 
-
-        private async void SendMessage(Func<Guest, bool> funcWhere = null, params Guest[] gueets)
+        private async Task DisplayAlertSendMessageProgressAsync(Func<Guest, bool> funcWhere = null, params Guest[] gueets)
         {
             if (!InternetCS.IsConnectedToInternet())
             {
-                Application.Current.MainPage.DisplayAlert("Предупреждение", "Отсутствует доступ к интернету!", "ОK");
+                await Application.Current.MainPage.DisplayAlert("Предупреждение", "Отсутствует доступ к интернету!", "ОK").ConfigureAwait(false);
                 return;
             }
-            ///////
-            ///
-
-            List<ErrorMessage<Guest>> errorMessages = [];
-
-            foreach (var item in gueets.Where(funcWhere is null?(x)=>true:funcWhere))
-            {
-                try
-                {
-                    var resultSend = item.Mail.SendingMessages(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _mailAccount, item.User.ToString(), item.VrificatQRCode.GetStreamEncodeQRCode()); ;;;
-                    if(resultSend != SenderResponseCode.MailSend)
-                        errorMessages.Add(ErrorMessage<Guest>.GetErrorMessage(item, resultSend));
-                    _localDbService.Update(item.Mail);
-                }
-                catch (SendMailMessageException ex)
-                {
-                    errorMessages.Add(new ErrorMessage<Guest>(item, ex.Message));
-                }
-                
-            }
-            if (errorMessages.Count != 0)
-                DisplayAlertSendingMessagesErrorAsync(errorMessages);
-            //_scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
-            _localDbService.Update(_scheduledEvent);
+            await popupService
+                .ShowPopupAsync<DisplayAlertSendMessageProgressViewModel>(onPresenting: viewModel => viewModel.ListOfErrorMessage(funcWhere,gueets, _scheduledEvent, _mailAccount, _localDbService))
+                .ConfigureAwait(false);
         }
+
+        //private async void SendMessageAsync(Func<Guest, bool> funcWhere = null, params Guest[] gueets)
+        //{
+
+        //    if (!InternetCS.IsConnectedToInternet())
+        //    {
+        //        Application.Current.MainPage.DisplayAlert("Предупреждение", "Отсутствует доступ к интернету!", "ОK");
+        //        return;
+        //    }
+        //    List<ErrorMessage<Guest>> errorMessages = [];
+
+        //    foreach (var item in gueets.Where(funcWhere is null?(x)=>true:funcWhere))
+        //    {
+        //        try
+        //        {
+        //            item.Mail.SendingMessages(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _mailAccount, item.User.ToString(), item.VrificatQRCode.GetStreamEncodeQRCode());
+        //            _localDbService.Update(item.Mail);
+        //        }
+        //        catch (SendMailMessageException ex)
+        //        {
+        //            errorMessages.Add(new ErrorMessage<Guest>(item, ex.Message));
+        //        }  
+        //    }
+        //    if (errorMessages.Count != 0)
+        //        DisplayAlertSendingMessagesErrorAsync(errorMessages);
+        //    _localDbService.Update(_scheduledEvent);
+        //}
          
-        private async void DisplayAlertSendingMessagesErrorAsync(List<ErrorMessage<Guest>> errorMessages)
-        {
-            await popupService.ShowPopupAsync<DisplayAlertSendingMessagesErrorViewModel>(onPresenting: viewModel => viewModel.ListOfErrorMessage(errorMessages));
-        }
-        //private void SendMessage(Guest gueet)
+        //private async Task DisplayAlertSendingMessagesErrorAsync(List<ErrorMessage<Guest>> errorMessages)
         //{
-        //    if (!InternetCS.IsConnectedToInternet())
-        //    {
-        //        Application.Current.MainPage.DisplayAlert("Предупреждение", "Отсутствует доступ к интернету!", "ОK");
-        //        return;
-        //    }
-
-        //    gueet.Mail.SendingMessagesGuest(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, gueet, _mailAccount);
-        //    ///////
-        //    // _scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
-        //    _localDbService.Update(gueet.Mail);
-        //    _localDbService.Update(_scheduledEvent);
-        //}
-
-
-        //private bool CheckConnectedToInternet()
-        //{
-        //    if (!InternetCS.IsConnectedToInternet())
-        //    {
-        //        Application.Current.MainPage.DisplayAlert("Предупреждение", "Отсутствует доступ к интернету!", "ОK");
-        //        return ;
-        //    }
-        //}
-        //private void SendMessage()
-        //{
-        //    if (!InternetCS.IsConnectedToInternet())
-        //    {
-        //        Application.Current.MainPage.DisplayAlert("Предупреждение", "Отсутствует доступ к интернету!", "ОK");
-        //        return;
-        //    }
-        //    ///////
-        //    ///
-        //    foreach (var item in Guests.Where(x => !x.Mail.IsMessageSent))
-        //    {
-        //        item.Mail.SendingMessagesGuest(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, item, _mailAccount);
-        //        _localDbService.Update(item.Mail);
-        //    }
-        //    //_scheduledEvent.SendMessageEvent?.Invoke(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _localDbService, resendMessage);
-        //    _localDbService.Update(_scheduledEvent);
+        //    await popupService.ShowPopupAsync<DisplayAlertSendingMessagesErrorViewModel>(onPresenting: viewModel => viewModel.ListOfErrorMessage(errorMessages)).ConfigureAwait(false);
         //}
 
         public RelayCommand SendCommand => new(async () =>
         {
-            SendMessage((x) => !x.Mail.IsMessageSent, [.. Guests]);
+            await DisplayAlertSendMessageProgressAsync((x) => !x.Mail.IsMessageSent, [.. Guests]).ConfigureAwait(false);
         });
 
         public  RelayCommand ParseCommand => new(async () =>
@@ -224,26 +184,21 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             var result = await FilePicker.PickAsync(new PickOptions 
             { 
                 FileTypes = customFileType
-            });
+            }).ConfigureAwait(false);
 
-            if (result is null)
-                return;
-
-
-            await popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.ListOfParsedGuests(_scheduledEvent, result, new XlsxParser()));
-
-            //ShowPopup(stream);
+            if (result is null) return;
 
 
+            await popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.ListOfParsedGuests(_scheduledEvent, result, new XlsxParser())).ConfigureAwait(false);
         });
 
-        public void ShowPopup(Stream stream)
-        {
-            var pars = new XlsxParser();
-            var newGuest = pars.Pars(stream);
-           //popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.GuestList(_scheduledEvent, newGuest));
+        //public void ShowPopup(Stream stream)
+        //{
+        //    var pars = new XlsxParser();
+        //    var newGuest = pars.Pars(stream);
+        //   //_popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.GuestList(_scheduledEvent, newGuest));
             
-        }
+        //}
 
 
         [RelayCommand(CanExecute = nameof(CheckNameEvent))]

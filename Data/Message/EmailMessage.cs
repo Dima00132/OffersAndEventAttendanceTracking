@@ -24,19 +24,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
     public sealed class ErrorMessage<T>(T ErrorObject, string Message)
     {
         public T ErrorObject { get; } = ErrorObject;
-        public string Message { get; } = Message;
-
-        private static Dictionary<SenderResponseCode, string> _errorMessage = new Dictionary<SenderResponseCode, string>()
-        {
-            [SenderResponseCode.NaN] = "NaN",
-            [SenderResponseCode.MailSend] = "Сообщение отправлено!",
-            [SenderResponseCode.MailDomainFormatError] = "Неправильно указан домен!",
-            [SenderResponseCode.MailAddressFormatError] = "Некорректно адрес почты!"
-        };
-
-        public static ErrorMessage<T> GetErrorMessage(T ErrorObject, SenderResponseCode senderResponseCode)
-            =>new ErrorMessage<T>(ErrorObject, _errorMessage[senderResponseCode]);
-        
+        public string Message { get; } = Message;   
     }
 
     [Serializable]
@@ -62,14 +50,6 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
         public string ToAddress { get; } = toAddress;
         public Stream SreamImage { get; } = sreamImage;
 
-        private bool CheckValidMailAddress(string mailAddress,out SenderResponseCode senderResponseCode)
-        {
-            var isValidFormat = !EmailValidator.CheckingEmailFormat(mailAddress);
-            var isValidDomain = !EmailValidator.CheckEmailDomain(mailAddress);
-            senderResponseCode = isValidFormat ? SenderResponseCode.MailAddressFormatError : isValidDomain ? SenderResponseCode.MailDomainFormatError : SenderResponseCode.NaN;
-            return isValidFormat | isValidDomain;
-        }
-
         private MimeEntity GetMessageBody(BodyBuilder body)
         {
             var imageFoot = body.LinkedResources.Add("qr", SreamImage);
@@ -78,10 +58,8 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
             return body.ToMessageBody();
         }
 
-        public SenderResponseCode Send()
+        public bool Send()
         {
-            if (CheckValidMailAddress(ToAddress, out SenderResponseCode senderResponse))
-                return senderResponse;
             try
             {
                 var message = new MimeMessage();
@@ -99,7 +77,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
             {
                 throw new SendMailMessageException(ex.Message,ex);
             }
-            return SenderResponseCode.MailSend; 
+            return true; 
         }
     }
 }

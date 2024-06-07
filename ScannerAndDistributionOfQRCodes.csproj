@@ -106,6 +106,7 @@
 	  <None Remove="Resources\Images\erroe_image.png" />
 	  <None Remove="Resources\Images\file_selection.png" />
 	  <None Remove="Resources\Images\guest_list.png" />
+	  <None Remove="Resources\Images\image_valid_mail.png" />
 	  <None Remove="Resources\Images\qr_code_send.png" />
 	  <None Remove="Resources\Images\qr_code_verified.png" />
 	  <None Remove="Resources\Images\scanner_qr_code.png" />
@@ -115,6 +116,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AForge.Video.DirectShow" Version="2.2.5" />
+		<PackageReference Include="Aspose.Email" Version="24.5.0" />
 		<PackageReference Include="BarCode" Version="2024.5.3" />
 		<PackageReference Include="Bytescout.Spreadsheet" Version="4.7.1.2054" />
 		<PackageReference Include="Camera.MAUI" Version="1.5.1" />

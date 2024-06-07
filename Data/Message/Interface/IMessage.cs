@@ -7,7 +7,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message.Interface
 {
     public interface IMessage
     {
-        bool Send();
+        SenderResponseCode Send();
         string ToAddress { get; }
         IMailAccount From { get; }
     }

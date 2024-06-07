@@ -66,8 +66,8 @@ namespace ScannerAndDistributionOfQRCodes
         private bool _isConnecting = false;
 
         private ScannerQR _scannerQR;
-        private IDecodeQRCode _decodeQRCode;
-        private IEncodeQRCode _encodeQRCode;
+        //private IDecodeQRCode _decodeQRCode;
+        //private IEncodeQRCode _encodeQRCode;
         
 
         Dictionary<string, string> MonikerStringName = new();
@@ -81,8 +81,8 @@ namespace ScannerAndDistributionOfQRCodes
             SetMonikerStringName(filterInfoCollection);
             SetItemsPicker();
 
-            _decodeQRCode = new DecodeQRCode();
-            _encodeQRCode = new EncodeQRCode();
+            //_decodeQRCode = new DecodeQRCode();
+            //_encodeQRCode = new EncodeQRCode();
             SetImageOfCameraOn();
             _navigationService = navigationService;
             _localDbService = localDbService;
@@ -211,7 +211,7 @@ namespace ScannerAndDistributionOfQRCodes
 
                 using Stream streamImage = new MemoryStream(old);
                 QRImage = ImageSource.FromStream(() => streamImage);
-                var result = _decodeQRCode.Decode(bitmap);
+                var result = DecodeQRCode.Decode(bitmap);
                 if (!string.IsNullOrEmpty(result))
                 {
                     ///camera_is_on.png

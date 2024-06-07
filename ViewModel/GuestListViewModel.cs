@@ -145,9 +145,10 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             {
                 try
                 {
-                    item.Mail.SendingMessagesGuest(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, item, _mailAccount);
+                    var resultSend = item.Mail.SendingMessages(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _mailAccount, item.User.ToString(), item.VrificatQRCode.GetStreamEncodeQRCode()); ;;;
+                    if(resultSend != SenderResponseCode.MailSend)
+                        errorMessages.Add(ErrorMessage<Guest>.GetErrorMessage(item, resultSend));
                     _localDbService.Update(item.Mail);
-                    //throw new SendMailMessageException("Ьрей писю ");
                 }
                 catch (SendMailMessageException ex)
                 {
@@ -228,15 +229,6 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             if (result is null)
                 return;
 
-            //var stream = await result.OpenReadAsync();
-
-
-
-            //var pars = new XlsxParser();
-
-            //var newGuest = pars.Pars(stream);
-
-
 
             await popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.ListOfParsedGuests(_scheduledEvent, result, new XlsxParser()));
 
@@ -296,6 +288,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             guest.SetSurname(Surname).SetPatronymic(Patronymic).SetName(Name).SetMail(Mail);
             IsVisibleChangeGuest = false;
+            _localDbService.Update(guest.Mail);
             _localDbService.Update(guest);
         }
 
@@ -319,7 +312,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         public bool CheckNameEvent()
         {
             return !string.IsNullOrEmpty(Surname) & !string.IsNullOrEmpty(Name)
-                & !string.IsNullOrEmpty(Patronymic) & EmailValidator.CheckEmailValidator(Mail);
+                & !string.IsNullOrEmpty(Patronymic) & EmailValidator.CheckingEmailFormat(Mail) & EmailValidator.CheckEmailDomain(Mail);
         }
 
         private void SubscribingToMessageSendingEvents(ScheduledEvent scheduled, ObservableCollection<Guest> guests)

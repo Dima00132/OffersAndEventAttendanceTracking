@@ -21,7 +21,7 @@ using ScannerAndDistributionOfQRCodes.Data.Message.Mail.Interface;
 namespace ScannerAndDistributionOfQRCodes.Data.Message.Mail
 {
     [Table("mail")]
-    public partial class Mail : ObservableObject, IMail, ISendingMessages, ISendingMessagesGuest
+    public sealed class Mail : ObservableObject, IMail, ISendingMessages
     {
 
         [PrimaryKey, AutoIncrement]
@@ -80,18 +80,19 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message.Mail
             IsMessageSent = false;
             var mailWithoutSpaces = mail.Replace(" ", "");
 
-            IsValidMail = CheckEmailValidator(mailWithoutSpaces);
+            //IsValidMail = CheckEmailValidator(mailWithoutSpaces);
+            IsValidMail =  EmailValidator.CheckEmailValidatorAll(mailWithoutSpaces);
             //Проверка валидности посты
             //MailAddress = mailWithoutSpaces;
             return mailWithoutSpaces;
         }
 
 
-        private bool CheckEmailValidator(string mail)
-            => !string.IsNullOrEmpty(mail) && CheckingEmailFormat(mail);
+        //private bool CheckEmailValidator(string mail)
+        //    => !string.IsNullOrEmpty(mail) && CheckingEmailFormat(mail);
 
-        private bool CheckingEmailFormat(string mail)
-            => System.Text.RegularExpressions.Regex.IsMatch(mail, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+        //private bool CheckingEmailFormat(string mail)
+        //    => System.Text.RegularExpressions.Regex.IsMatch(mail, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
 
         public override bool Equals(object? obj)
         {
@@ -104,80 +105,30 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message.Mail
 
         public override int GetHashCode() => MailAddress.GetHashCode();
 
-        public void SendingMessages(string subject, string messageText, IMailAccount mailAccount, User user = null, Stream stream = null)
+        public SenderResponseCode SendingMessages(string subject, MessageText messageText, IMailAccount mailAccount, string userName = "", Stream stream = null)
         {
-            //var encodeQRCode = new EncodeQRCode();
-
-            // _qRCodeImge = encodeQRCode.Encode(QRHashCode);
-
-            //var stream = encodeQRCode.EncodeStream(QRHashCode);
-
-            // new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr", new User("1", "1", "1"))
-
-            string userName = user is null ? string.Empty : user.ToString();
-
-            var emailSetnd = new EmailYandexMessage(messageText, subject, userName, MailAddress,
+            //string userName = user is null ? string.Empty : user.ToString();
+            var emailSetnd = new EmailYandexMessage(subject, messageText, userName, MailAddress,
                 mailAccount, stream);
-            //var emailSetnd = new EmailYandexMessage(scheduled.MessageText, scheduled.NameEvent, $"{Surname} {Name} {Patronymic}", Mail,
-            //    new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr",new User("1","1","1")), stream);
-            ///
-
-
             try
             {
-                IsMessageSent = emailSetnd.Send();
+                var resultSend = emailSetnd.Send();
+                if(resultSend == SenderResponseCode.MailSend)
+                    IsMessageSent = true;
+                return resultSend;
             }
             catch (SendMailMessageException ex)
             {
                 IsMessageSent = false;
                 throw new SendMailMessageException(ex.Message,ex.InnerException);
             }
-            
-            //localDbService.Update(this);
-            //}
         }
 
-        public void SendingMessagesGuest(string subject, string messageText, Guest guest, IMailAccount mailAccount)
-        {
-            var encodeQRCode = new EncodeQRCode();
-
-            //_qRCodeImge = encodeQRCode.Encode(user.QRHashCode);
-
-            var stream = encodeQRCode.EncodeStream(guest.VrificatQRCode.QRHashCode);
-
-            // new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr", new User("1", "1", "1"))
-            SendingMessages(subject, messageText, mailAccount, guest.User, stream);
-
-
-            //var emailSetnd = new EmailYandexMessage(messageText, nameEvent, $"{user}", MailAddress,
-            //    mailAccount, stream);
-            ////var emailSetnd = new EmailYandexMessage(scheduled.MessageText, scheduled.NameEvent, $"{Surname} {Name} {Patronymic}", Mail,
-            ////    new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr",new User("1","1","1")), stream);
-            /////
-            //IsMessageSent = emailSetnd.Send();
-            //localDbService.Update(this);
-            //}
-        }
-
-
-        //public void SendingMessages(string nameEvent, string messageText, ILocalDbService localDbService, bool resendMessage = false)
+        //public SenderResponseCode SendingMessagesGuest(string subject, string messageText, Guest guest, IMailAccount mailAccount)
         //{
-        //    if (IsMessageSent & !resendMessage)
-        //        return;
-
-        //    var encodeQRCode = new EncodeQRCode();
-        //    // _qRCodeImge = encodeQRCode.Encode(QRHashCode);
-
-        //    var stream = encodeQRCode.EncodeStream(QRHashCode);
-
-        //    var emailSetnd = new EmailYandexMessage(messageText, nameEvent, $"{User}", Mail,
-        //        new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr", new User("1", "1", "1")), stream);
-        //    //var emailSetnd = new EmailYandexMessage(scheduled.MessageText, scheduled.NameEvent, $"{Surname} {Name} {Patronymic}", Mail,
-        //    //    new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr",new User("1","1","1")), stream);
-        //    ///
-        //    IsMessageSent = emailSetnd.Send();
-        //    localDbService.Update(this);
-        //    //}
+        //    //var encodeQRCode = new EncodeQRCode();
+        //    //var stream = encodeQRCode.EncodeStream(guest.VrificatQRCode.QRHashCode);
+        //   return SendingMessages(subject, messageText, mailAccount, guest.User, stream);
         //}
     }
 }

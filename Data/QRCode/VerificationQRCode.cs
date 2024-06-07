@@ -36,6 +36,11 @@ namespace ScannerAndDistributionOfQRCodes.Data.QRCode
         {
         }
 
+        public Stream GetStreamEncodeQRCode()
+        {
+        //    var encodeQRCode = new EncodeQRCode();
+            return EncodeQRCode.EncodeStream(QRHashCode);
+        }
 
         public void Change(User user, Mail mail)
         {

@@ -27,6 +27,12 @@
                     <Editor Text="{Binding MessageText}"
                      Placeholder ="Укажите текст приглашения"/>
                 </Frame>
+                <Frame >
+                    <Editor Text="{Binding OrganizationData}"
+                            Placeholder ="Данные организации (обязатебно)"/>
+                </Frame>
+                
+
             </StackLayout>
         </ScrollView>
 

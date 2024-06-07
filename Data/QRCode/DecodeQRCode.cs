@@ -16,9 +16,9 @@ using ScannerAndDistributionOfQRCodes.Data.QRCode.QRCodeInterface;
 
 namespace ScannerAndDistributionOfQRCodes.Data.QRCode
 {
-    public sealed class DecodeQRCode : IDecodeQRCode
+    public static class DecodeQRCode 
     {
-        public string Decode(Bitmap image)
+        public static string Decode(Bitmap image)
         {
             using (image)
             {

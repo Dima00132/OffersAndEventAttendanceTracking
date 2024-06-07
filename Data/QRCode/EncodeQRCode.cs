@@ -4,15 +4,15 @@ using ScannerAndDistributionOfQRCodes.Data.QRCode.QRCodeInterface;
 
 namespace ScannerAndDistributionOfQRCodes.Data.QRCode
 {
-    public sealed class EncodeQRCode : IEncodeQRCode
+    public static  class EncodeQRCode 
     {
-        public Image Encode(string text)
+        public static Image Encode(string text)
         {
             if (string.IsNullOrEmpty(text))
                 text = string.Empty;
-            QRCodeGenerator generator = new QRCodeGenerator();
+            QRCodeGenerator generator = new();
             QRCodeData codeData = generator.CreateQrCode(text, QRCodeGenerator.ECCLevel.L);
-            PngByteQRCode qRCode = new PngByteQRCode(codeData);
+            PngByteQRCode qRCode = new(codeData);
             Image imageSource = null;
 
             byte[] qrCodeBytes = qRCode.GetGraphic(20);
@@ -24,21 +24,14 @@ namespace ScannerAndDistributionOfQRCodes.Data.QRCode
             return imageSource;
         }
 
-        public Stream EncodeStream(string text)
+        public static Stream EncodeStream(string text)
         {
             if (string.IsNullOrEmpty(text))
                 text = string.Empty;
-            QRCodeGenerator generator = new QRCodeGenerator();
+            QRCodeGenerator generator = new();
             QRCodeData codeData = generator.CreateQrCode(text, QRCodeGenerator.ECCLevel.L);
-            PngByteQRCode qRCode = new PngByteQRCode(codeData);
-            Image imageSource = null;
-
+            PngByteQRCode qRCode = new(codeData);
             byte[] qrCodeBytes = qRCode.GetGraphic(20);
-
-            //MainThread.BeginInvokeOnMainThread(async () =>
-            //{
-            //    imageSource.Source = ImageSource.FromStream(() => new MemoryStream(qrCodeBytes));
-            //});
             return new MemoryStream(qrCodeBytes);
         }
     }

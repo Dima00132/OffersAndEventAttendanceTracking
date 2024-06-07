@@ -8,6 +8,6 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message.Mail.Interface
     {
         bool IsValidMail { get; set; }
         bool IsMessageSent { get; set; }
-        void SendingMessagesGuest(string subject, string messageText, Guest guest, IMailAccount mailAccount);
+        SenderResponseCode SendingMessagesGuest(string subject, string messageText, Guest guest, IMailAccount mailAccount);
     }
 }

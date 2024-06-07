@@ -64,7 +64,10 @@ namespace ScannerAndDistributionOfQRCodes.Model
             set => SetProperty(ref _verificatQRCode, value);
         }
 
-        
+    
+
+
+
         //private bool _isVerifiedQRCode;
         //public bool IsVerifiedQRCode
         //{
@@ -140,12 +143,12 @@ namespace ScannerAndDistributionOfQRCodes.Model
            return this;
         }
 
-        private string GenerateQRHashCode()
-        {
-            var uniqueQR = GeneratorUniqueQRHashCode
-                .Generate(User.Name, User.Surname, User.Patronymic, Mail.MailAddress);
-            return uniqueQR;
-        }
+        //private string GenerateQRHashCode()
+        //{
+        //    var uniqueQR = GeneratorUniqueQRHashCode
+        //        .Generate(User.Name, User.Surname, User.Patronymic, Mail.MailAddress);
+        //    return uniqueQR;
+        //}
 
         private string RemoveSpaces(string value)
             =>value.Replace(" ", "");

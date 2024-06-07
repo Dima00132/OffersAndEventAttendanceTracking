@@ -17,7 +17,7 @@ namespace ScannerAndDistributionOfQRCodes.Service
 
     public sealed class LocalDbService: ILocalDbService
     {
-        private const string DB_NAME = "data_whole_event_save_10.db3";
+        private const string DB_NAME = "data_whole_event_save_11.db3";
         private SQLiteConnection _connection;
         private const SQLiteOpenFlags Flags =
             SQLiteOpenFlags.ReadWrite |
@@ -48,6 +48,7 @@ namespace ScannerAndDistributionOfQRCodes.Service
                 _ = _connection.CreateTable<User>();
                 _ = _connection.CreateTable<Mail>();
                 _ = _connection.CreateTable<VerificationQRCode>();
+                _ = _connection.CreateTable<MessageText>();
 
 
             }

@@ -66,8 +66,8 @@
                                         </Label.Text>
                                     </Label>
 
-                                    <HorizontalStackLayout Grid.Column="1" VerticalOptions="Start" HorizontalOptions="End">
-                                        <Image x:Name="imageValidMail" IsVisible="False" Source="dont_valid_mail" ToolTipProperties.Text="Неправильно указана почта!">
+                                    <HorizontalStackLayout Grid.Column="1" VerticalOptions="Start" HorizontalOptions="End" Spacing="2">
+                                        <Image x:Name="imageValidMail" IsVisible="False" Source="image_valid_mail.png" ToolTipProperties.Text="Ошибка в домене или формате почты!">
                                             <Image.Triggers>
                                                 <DataTrigger TargetType="Image"
                                                          Binding="{Binding  Mode=TwoWay, Path=Mail.IsValidMail}" Value="False">

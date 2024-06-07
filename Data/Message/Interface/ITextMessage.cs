@@ -1,7 +1,9 @@
-﻿namespace ScannerAndDistributionOfQRCodes.Data.Message.Interface
+﻿using ScannerAndDistributionOfQRCodes.Model;
+
+namespace ScannerAndDistributionOfQRCodes.Data.Message.Interface
 {
     public interface ITextMessage : IMessage
     {
-        string Text { get; }
+       MessageText MessageText { get; }
     }
 }

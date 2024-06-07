@@ -10,17 +10,37 @@ using MailKit.Net.Smtp;
 using ScannerAndDistributionOfQRCodes.Data.Message.Interface;
 using MailKit;
 using MailKit.Security;
+using Microsoft.Exchange.WebServices.Data;
+using MailKit.Net.Pop3;
+using MailKit.Net.Imap;
+using Aspose.Email;
+using Microsoft.Maui.ApplicationModel.Communication;
+using Aspose.Email.Tools.Verifications;
+using ScannerAndDistributionOfQRCodes.Model;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace ScannerAndDistributionOfQRCodes.Data.Message
 {
-    public class ErrorMessage<T>(T ErrorObject, string Message)
+    public sealed class ErrorMessage<T>(T ErrorObject, string Message)
     {
         public T ErrorObject { get; } = ErrorObject;
         public string Message { get; } = Message;
+
+        private static Dictionary<SenderResponseCode, string> _errorMessage = new Dictionary<SenderResponseCode, string>()
+        {
+            [SenderResponseCode.NaN] = "NaN",
+            [SenderResponseCode.MailSend] = "Сообщение отправлено!",
+            [SenderResponseCode.MailDomainFormatError] = "Неправильно указан домен!",
+            [SenderResponseCode.MailAddressFormatError] = "Некорректно адрес почты!"
+        };
+
+        public static ErrorMessage<T> GetErrorMessage(T ErrorObject, SenderResponseCode senderResponseCode)
+            =>new ErrorMessage<T>(ErrorObject, _errorMessage[senderResponseCode]);
+        
     }
 
     [Serializable]
-    public class SendMailMessageException : Exception
+    public sealed class SendMailMessageException : Exception
     {
         public SendMailMessageException() { }
 
@@ -31,109 +51,55 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
             : base(message, inner) { }
     }
 
-    public class EmailYandexMessage : IEmailMessage, IImageMessage
+
+
+    public class EmailYandexMessage(string subject, MessageText messageText, string receiverName, string toAddress, IMailAccount from, Stream sreamImage) : IEmailMessage, IImageMessage
     {
-        public EmailYandexMessage(string text, string subject, string receiverName, string toAddress, IMailAccount from, Stream sreamImage)
+        public string Subject { get; } = subject;
+        public MessageText MessageText { get; } = messageText;
+        public string ReceiverName { get; } = receiverName;
+        public IMailAccount From { get; } = from;
+        public string ToAddress { get; } = toAddress;
+        public Stream SreamImage { get; } = sreamImage;
+
+        private bool CheckValidMailAddress(string mailAddress,out SenderResponseCode senderResponseCode)
         {
-            Text = text;
-            Subject = subject;
-            ReceiverName = receiverName;
-            From = from;
-            ToAddress = toAddress;
-            SreamImage = sreamImage;
+            var isValidFormat = !EmailValidator.CheckingEmailFormat(mailAddress);
+            var isValidDomain = !EmailValidator.CheckEmailDomain(mailAddress);
+            senderResponseCode = isValidFormat ? SenderResponseCode.MailAddressFormatError : isValidDomain ? SenderResponseCode.MailDomainFormatError : SenderResponseCode.NaN;
+            return isValidFormat | isValidDomain;
         }
 
-        public string Text { get; }
-        public string Subject { get; }
-        public string ReceiverName { get; }
-        public IMailAccount From { get; }
-        public string ToAddress { get; }
-        public Stream SreamImage { get; }
-
-
-        public  void VerifyAddress(IMailAccount from , string toAddress)
+        private MimeEntity GetMessageBody(BodyBuilder body)
         {
-            using (var client = new SmtpClient())
-            {
-                client.Connect("smtp.yandex.ru", 465,true);
-                client.Authenticate(from.MailAddress, from.Password);
-
-                try
-                {
-                    var verified = client.Verify(toAddress);
-                    Console.WriteLine($"'smith' was resolved the the following mailbox: {verified}");
-                }
-                catch (SmtpCommandException ex)
-                {
-                    Console.WriteLine($"'smith' is not a valid address: {ex.Message}");
-                }
-
-                client.Disconnect(true);
-            }
+            var imageFoot = body.LinkedResources.Add("qr", SreamImage);
+            imageFoot.ContentId = MimeUtils.GenerateMessageId();
+            body.HtmlBody = $@"<p>{ReceiverName}</p><br/><p>{MessageText.Text}</p><img src=""cid:{imageFoot.ContentId}""/><br /><div style=""border-top:3px solid #61028d"">&nbsp;</div><p>{MessageText.OrganizationData}</p>";
+            return body.ToMessageBody();
         }
 
-        public bool Send()
+        public SenderResponseCode Send()
         {
+            if (CheckValidMailAddress(ToAddress, out SenderResponseCode senderResponse))
+                return senderResponse;
             try
             {
-
-                VerifyAddress(From, ToAddress);
-    
-
-               var message = new MimeMessage();
-
-                //From.MailAddress
+                var message = new MimeMessage();
                 message.From.Add(new MailboxAddress($"{From.UserData.Surname} {From.UserData.Name} {From.UserData.Patronymic}", From.MailAddress));
                 message.To.Add(new MailboxAddress(ReceiverName, ToAddress));
                 message.Subject = Subject;
-
-                var body = new BodyBuilder();
-                var imageFoot = body.LinkedResources.Add("qr", SreamImage);
-                imageFoot.ContentId = MimeUtils.GenerateMessageId();
-                body.HtmlBody = $@"<img src=""cid:{imageFoot.ContentId}""/><br /><div style=""border-top:3px solid #61028d"">&nbsp;</div><p>{Text}</p>";
-                message.Body = body.ToMessageBody();
-
+                message.Body = GetMessageBody(new BodyBuilder());
                 using var client = new SmtpClient();
-                client.Connect("smtp.yandex.ru", 465, true);
-
-
-
-           
-
-                //From.MailAddress;
-                // From.Password;
-                client.Authenticate(From.MailAddress, From.Password);
-
-                var t =  client.Send(message);
-                client.Disconnect(true);
+                client.Connect(From.MailServer.Server, From.MailServer.Port, From.MailServer.ConnectionProtection);
+                client.DeliveryStatusNotificationType = DeliveryStatusNotificationType.Full;
+                client.Authenticate(Encoding.UTF8, From.MailID, From.Password);
+                client.Send(message);
             }
             catch (Exception ex)
             {
-
                 throw new SendMailMessageException(ex.Message,ex);
             }
-            return true;
-            
+            return SenderResponseCode.MailSend; 
         }
-
-        //private void Client_MessageSent(object? sender, MessageSentEventArgs e)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //private void Client_Authenticated(object? sender, AuthenticatedEventArgs e)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //private void Client_Disconnected(object? sender, DisconnectedEventArgs e)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //private void Client_Connected(object? sender, ConnectedEventArgs e)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

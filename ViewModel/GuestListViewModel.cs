@@ -121,10 +121,10 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             
             //SendMessageAsync(gueets:gueet);
-            await DisplayAlertSendMessageProgressAsync(gueets: gueet).ConfigureAwait(false);
+            await DisplayAlertSendMessageProgressAsync(gueet).ConfigureAwait(false);
         });
 
-        private async Task DisplayAlertSendMessageProgressAsync(Func<Guest, bool> funcWhere = null, params Guest[] gueets)
+        private async Task DisplayAlertSendMessageProgressAsync(params Guest[] gueets)
         {
             if (!InternetCS.IsConnectedToInternet())
             {
@@ -132,7 +132,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                 return;
             }
             await popupService
-                .ShowPopupAsync<DisplayAlertSendMessageProgressViewModel>(onPresenting: viewModel => viewModel.ListOfErrorMessage(funcWhere,gueets, _scheduledEvent, _mailAccount, _localDbService))
+                .ShowPopupAsync<DisplayAlertSendMessageProgressViewModel>(onPresenting: viewModel => viewModel.ProgresslListSendMessages(gueets, _scheduledEvent, _mailAccount, _localDbService))
                 .ConfigureAwait(false);
         }
 
@@ -165,31 +165,17 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
          
         //private async Task DisplayAlertSendingMessagesErrorAsync(List<ErrorMessage<Guest>> errorMessages)
         //{
-        //    await popupService.ShowPopupAsync<DisplayAlertSendingMessagesErrorViewModel>(onPresenting: viewModel => viewModel.ListOfErrorMessage(errorMessages)).ConfigureAwait(false);
+        //    await popupService.ShowPopupAsync<DisplayAlertSendingMessagesErrorViewModel>(onPresenting: viewModel => viewModel.ProgresslListSendMessages(errorMessages)).ConfigureAwait(false);
         //}
 
         public RelayCommand SendCommand => new(async () =>
         {
-            await DisplayAlertSendMessageProgressAsync((x) => !x.Mail.IsMessageSent, [.. Guests]).ConfigureAwait(false);
+            await DisplayAlertSendMessageProgressAsync([.. Guests]).ConfigureAwait(false);
         });
 
         public  RelayCommand ParseCommand => new(async () =>
         {
-            FilePickerFileType? customFileType =
-            new(new Dictionary<DevicePlatform, IEnumerable<string>>
-            {
-                { DevicePlatform.WinUI, new[] { ".xlsx" } }
-            });
-
-            var result = await FilePicker.PickAsync(new PickOptions 
-            { 
-                FileTypes = customFileType
-            }).ConfigureAwait(false);
-
-            if (result is null) return;
-
-
-            await popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.ListOfParsedGuests(_scheduledEvent, result, new XlsxParser())).ConfigureAwait(false);
+            await popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.ListOfParsedGuests(_scheduledEvent, new XlsxParser())).ConfigureAwait(false);
         });
 
         //public void ShowPopup(Stream stream)

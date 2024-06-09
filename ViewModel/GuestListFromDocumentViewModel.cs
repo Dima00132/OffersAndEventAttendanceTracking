@@ -17,6 +17,7 @@ using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
 using System.ComponentModel;
 using System.Security.Policy;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
@@ -57,39 +58,77 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         [ObservableProperty]
         private bool _isError = false;
 
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(ConfirmCommand))]
+        private string _surname;
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(ConfirmCommand))]
+        private string _name;
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(ConfirmCommand))]
+        private string _patronymic;
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(ConfirmCommand))]
+        private string _mail;
+
         private ScheduledEvent _scheduledEvent;
+
+        private List<Dictionary<string, string>> _listxlsxParser = [];
         public GuestListFromDocumentViewModel(ILocalDbService localDbService)
         {
             _localDbService = localDbService;
         }
 
+
+        [RelayCommand(CanExecute = nameof(CheckName))]
+        public void Confirm()
+        {
+            var guests = GetGuests(_listxlsxParser);
+            if (RepetitionCheck(guests))
+                DisplayAlertError("Количество уникальных гостей 0");
+        }
+
+        private bool CheckName() => !string.IsNullOrEmpty(Name) & !string.IsNullOrEmpty(Surname) & !string.IsNullOrEmpty(Patronymic) & !string.IsNullOrEmpty(Mail);
+
+        private List<Guest> GetGuests(List<Dictionary<string, string>> listxlsxParser)
+        {
+            var guests = new List<Guest>(); 
+            foreach (var item in listxlsxParser)
+            {
+                if (!CheckingPresenceOfColumn(item, [Mail, Name, Surname, Patronymic]))
+                    continue;
+                var guest = new Guest().SetName(item[Name]).SetSurname(item[Surname])
+                    .SetPatronymic(item[Patronymic]).SetMail(item[Mail]);
+                guests.Add(guest);
+            }
+            return guests;
+        }
+
+        private bool CheckingPresenceOfColumn(Dictionary<string, string>  rowXlsx,params string[] ColumnName)
+        {
+            for (int i = 0; i < ColumnName.Length; i++)
+                if (!rowXlsx.ContainsKey(ColumnName[i]))
+                    return false;
+            return true;
+        }
+
         public RelayCommand<Popup> SaveCommand => new(async (popup) =>
         {
-            ///
-
             foreach (var item in Guests)
             {
-                ////
                 var isGuestOnList = _scheduledEvent.Guests.Where(x => x.VrificatQRCode.QRHashCode.Equals(item.VrificatQRCode.QRHashCode)).Count() != 0?true:false;
                 if (isGuestOnList)
                     continue;
                 _scheduledEvent.Guests.Add(item);
                 _localDbService.Create(item);
             }
-
-           // var value = Application.Current.MainPage.DisplayAlert("Уведомление", "Отправить преглошение?","Да", "Нет");
-            
-
             _localDbService.Update(_scheduledEvent);
             popup.Close();
         });
 
-        //[RelayCommand]
-        //public async Task Close(Popup popup)
-        //{
-        //    popup.Close();
-        //    await DisplayToast("Closed using button");
-        //}
 
         public RelayCommand<Popup> CancelCommand => new(async (popup) =>
         {
@@ -97,9 +136,9 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         });
 
 
-        private bool CheckingListFilling(List<Guest> guests)
+        private bool CheckingListFilling(List<Dictionary<string, string>> listxlsxParser)
         {
-            return guests.Count == 0;
+            return listxlsxParser.Count == 0;
         }
 
         private void DisplayAlertError(string errorMessage)
@@ -108,12 +147,11 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             Application.Current.MainPage.DisplayAlert("Предупреждение", errorMessage, "Ок");
         }
 
+   
         private  bool RepetitionCheck(List<Guest> guests)
         {
-
             foreach (var item in guests)
             {
-                //var isInMainList = _scheduledEvent.SearchForGuestByQRHashCode(item.VrificatQRCode.QRHashCode) is null?true:false;
                 var isInMainList = !_scheduledEvent.Guests.Contains(item, new CustomGuestMailComparer());
                 var isInCurrentList = !Guests.Contains(item,new  CustomGuestMailComparer());
                 if (isInMainList & isInCurrentList)
@@ -122,35 +160,46 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                     CountGuest++;
                 }
             }
-
             return Guests.Count == 0;
         }
 
-        internal async void ListOfParsedGuests(ScheduledEvent scheduledEvent, FileResult result, IParser xlsxParser)
+        private async Task< FileResult> GetFileAsync()
         {
-            List<Guest> listGuest = new();
+            FilePickerFileType? customFileType =
+                new(new Dictionary<DevicePlatform, IEnumerable<string>>
+                {
+                    { DevicePlatform.WinUI, new[] { ".xlsx" } }
+                });
+
+            var result =  await FilePicker.PickAsync(new PickOptions
+            {
+                FileTypes = customFileType
+            }).ConfigureAwait(true);
+            return result;
+        }
+
+
+        public async Task ListOfParsedGuests(ScheduledEvent scheduledEvent, IParser xlsxParser)
+        {
+            var result = await GetFileAsync();
             _scheduledEvent = scheduledEvent;
             try
             {
-                var stream = await result.OpenReadAsync();
-                listGuest = xlsxParser.Pars(stream);              
+                var stream = await result.OpenReadAsync().ConfigureAwait(true);
+                _listxlsxParser = xlsxParser.Pars(stream);              
             }
             catch(Exception  ex)
             {
-                DisplayAlertError($"Произлшла ошибка при чтение файла!\n {ex.Message}");
+                DisplayAlertError($"Произлшла ошибка при чтение файла!\n {ex.Message} \n Повторите попытку заново!");
                 return;
             }
-
-
-         
-            if (CheckingListFilling(listGuest)) 
+            if (CheckingListFilling(_listxlsxParser)) 
             {
                 DisplayAlertError($"Файл {result.FileName} не содержит необходимых данных");
                 return;
             }
 
-            if (RepetitionCheck(listGuest))
-                DisplayAlertError("Количество уникальных гостей 0");
+            
         }
     }
 }

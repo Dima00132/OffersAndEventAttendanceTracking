@@ -7,9 +7,10 @@
              xmlns:view ="clr-namespace:ScannerAndDistributionOfQRCodes.View"
              xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel"
              CanBeDismissedByTappingOutsideOfPopup ="False"
+             Color="Transparent"
              x:Name="guestListFromDocumentPopup">
 
-    <toolkit:Popup.Resources>
+    <!--<toolkit:Popup.Resources>
         <Style TargetType="{x:Type view:GuestListFromDocumentPopup}">
             <Setter Property="Size" Value="500,700" />
             <Setter Property="Color" Value="Green" />
@@ -17,9 +18,18 @@
             <Setter Property="VerticalOptions" Value="Start" />
             <Setter Property="CanBeDismissedByTappingOutsideOfPopup" Value="True" />
         </Style>
-    </toolkit:Popup.Resources>
+    </toolkit:Popup.Resources>-->
 
-    <Frame>
+    <Border Padding="0" HeightRequest="700"
+           WidthRequest="500"
+           Stroke="Transparent"
+           BackgroundColor="#FFEAE7EC">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="20"/>
+        </Border.StrokeShape>
+        <Frame BorderColor="#d48055">
+            
+        
 
         <Grid RowDefinitions="50,*,50" RowSpacing="5">
             <Label Grid.Row="0" Text="{Binding CountGuest,StringFormat='Количество гостей {0}'}">
@@ -30,7 +40,28 @@
                     </DataTrigger>
                 </Label.Triggers>
             </Label>
-            <CollectionView Grid.Row="1" 
+
+            <StackLayout x:Name="stackLayoutSelectingSpeakers" Grid.Row="1" Spacing="5" >
+                <Grid ColumnDefinitions="*,60"  ColumnSpacing="5" >
+                        <Label Grid.Column="0" Text="Укажите колонку под Имя" FontSize="Subtitle" VerticalOptions="Center"/>
+                    <Entry Grid.Column="1" HorizontalOptions="End" Text="{Binding Name}" MaxLength="2" TextTransform="Uppercase"/>
+                </Grid>
+                    <Grid ColumnDefinitions="*,60"  ColumnSpacing="5" >
+                        <Label Grid.Column="0" Text="Укажите колонку под Фамитию" FontSize="Subtitle" VerticalOptions="Center"/>
+                    <Entry Grid.Column="1" HorizontalOptions="End" Text="{Binding Surname}" MaxLength="2" TextTransform="Uppercase"/>
+                </Grid>
+                    <Grid ColumnDefinitions="*,60"  ColumnSpacing="5" >
+                        <Label Grid.Column="0" Text="Укажите колонку под Отчества" FontSize="Subtitle" VerticalOptions="Center"/>
+                    <Entry Grid.Column="1" HorizontalOptions="End" Text="{Binding Patronymic}"  MaxLength="2" TextTransform="Uppercase"/>
+                </Grid>
+                    <Grid ColumnDefinitions="*,60"  ColumnSpacing="5" >
+                        <Label Grid.Column="0" Text="Укажите колонку под Mail" FontSize="Subtitle" VerticalOptions="Center"/>
+                    <Entry Grid.Column="1" HorizontalOptions="End" Text="{Binding Mail}" MaxLength="2" TextTransform="Uppercase"/>
+                </Grid>
+            </StackLayout>
+
+            <CollectionView x:Name="collectionGuests" Grid.Row="1" 
+                            IsVisible="False"
                         AbsoluteLayout.LayoutFlags="All"
                         ItemsSource="{Binding Guests}">
                 <CollectionView.ItemTemplate>
@@ -41,21 +72,27 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            
-            <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="5">
+
+            <Grid x:Name="confirmGrid" Grid.Row="2" ColumnDefinitions="*,*"  ColumnSpacing="5"   >
+                    <Button Grid.Column="0" Text="Назад" BackgroundColor="#d48055" Command="{Binding CancelCommand}" CommandParameter="{Binding Source={x:Reference guestListFromDocumentPopup}}"/>
+                    <Button Grid.Column="1" Text="Подтвердить" BackgroundColor="#d48055" Command="{Binding ConfirmCommand}" Clicked="Button_Clicked"/>
+            </Grid>
+
+            <Grid x:Name="gridSaveCancelCommand" Grid.Row="2" ColumnDefinitions="*,*"  IsVisible="False" ColumnSpacing="5">
                 <Grid.Triggers>
                     <DataTrigger TargetType="Grid"
                                  Binding="{Binding  Source={x:Reference erroeGrid}, Path=IsVisible}" Value="True">
                         <Setter  Property="IsVisible" Value="False" />
                     </DataTrigger>
                 </Grid.Triggers>
-                <Button Grid.Column="1" Text="Сохранить" Command="{Binding SaveCommand}" CommandParameter="{Binding Source={x:Reference guestListFromDocumentPopup}}" />
-                <Button Grid.Column="0" Text="отменить" Command="{Binding CancelCommand}" CommandParameter="{Binding Source={x:Reference guestListFromDocumentPopup}}"/>
+                    <Button Grid.Column="1" Text="Сохранить" BackgroundColor="#d48055" Command="{Binding SaveCommand}" CommandParameter="{Binding Source={x:Reference guestListFromDocumentPopup}}" />
+                    <Button Grid.Column="0" Text="отменить" BackgroundColor="#d48055" Command="{Binding CancelCommand}" CommandParameter="{Binding Source={x:Reference guestListFromDocumentPopup}}"/>
             </Grid>
 
             <Grid x:Name="erroeGrid" Grid.Row="2" IsVisible="{Binding IsError}" >
-                <Button Text="Назад" Command="{Binding CancelCommand}" CommandParameter="{Binding Source={x:Reference guestListFromDocumentPopup}}"/>
+                    <Button Text="Назад" Command="{Binding CancelCommand}" BackgroundColor="#d48055" CommandParameter="{Binding Source={x:Reference guestListFromDocumentPopup}}"/>
             </Grid>
         </Grid>
-    </Frame>
+        </Frame>
+    </Border>
 </toolkit:Popup>

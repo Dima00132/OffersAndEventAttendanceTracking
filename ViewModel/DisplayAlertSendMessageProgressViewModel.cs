@@ -16,7 +16,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         private ILocalDbService _localDbService;
         private ScheduledEvent _scheduledEvent;
         private IMailAccount _mailAccount;
-        private List<Guest> _gueets;
+        private Guest[] _gueets;
 
         [ObservableProperty]
         private int _progressSend;
@@ -41,14 +41,17 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             popup.Close();
         });
 
-        public void ListOfErrorMessage(Func<Guest, bool> funcWhere, Guest[] gueets, ScheduledEvent scheduledEvent, IMailAccount mailAccount, ILocalDbService localDbService)
+        public  void  ProgresslListSendMessages(Guest[] gueets, ScheduledEvent scheduledEvent, IMailAccount mailAccount, ILocalDbService localDbService)
         {
             _localDbService = localDbService;
-            _scheduledEvent = scheduledEvent;
+           // _scheduledEvent = scheduledEvent;
             _mailAccount = mailAccount;
-            _gueets = gueets.Where(funcWhere is null ? (x) => true : funcWhere).ToList();
-            CountMessages = _gueets.Count;
-            IsEnabledSend = CountMessages != 0;   
+            _gueets = gueets;
+            CountMessages = _gueets.Length;
+
+            ProgressSend = gueets.Length == 1?0:gueets.Count((x) => x.Mail.IsMessageSent);
+            
+            IsEnabledSend = CountMessages != 0 & CountMessages != ProgressSend;
         }
 
 
@@ -58,8 +61,9 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             await SendMessageAsync(_scheduledEvent, _mailAccount, _gueets).ConfigureAwait(false);
         });
 
-        private async Task SendMessageAsync(ScheduledEvent scheduledEvent, IMailAccount mailAccount,List<Guest> gueets)
+        private async Task SendMessageAsync(ScheduledEvent scheduledEvent, IMailAccount mailAccount,Guest[] gueets)
         {
+
             if (!InternetCS.IsConnectedToInternet())
             {
                 await Application.Current.MainPage
@@ -67,7 +71,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                     .ConfigureAwait(false);
                 return;
             }
-
+            
             
             List<ErrorMessage<Guest>> errorMessages = [];
 
@@ -89,7 +93,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             if (errorMessages.Count != 0)
                 await DisplayAlertSendingMessagesErrorAsync(errorMessages).ConfigureAwait(false);
             IsEnabledSend = false;
-            _localDbService.Update(scheduledEvent);
+            //_localDbService.Update(scheduledEvent);
         }
 
         private async Task DisplayAlertSendingMessagesErrorAsync(List<ErrorMessage<Guest>> errorMessages)
@@ -100,7 +104,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         }
 
 
-        //public void ListOfErrorMessage(List<ErrorMessage<Guest>> errorMessages)
+        //public void ProgresslListSendMessages(List<ErrorMessage<Guest>> errorMessages)
         //{
         //    Guests = new ObservableCollection<ErrorMessage<Guest>>(errorMessages);
         //    CountGuest = errorMessages.Count;

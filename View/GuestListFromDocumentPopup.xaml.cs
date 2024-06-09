@@ -11,4 +11,11 @@ public partial class GuestListFromDocumentPopup  : Popup
 
     }
 
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        confirmGrid.IsVisible = false;
+        stackLayoutSelectingSpeakers.IsVisible = false;
+        collectionGuests.IsVisible = true;
+        gridSaveCancelCommand.IsVisible = true;
+    }
 }

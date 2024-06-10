@@ -44,21 +44,22 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         public  void  ProgresslListSendMessages(Guest[] gueets, ScheduledEvent scheduledEvent, IMailAccount mailAccount, ILocalDbService localDbService)
         {
             _localDbService = localDbService;
-           // _scheduledEvent = scheduledEvent;
+            _scheduledEvent = scheduledEvent;
             _mailAccount = mailAccount;
-            _gueets = gueets;
-            CountMessages = _gueets.Length;
-
-            ProgressSend = gueets.Length == 1?0:gueets.Count((x) => x.Mail.IsMessageSent);
+            _gueets = gueets.Where((x) => gueets.Length == 1?true:!x.Mail.IsMessageSent & x.Mail.IsValidMail).ToArray();
+            CountMessages = _gueets.Count((x)=> x.Mail.IsValidMail);
+            ProgressSend = gueets.Length == 1?0: _gueets.Count((x) => x.Mail.IsMessageSent & x.Mail.IsValidMail);
             
             IsEnabledSend = CountMessages != 0 & CountMessages != ProgressSend;
         }
 
 
-      
-        public  RelayCommand SendCommand => new(async () =>
+
+
+
+        public RelayCommand SendCommand => new(async () =>
         {
-            await SendMessageAsync(_scheduledEvent, _mailAccount, _gueets).ConfigureAwait(false);
+            await SendMessageAsync(_scheduledEvent, _mailAccount, _gueets).ConfigureAwait(true);
         });
 
         private async Task SendMessageAsync(ScheduledEvent scheduledEvent, IMailAccount mailAccount,Guest[] gueets)
@@ -79,10 +80,13 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             {
                 try
                 {
-                    item.Mail.SendingMessages(scheduledEvent.NameEvent, scheduledEvent.MessageText, 
+                    await Task.Run(() =>
+                    {
+                        item.Mail.SendingMessages(scheduledEvent.NameEvent, scheduledEvent.MessageText,
                         mailAccount, item.User.ToString(), item.VrificatQRCode.GetStreamEncodeQRCode());
+                        ProgressSend++;
+                    }).ConfigureAwait(true);
                     _localDbService.Update(item.Mail);
-                    ProgressSend++;
                 }
                 catch (SendMailMessageException ex)
                 {
@@ -93,7 +97,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             if (errorMessages.Count != 0)
                 await DisplayAlertSendingMessagesErrorAsync(errorMessages).ConfigureAwait(false);
             IsEnabledSend = false;
-            //_localDbService.Update(scheduledEvent);
+            _localDbService.Update(scheduledEvent);
         }
 
         private async Task DisplayAlertSendingMessagesErrorAsync(List<ErrorMessage<Guest>> errorMessages)
@@ -102,12 +106,5 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                 .ShowPopupAsync<DisplayAlertSendingMessagesErrorViewModel>(onPresenting: viewModel => viewModel.ListOfErrorMessage(errorMessages))
                 .ConfigureAwait(false);
         }
-
-
-        //public void ProgresslListSendMessages(List<ErrorMessage<Guest>> errorMessages)
-        //{
-        //    Guests = new ObservableCollection<ErrorMessage<Guest>>(errorMessages);
-        //    CountGuest = errorMessages.Count;
-        //}
     }
 }

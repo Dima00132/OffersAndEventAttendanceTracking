@@ -9,31 +9,20 @@
     <Grid RowDefinitions="50,*">
 
         
-            <Grid Grid.Row="0" ColumnDefinitions="800,*">
-                <Label Grid.Column="0" Text="{Binding ScheduledEvent.NameEvent}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Medium" />
-            <Label  Grid.Column="1" Text="{Binding ScheduledEvent.CountGuest, StringFormat='Количество гостей {0}'}" HorizontalOptions="Center" VerticalOptions="End" FontSize="Medium"  />
+        <Grid Grid.Row="0" ColumnDefinitions="800,*">
+            <Label Grid.Column="0" Text="{Binding ScheduledEvent.NameEvent}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Micro" />
+            <Grid Grid.Column="1" RowDefinitions="*,*">
+                <Label  Grid.Row="0" Text="{Binding ScheduledEvent.CountGuest, StringFormat='Количество гостей - {0}'}"  HorizontalOptions="Center" VerticalOptions="Center" FontSize="Micro"  />
+                <Label  Grid.Row="1" Text="{Binding ScheduledEvent.CountGuest, StringFormat='Прибыло гостей - {0}'}"  HorizontalOptions="Center" VerticalOptions="Center" FontSize="Micro"  />
             </Grid>
-        
-            
+                
+                
+        </Grid>
 
 
-            <Grid Grid.Row="1"  ColumnDefinitions="800,*">
-                <!--<Frame Grid.Column="1" BorderColor="White"  >
-                    <Frame  CornerRadius="50"  HeightRequest="650" >
-                <StackLayout>
-                    <Frame>
-                        <Label Text="{Binding Guest.Surname}"/>
-                    </Frame>
-                    <Frame>
-                        <Label Text="{Binding Guest.Name}"/>
-                    </Frame>
-                    <Frame>
-                        <Label Text="{Binding Guest.Patronymic}"/>
-                    </Frame>
-                    </StackLayout>
-                 </Frame>
-                </Frame>-->
 
+
+        <Grid Grid.Row="1"  ColumnDefinitions="800,*">
             <Frame Grid.Column="1" IsVisible="{Binding IsEditor}"  CornerRadius="70" BorderColor="White" >
                 <Frame  CornerRadius="50"  HeightRequest="520">
                     <Frame.Triggers>

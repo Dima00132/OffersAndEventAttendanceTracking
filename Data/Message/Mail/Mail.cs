@@ -93,7 +93,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message.Mail
 
         public override int GetHashCode() => MailAddress.GetHashCode();
 
-        public void SendingMessages(string subject, MessageText messageText, IMailAccount mailAccount, string userName = "", Stream stream = null)
+        public void  SendingMessages(string subject, MessageText messageText, IMailAccount mailAccount, string userName = "", Stream stream = null)
         {
             var emailSetnd = new EmailYandexMessage(subject, messageText, userName, MailAddress,
                 mailAccount, stream);

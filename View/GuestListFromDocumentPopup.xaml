@@ -41,8 +41,16 @@
                 </Label.Triggers>
             </Label>
 
-            <StackLayout x:Name="stackLayoutSelectingSpeakers" Grid.Row="1" Spacing="5" >
-                <Grid ColumnDefinitions="*,60"  ColumnSpacing="5" >
+                <Image Grid.Row="1" IsVisible="{Binding IsError}" Source="file_reading_error.png"/>
+            
+                <StackLayout x:Name="stackLayoutSelectingSpeakers" Grid.Row="1" Spacing="5" >
+                    <StackLayout.Triggers>
+                        <DataTrigger TargetType="StackLayout"
+                  Binding="{Binding  Source={x:Reference erroeGrid}, Path=IsVisible}" Value="True">
+                            <Setter  Property="IsVisible" Value="False" />
+                        </DataTrigger>
+                    </StackLayout.Triggers>
+                    <Grid ColumnDefinitions="*,60"  ColumnSpacing="5" >
                         <Label Grid.Column="0" Text="Укажите колонку под Имя" FontSize="Subtitle" VerticalOptions="Center"/>
                     <Entry Grid.Column="1" HorizontalOptions="End" Text="{Binding Name}" MaxLength="2" TextTransform="Uppercase"/>
                 </Grid>

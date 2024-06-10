@@ -98,12 +98,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\add_user.png" />
 	  <None Remove="Resources\Images\camera_is_on.png" />
 	  <None Remove="Resources\Images\delete_image.png" />
 	  <None Remove="Resources\Images\dont_qr_code_send.png" />
 	  <None Remove="Resources\Images\dont_valid_mail.png" />
 	  <None Remove="Resources\Images\editor_image.png" />
 	  <None Remove="Resources\Images\erroe_image.png" />
+	  <None Remove="Resources\Images\file_reading_error.png" />
 	  <None Remove="Resources\Images\file_selection.png" />
 	  <None Remove="Resources\Images\guest_list.png" />
 	  <None Remove="Resources\Images\image_valid_mail.png" />

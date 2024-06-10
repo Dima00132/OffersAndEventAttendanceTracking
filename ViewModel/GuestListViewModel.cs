@@ -230,6 +230,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             guest.SetSurname(Surname).SetPatronymic(Patronymic).SetName(Name).SetMail(Mail);
             IsVisibleChangeGuest = false;
             _localDbService.Update(guest.Mail);
+            _localDbService.Update(guest.VrificatQRCode);
             _localDbService.Update(guest);
         }
 
@@ -259,11 +260,11 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         private void SubscribingToMessageSendingEvents(ScheduledEvent scheduled, ObservableCollection<Guest> guests)
         {
             isStart = false;
-            foreach (var item in guests)
-            {
-                CountSendMessage += item.Mail.IsMessageSent ? 1 : 0;
-                //scheduled.SendMessageEvent += item.GetUpSubscriptionForSendingMessages();
-            }
+            //foreach (var item in guests)
+            //{
+            //    CountSendMessage += item.Mail.IsMessageSent ? 1 : 0;
+            //    //scheduled.SendMessageEvent += item.GetUpSubscriptionForSendingMessages();
+            //}
            CountGuest = guests.Count;
         }
 

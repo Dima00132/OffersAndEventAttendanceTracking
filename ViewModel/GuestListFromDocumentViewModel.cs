@@ -11,13 +11,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ScannerAndDistributionOfQRCodes.Data.Parser;
 using ScannerAndDistributionOfQRCodes.Service.PopupService.Interface;
 using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
 using System.ComponentModel;
 using System.Security.Policy;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.IdentityModel.Tokens;
+using ScannerAndDistributionOfQRCodes.Data.Parser.Interface;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {

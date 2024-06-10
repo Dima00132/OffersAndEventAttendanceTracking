@@ -141,7 +141,7 @@ namespace ScannerAndDistributionOfQRCodes.Model
 
         public Guest? SearchForGuestByQRHashCode(string hash)
         {
-            return Guests.FirstOrDefault(x => !x.VrificatQRCode.CompareQRHashCode(hash),null);
+            return Guests.FirstOrDefault(x => x.VrificatQRCode.CompareQRHashCode(hash),null);
 
             //foreach (var item in Guests.Where())
             //{

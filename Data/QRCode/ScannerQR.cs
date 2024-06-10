@@ -50,7 +50,6 @@ namespace ScannerAndDistributionOfQRCodes.Data.QRCode
             return this;
         }
 
-        private object obj = new object();
         public void StartCamera()
         {
             IsCameraLaunched = true;

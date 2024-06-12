@@ -1,1 +1,1 @@
-# ScannerAndDistributionOfQRCodes
+# Приложение для отправки qr code приглашения на мероприятия

@@ -23,48 +23,27 @@ namespace ScannerAndDistributionOfQRCodes.Model
         }
 
         private ObservableCollection<ScheduledEvent> _scheduledEvent = [];
-
-
-        
-
-
-
         [Column("whole_vents")]
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public ObservableCollection<ScheduledEvent> ScheduledEvents
         {
             get => _scheduledEvent;
-            set
-            {
-                SetProperty(ref _scheduledEvent, value);
-                //
-            }
+            set => SetProperty(ref _scheduledEvent, value);
         }
-
         public WholeEvent SortedCategories()
         {
             ScheduledEvents = ScheduledEvents.OrderByDescending((x)=>x.Id).ToObservableCollection();
             return this;
         }
-
-
-
         public void Add(ScheduledEvent wholeEvent)
         {
             if (ScheduledEvents is null)
                 return;
             ScheduledEvents.Insert(0, wholeEvent);
         }
-
         public void Remove(ScheduledEvent wholeEvent)
-        {
-            if (ScheduledEvents is not null)
-                ScheduledEvents.Remove(wholeEvent);
-        }
-
+            =>ScheduledEvents?.Remove(wholeEvent);
         public ObservableCollection<ScheduledEvent> GetWholeEvents()
-        {
-            return ScheduledEvents;
-        }
+            =>ScheduledEvents;
     }
 }

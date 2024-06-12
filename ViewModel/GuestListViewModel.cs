@@ -1,5 +1,6 @@
 ﻿
 using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -23,14 +24,22 @@ using System.Threading.Tasks;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
-    public partial class GuestListViewModel:ViewModelBase
+    public partial class GuestListViewModel : ViewModelBase
     {
         private readonly INavigationService _navigationService;
         private readonly ILocalDbService _localDbService;
         private readonly IPopupService popupService;
         private readonly IMailAccount _mailAccount;
+
+        [ObservableProperty]
         private ScheduledEvent _scheduledEvent;
-       
+        //public ScheduledEvent ScheduledEvent
+        //{
+        //    get => _scheduledEvent;
+        //    set => SetProperty(ref _scheduledEvent, value);
+
+        //}
+
         private ObservableCollection<Guest> _guests;
         public ObservableCollection<Guest> Guests
         {
@@ -62,14 +71,22 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         private bool _isEditor = false;
 
         [ObservableProperty]
-        private bool _isVisibleAddGuest = false; 
+        private bool _isVisibleAddGuest = false;
         [ObservableProperty]
         private bool _isVisibleChangeGuest = false;
 
         [ObservableProperty]
-        private int _countGuest;
-        [ObservableProperty]
         private int _countSendMessage;
+
+
+        private int _сountNotValidMail;
+        public int CountNotValidMail
+        {
+            get => _сountNotValidMail;
+            set => SetProperty(ref _сountNotValidMail, value);
+
+        }
+
 
         public GuestListViewModel(INavigationService navigationService, ILocalDbService localDbService, IPopupService popupService, IMailAccount mailAccount)
         {
@@ -119,8 +136,6 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         public RelayCommand<Guest> SendGuestCommand => new(async (gueet) =>
         {
-            
-            //SendMessageAsync(gueets:gueet);
             await DisplayAlertSendMessageProgressAsync(gueet).ConfigureAwait(false);
         });
 
@@ -134,68 +149,48 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             await popupService
                 .ShowPopupAsync<DisplayAlertSendMessageProgressViewModel>(onPresenting: viewModel => viewModel.ProgresslListSendMessages(gueets, _scheduledEvent, _mailAccount, _localDbService))
                 .ConfigureAwait(false);
+            UpdateCountProperty();
         }
 
-        //private async void SendMessageAsync(Func<Guest, bool> funcWhere = null, params Guest[] gueets)
-        //{
+        private int GetNotValidMail() => Guests.Count((x) => !x.Mail.IsValidMail);
+        private int GetCountSendMessage()
+            => Guests.Count((x) => x.Mail.IsMessageSent);
 
-        //    if (!InternetCS.IsConnectedToInternet())
-        //    {
-        //        Application.Current.MainPage.DisplayAlert("Предупреждение", "Отсутствует доступ к интернету!", "ОK");
-        //        return;
-        //    }
-        //    List<ErrorMessage<Guest>> errorMessages = [];
 
-        //    foreach (var item in gueets.Where(funcWhere is null?(x)=>true:funcWhere))
-        //    {
-        //        try
-        //        {
-        //            item.Mail.SendingMessages(_scheduledEvent.NameEvent, _scheduledEvent.MessageText, _mailAccount, item.User.ToString(), item.VrificatQRCode.GetStreamEncodeQRCode());
-        //            _localDbService.Update(item.Mail);
-        //        }
-        //        catch (SendMailMessageException ex)
-        //        {
-        //            errorMessages.Add(new ErrorMessage<Guest>(item, ex.Message));
-        //        }  
-        //    }
-        //    if (errorMessages.Count != 0)
-        //        DisplayAlertSendingMessagesErrorAsync(errorMessages);
-        //    _localDbService.Update(_scheduledEvent);
-        //}
-         
-        //private async Task DisplayAlertSendingMessagesErrorAsync(List<ErrorMessage<Guest>> errorMessages)
-        //{
-        //    await popupService.ShowPopupAsync<DisplayAlertSendingMessagesErrorViewModel>(onPresenting: viewModel => viewModel.ProgresslListSendMessages(errorMessages)).ConfigureAwait(false);
-        //}
 
         public RelayCommand SendCommand => new(async () =>
         {
             await DisplayAlertSendMessageProgressAsync([.. Guests]).ConfigureAwait(false);
         });
 
-        public  RelayCommand ParseCommand => new(async () =>
+        public RelayCommand ParseCommand => new(async () =>
         {
             await popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.ListOfParsedGuests(_scheduledEvent, new XlsxParser())).ConfigureAwait(false);
+            UpdateCountProperty();
+            _localDbService.Update(_scheduledEvent);
         });
 
-        //public void ShowPopup(Stream stream)
-        //{
-        //    var pars = new XlsxParser();
-        //    var newGuest = pars.Pars(stream);
-        //   //_popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.GuestList(_scheduledEvent, newGuest));
-            
-        //}
+        public RelayCommand UpdateCommand => new(() =>
+        {
+            if (ScheduledEvent is null)
+                return;
+            Guests = null;
+            Guests =  ScheduledEvent.Guests;
+        });
 
 
         [RelayCommand(CanExecute = nameof(CheckNameEvent))]
         public async Task Save()
         {
             if (IsVisibleAddGuest)
-                Guests.Add( CreationGuest());
-            if (IsVisibleChangeGuest)
+                Guests.Add(CreationGuest());
+                //_scheduledEvent.Add( CreationGuest());
+                //Guests.Insert(0,CreationGuest());
+                if (IsVisibleChangeGuest)
                 ChangeGuest(Guest);
             IsEditor = false;
             ClearValues();
+            UpdateCountProperty();
             _localDbService.Update(_scheduledEvent);
         }
 
@@ -212,7 +207,8 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             //_scheduledEvent.SendMessageEvent -= guest.GetUpSubscriptionForSendingMessages();
             Guests.Remove(guest);
-            CountGuest--;
+            //_scheduledEvent.Remove(guest);
+            //CountGuest--;
             _localDbService.Update(_scheduledEvent);
         });
 
@@ -222,7 +218,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             var guest = new Guest().SetSurname(Surname).SetPatronymic(Patronymic).SetName(Name).SetMail(Mail);
             //_scheduledEvent.SendMessageEvent += guest.GetUpSubscriptionForSendingMessages();
             _localDbService.Create(guest);
-            CountGuest++;
+            //CountGuest++;
             return guest;
         }
         private void ChangeGuest(Guest guest)
@@ -234,7 +230,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             _localDbService.Update(guest);
         }
 
-     
+       
 
         private void InstallationValues(Guest guest)
         {
@@ -257,15 +253,21 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                 & !string.IsNullOrEmpty(Patronymic) & EmailValidator.CheckingEmailFormat(Mail) & EmailValidator.CheckEmailDomain(Mail);
         }
 
-        private void SubscribingToMessageSendingEvents(ScheduledEvent scheduled, ObservableCollection<Guest> guests)
+        //private void SubscribingToMessageSendingEvents(ScheduledEvent scheduled, ObservableCollection<Guest> guests)
+        //{
+        //    isStart = false;
+        //    //foreach (var item in guests)
+        //    //{
+        //    //    CountSendMessage += item.Mail.IsMessageSent ? 1 : 0;
+        //    //    //scheduled.SendMessageEvent += item.GetUpSubscriptionForSendingMessages();
+        //    //}
+        //   //CountGuest = guests.Count;
+        //}
+        private void UpdateCountProperty()
         {
-            isStart = false;
-            //foreach (var item in guests)
-            //{
-            //    CountSendMessage += item.Mail.IsMessageSent ? 1 : 0;
-            //    //scheduled.SendMessageEvent += item.GetUpSubscriptionForSendingMessages();
-            //}
-           CountGuest = guests.Count;
+            CountSendMessage = GetCountSendMessage();
+            CountNotValidMail = GetNotValidMail();
+            //CountGuest = Guests.Count();
         }
 
 
@@ -275,9 +277,12 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             if (parameter is ScheduledEvent scheduledEvent)
             {
-                _scheduledEvent = scheduledEvent;
+                ScheduledEvent = scheduledEvent;
                 Guests = scheduledEvent.Guests;
-                SubscribingToMessageSendingEvents(_scheduledEvent, Guests);
+                UpdateCountProperty();
+                isStart = false;
+                
+                //SubscribingToMessageSendingEvents(_scheduledEvent, Guests);
             }
             return base.OnNavigatingTo(parameter);
         }

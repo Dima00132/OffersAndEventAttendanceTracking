@@ -64,7 +64,7 @@ namespace ScannerAndDistributionOfQRCodes.Model
             set => SetProperty(ref _verificatQRCode, value);
         }
 
-    
+        public DateTime ArrivalTime { get; set; }
 
 
 

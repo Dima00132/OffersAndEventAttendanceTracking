@@ -22,8 +22,21 @@
 
         <Grid ColumnDefinitions="800,*" >
 
-            <Grid Grid.Column="0"  RowDefinitions="50,*" RowSpacing="5">
-                <SearchBar Grid.Row="0" 
+            <Grid Grid.Column="0"  RowDefinitions="50,*,40" RowSpacing="5">
+                <Grid Grid.Row="0" ColumnDefinitions="*,50">
+                    <SearchBar Grid.Column="0" 
+                        x:Name="CompanySearch"
+                        Placeholder="Поиск..">
+                        <SearchBar.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                EventName="TextChanged"
+                                    Command="{Binding PerformSearchCommand}"
+                                    CommandParameter="{Binding Text, Source={x:Reference CompanySearch}}"/>
+                        </SearchBar.Behaviors>
+                    </SearchBar>
+                <ImageButton Grid.Column="1" Source="update_guests.png" ToolTipProperties.Text="Обновить список" Command="{Binding UpdateCommand}"/>
+            </Grid>
+                <!--<SearchBar Grid.Row="0" 
                            x:Name="CompanySearch"
                            Placeholder="Поиск..">
                  <SearchBar.Behaviors>
@@ -32,7 +45,7 @@
                                 Command="{Binding PerformSearchCommand}"
                                 CommandParameter="{Binding Text, Source={x:Reference CompanySearch}}"/>
                         </SearchBar.Behaviors>
-                </SearchBar>
+                </SearchBar>-->
                
             
 
@@ -101,6 +114,19 @@
                     </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+
+                <Grid Grid.Row="2" ColumnDefinitions="*,*,*" Padding="10" VerticalOptions="Center" HorizontalOptions="Start" ColumnSpacing="30">
+                <Label Grid.Column="0"  HorizontalOptions="End" Text="{Binding Guests.Count, StringFormat='Количество гостей - {0}'}"/>
+                    <Label Grid.Column="1">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{} Отправлено сообщений {0} из {1}">
+                                <Binding Path="CountSendMessage" />
+                                <Binding Path="Guests.Count"  />
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                <Label Grid.Column="3"  HorizontalOptions="End" Text="{Binding CountNotValidMail, StringFormat='Некорректных Email - {0}'}"/>
+                </Grid>
             </Grid>
 
             <Grid RowDefinitions="100,*" Grid.Column="1">
@@ -125,13 +151,11 @@
                             <Frame>
                                 <Entry  Text="{Binding Mail}" MaxLength="40"/>
                             </Frame>
-                            <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
-                                <Button Grid.Column="0" Text="Отменить" VerticalOptions="Start" BackgroundColor="#D48055"  Command="{Binding CancelCommand}" />
-                                <Button Grid.Column="1" Text="Сохранить"  VerticalOptions="End" BackgroundColor="#D48055"  Command="{Binding SaveCommand}" />
-                            </Grid>
-
-
-                        </StackLayout>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                            <Button Grid.Column="0" Text="Отменить" VerticalOptions="Start" BackgroundColor="#D48055"  Command="{Binding CancelCommand}" />
+                            <Button Grid.Column="1" Text="Сохранить"  VerticalOptions="End" BackgroundColor="#D48055"  Command="{Binding SaveCommand}" />
+                        </Grid>
+                    </StackLayout>
 
                     </Frame>
                 </Frame>

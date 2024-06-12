@@ -51,13 +51,13 @@
                         </DataTrigger>
                     </StackLayout.Triggers>
                     <Grid ColumnDefinitions="*,60"  ColumnSpacing="5" >
-                        <Label Grid.Column="0" Text="Укажите колонку под Имя" FontSize="Subtitle" VerticalOptions="Center"/>
-                    <Entry Grid.Column="1" HorizontalOptions="End" Text="{Binding Name}" MaxLength="2" TextTransform="Uppercase"/>
-                </Grid>
-                    <Grid ColumnDefinitions="*,60"  ColumnSpacing="5" >
                         <Label Grid.Column="0" Text="Укажите колонку под Фамитию" FontSize="Subtitle" VerticalOptions="Center"/>
                     <Entry Grid.Column="1" HorizontalOptions="End" Text="{Binding Surname}" MaxLength="2" TextTransform="Uppercase"/>
-                </Grid>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,60"  ColumnSpacing="5" >
+                        <Label Grid.Column="0" Text="Укажите колонку под Имя" FontSize="Subtitle" VerticalOptions="Center"/>
+                        <Entry Grid.Column="1" HorizontalOptions="End" Text="{Binding Name}" MaxLength="2" TextTransform="Uppercase"/>
+                    </Grid>
                     <Grid ColumnDefinitions="*,60"  ColumnSpacing="5" >
                         <Label Grid.Column="0" Text="Укажите колонку под Отчества" FontSize="Subtitle" VerticalOptions="Center"/>
                     <Entry Grid.Column="1" HorizontalOptions="End" Text="{Binding Patronymic}"  MaxLength="2" TextTransform="Uppercase"/>

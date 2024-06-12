@@ -16,16 +16,12 @@ public partial class GuestListPage : ContentPage
         e.Data.Properties.Add("Text", label.Text);
     }
 
-    private void DropGestureRecognizer_Drop_1(object sender, DropEventArgs e)
-    {
-     
-        //if (e.Data.GetDataPresent(DataFormats.FileDrop))
-        //{
-        //    // можно же перетянуть много файлов, так что....
-        //    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-        //    // делаешь что-то
-        //}
+    protected override void OnAppearing()
+    {
+        if (BindingContext is GuestListViewModel model)
+            _ = model.UpdateCommand;
+        base.OnAppearing();
     }
     public GuestListPage(GuestListViewModel guestListViewModel) : base()
 	{

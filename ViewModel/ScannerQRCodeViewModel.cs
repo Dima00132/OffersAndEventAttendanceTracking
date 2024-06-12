@@ -26,6 +26,7 @@ using System.Security.Policy;
 using ScannerAndDistributionOfQRCodes.Data.QRCode;
 using ScannerAndDistributionOfQRCodes.Data.QRCode.QRCodeInterface;
 using static SQLite.SQLite3;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace ScannerAndDistributionOfQRCodes
@@ -65,7 +66,7 @@ namespace ScannerAndDistributionOfQRCodes
         private bool _isChangesDeviceCamera = false;
         private bool _isConnecting = false;
 
-        private ScannerQR _scannerQR;
+        private readonly ScannerQR _scannerQR;
         //private IDecodeQRCode _decodeQRCode;
         //private IEncodeQRCode _encodeQRCode;
         
@@ -91,7 +92,10 @@ namespace ScannerAndDistributionOfQRCodes
         public override Task OnNavigatingTo(object? parameter, object? parameterSecond = null)
         {
             if (parameter is ScheduledEvent scheduledEvent)
+            {
                 ScheduledEvent = scheduledEvent;
+                CountHowManyGuestsHaveArrived();
+            }
             return base.OnNavigatingTo(parameter);
         }
         private bool  ConnectingCamera()
@@ -193,11 +197,27 @@ namespace ScannerAndDistributionOfQRCodes
         private void SetImageOfCameraOn()
             =>QRImage = ImageSource.FromFile("camera_is_on.png");
 
+
+        public void CountHowManyGuestsHaveArrived()
+        {
+            ScheduledEvent.CountArrivedGuests = ScheduledEvent.Guests.Count(x => x.VrificatQRCode.IsVerifiedQRCode);
+        }
+
+
+        public RelayCommand BackCommand => new(() =>
+        {
+            IsEditor = false;
+        });
+
         public RelayCommand CnfirmCommand => new(() =>
         {
             IsEditor = false;
+            CountHowManyGuestsHaveArrived();
             Guest.VrificatQRCode.IsVerifiedQRCode = true;
+            Guest.ArrivalTime = DateTime.Now;
             _localDbService.Update(Guest.VrificatQRCode);
+            _localDbService.Update(Guest);
+            _localDbService.Update(ScheduledEvent);
         });
 
         private void UpdateQrCodeAsync(object obj,NewFrameEventArgs eventArgs)
@@ -228,7 +248,7 @@ namespace ScannerAndDistributionOfQRCodes
         private void CheckForRepeatedEventAttendance(VerificationQRCode verificationQR)
         {
             if (verificationQR.IsVerifiedQRCode)
-                Application.Current.MainPage.DisplayAlert("Предепреждение", "Данный гость уже присутствует на мероприятие!", "Ок");
+               Application.Current.MainPage.DisplayAlert("Предепреждение", "Данный гость уже присутствует на мероприятие!", "Ок");
         }
 
         private bool SearchByQRHash(string value)
@@ -236,23 +256,13 @@ namespace ScannerAndDistributionOfQRCodes
             if(ScheduledEvent.SearchForGuestByQRHashCode(value) is Guest guest)
             {
                 Guest = guest;
-                MainThread.BeginInvokeOnMainThread(()=>CheckForRepeatedEventAttendance(guest.VrificatQRCode));
+                MainThread.BeginInvokeOnMainThread(()=>CheckForRepeatedEventAttendance(Guest.VrificatQRCode));
                 return IsEditor = true;
             }
-
-            //foreach (var item in ScheduledEvent.Guests)
-            //{
-            //    if (item.VrificatQRCode.QRHashCode.Equals(hash))
-            //    {
-            //        Guest = item;
-            //        return true;
-            //    }
-            //}
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 Application.Current.MainPage.DisplayAlert("Предепреждение", $"Данного QR-code нет в списке \n {value}", "Ок");
             });
-            
             return false;
         }
     }

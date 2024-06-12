@@ -4,6 +4,7 @@ using ScannerAndDistributionOfQRCodes.Model;
 using ScannerAndDistributionOfQRCodes.Navigation;
 using ScannerAndDistributionOfQRCodes.Service.Interface;
 using ScannerAndDistributionOfQRCodes.ViewModel.Base;
+using SixLabors.ImageSharp.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -51,15 +52,14 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         [RelayCommand(CanExecute = nameof(CheckNameEvent))]
         public async Task AddScheduledEvent()
         {
-            var newDate = new DateTime(Date.Year, Date.Month, Date.Day, Time.Hours, Time.Minutes,0);
+            var newDate = new DateTime(Date.Year, Date.Month, Date.Day, Time.Hours, Time.Minutes, 0);
             var text = $"{newDate.ToString("D")} в {newDate.ToString("HH:mm")} <br/>{MessageText}";
-            var sheduledEvent = new ScheduledEvent(NameEvent, newDate)
+            var nameEvent = NameEvent.Replace('\r', ' ').Replace('\n',' ') ;
+            var sheduledEvent = new ScheduledEvent(nameEvent, newDate)
             {
                 MessageText =new  MessageText(text, OrganizationData)
             };
             _whole.Add(sheduledEvent);
-
-            //_localDbService.CreateAndUpdate(sheduledEvent, _whole);
             _localDbService.Create(sheduledEvent);
             _localDbService.Create(sheduledEvent.MessageText);
             _localDbService.Update(_whole);

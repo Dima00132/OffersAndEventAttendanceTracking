@@ -10,10 +10,16 @@
 
         
         <Grid Grid.Row="0" ColumnDefinitions="800,*">
-            <Label Grid.Column="0" Text="{Binding ScheduledEvent.NameEvent}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Micro" />
-            <Grid Grid.Column="1" RowDefinitions="*,*">
-                <Label  Grid.Row="0" Text="{Binding ScheduledEvent.CountGuest, StringFormat='Количество гостей - {0}'}"  HorizontalOptions="Center" VerticalOptions="Center" FontSize="Micro"  />
-                <Label  Grid.Row="1" Text="{Binding ScheduledEvent.CountGuest, StringFormat='Прибыло гостей - {0}'}"  HorizontalOptions="Center" VerticalOptions="Center" FontSize="Micro"  />
+            <Label Grid.Column="0" Text="{Binding ScheduledEvent.NameEvent}" HorizontalOptions="Center" VerticalOptions="Center"  FontSize="14" />
+            <Grid Grid.Column="1">
+                <Label    HorizontalOptions="Center" VerticalOptions="Center" FontSize="Micro"  >
+                    <Label.Text>
+                        <MultiBinding StringFormat="{} Прибыло {1} из {0}">
+                            <Binding Path="ScheduledEvent.Guests.Count" />
+                            <Binding Path="ScheduledEvent.CountArrivedGuests"  />
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
             </Grid>
                 
                 
@@ -49,7 +55,16 @@
                         <Frame>
                             <Label  Text="{Binding Guest.User.Patronymic}" />
                         </Frame>
-                        <Image x:Name="errorImage" WidthRequest="75" HeightRequest="75" Source="erroe_image.png">
+                        <Frame>
+                            <Label  Text="{Binding Guest.ArrivalTime, StringFormat='Время прибытя {0}'}"/>
+                            <Frame.Triggers>
+                                <DataTrigger TargetType="Frame"
+                                             Binding="{Binding Guest.VrificatQRCode.IsVerifiedQRCode}" Value="False">
+                                    <Setter  Property="IsVisible" Value="True"/>
+                                </DataTrigger>
+                            </Frame.Triggers>
+                        </Frame>
+                        <Image x:Name="errorImage" WidthRequest="75" HeightRequest="75" Source="error_user.png">
                             <Image.Triggers>
                                 <DataTrigger TargetType="Image"
                                              Binding="{Binding Guest.VrificatQRCode.IsVerifiedQRCode}" Value="True">
@@ -64,7 +79,22 @@
                             </Image.Triggers>
                         </Image>
                         <Grid >
-                            <Button Grid.Column="0" Text="Подтвердить" VerticalOptions="Start" BackgroundColor="Gray"  Command="{Binding CnfirmCommand}" />
+                            <Button  Grid.Column="0" Text="Подтвердить" VerticalOptions="Start" BackgroundColor="#D48055" Command="{Binding CnfirmCommand}" >
+                                <Button.Triggers>
+                                    <DataTrigger TargetType="Button"
+                                                 Binding="{Binding Guest.VrificatQRCode.IsVerifiedQRCode}" Value="True">
+                                        <Setter  Property="IsVisible" Value="False"/>
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+                            <Button Grid.Column="0" Text="Назад" VerticalOptions="Start" BackgroundColor="#D48055"  Command="{Binding BackCommand}" >
+                                <Button.Triggers>
+                                    <DataTrigger TargetType="Button"
+                                                 Binding="{Binding Guest.VrificatQRCode.IsVerifiedQRCode}" Value="False">
+                                        <Setter  Property="IsVisible" Value="True"/>
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
                         </Grid>
 
 

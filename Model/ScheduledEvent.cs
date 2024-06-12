@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using DocumentFormat.OpenXml.EMMA;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.Maui.Animations;
 using ScannerAndDistributionOfQRCodes.Service.Interface;
 using SQLite;
@@ -78,8 +79,9 @@ namespace ScannerAndDistributionOfQRCodes.Model
         private string _nameEvent;
         [ObservableProperty]
         private DateTime _date;
+        [ObservableProperty]
+        private int _countArrivedGuests;
 
-        
         private MessageText _messageText = new();
         [Column("mssage_text")]
         [OneToOne(CascadeOperations = CascadeOperation.All)]
@@ -93,19 +95,20 @@ namespace ScannerAndDistributionOfQRCodes.Model
             }
         }
 
-        
 
-        
+
+
 
         //[Ignore]
         // public SendMessage SendMessageEvent { get; set; }
 
-        private int _countGuest;
-        public int CountGuest
-        {
-            get => _countGuest;
-            set => SetProperty(ref _countGuest, value);
-        }
+    
+        //private int _countGuest;
+        //public int CountGuest
+        //{
+        //    get => _countGuest;
+        //    set => SetProperty(ref _countGuest, value);
+        //}
 
         public ScheduledEvent(string nameEvent, DateTime date)
         {
@@ -115,42 +118,35 @@ namespace ScannerAndDistributionOfQRCodes.Model
 
         public IEnumerable<Guest> FindsQuestionByRequest(string request)
         {
-            var learnQuestions = Guests;
-            var result = learnQuestions
+            
+            var result = Guests
                 .Where(x => x.User.ToString().Length >= request.Length)
-                .Where(x => String.Compare(x.User.ToString(), 0, request, 0, request.Length, StringComparison.OrdinalIgnoreCase) == 0);
+                .Where(x => CompareUser(x.User.Name, request) | CompareUser(x.User.ToString(), request)
+                | CompareUser(x.User.Surname,  request)| CompareUser(x.User.Patronymic, request));
+            //.Where(x => String.Compare(x.User.ToString(), 0, request, 0, request.Length, StringComparison.OrdinalIgnoreCase) == 0);
             return result;
         }
 
-        public void Add(Guest guest)
-        {
-            if (Guests is null)
-                return;
-            Guests.Insert(0, guest);
-            ++CountGuest;
-        }
+        private bool CompareUser(string name, string request)
+            => String.Compare(name, 0, request, 0, request.Length, StringComparison.OrdinalIgnoreCase) == 0;
 
-        public void Remove(Guest guest)
-        {
-            if (Guests is null)
-                return;
+        //public void Add(Guest guest)
+        //{
+        //    if (Guests is null)
+        //        return;
+        //    Guests.Insert(0, guest);
+        //}
 
-           Guests.Remove(guest);
-           --CountGuest;
-        }
+        //public void Remove(Guest guest)
+        //{
+        //    if (Guests is null)
+        //        return;
+        //    Guests.Remove(guest);
+        //}
 
         public Guest? SearchForGuestByQRHashCode(string hash)
         {
             return Guests.FirstOrDefault(x => x.VrificatQRCode.CompareQRHashCode(hash),null);
-
-            //foreach (var item in Guests.Where())
-            //{
-            //    if (item.VrificatQRCode.QRHashCode.Equals(hash))
-            //    {
-            //        Guest = item;
-            //        return true;
-            //    }
-            //}
         }
 
 

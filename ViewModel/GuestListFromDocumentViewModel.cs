@@ -119,7 +119,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             foreach (var item in Guests)
             {
-                var isGuestOnList = _scheduledEvent.Guests.Where(x => x.VrificatQRCode.QRHashCode.Equals(item.VrificatQRCode.QRHashCode)).Count() != 0?true:false;
+                var isGuestOnList = _scheduledEvent.Guests.Count(x => x.VrificatQRCode.QRHashCode.Equals(item.VrificatQRCode.QRHashCode)) != 0?true:false;
                 if (isGuestOnList)
                     continue;
                 _scheduledEvent.Guests.Add(item);
@@ -177,7 +177,6 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             }).ConfigureAwait(true);
             return result;
         }
-
 
         public async Task ListOfParsedGuests(ScheduledEvent scheduledEvent, IParser xlsxParser)
         {

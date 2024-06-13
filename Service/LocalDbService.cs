@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ScannerAndDistributionOfQRCodes.Data.Message.Mail;
 using ScannerAndDistributionOfQRCodes.Data.QRCode;
+using ScannerAndDistributionOfQRCodes.Data.Message;
 
 namespace ScannerAndDistributionOfQRCodes.Service
 {
@@ -49,8 +50,10 @@ namespace ScannerAndDistributionOfQRCodes.Service
                 _ = _connection.CreateTable<Mail>();
                 _ = _connection.CreateTable<VerificationQRCode>();
                 _ = _connection.CreateTable<MessageText>();
+                _ = _connection.CreateTable<MailAccount>();
+                _ = _connection.CreateTable<MailServer>();
 
-
+           
             }
             catch (Exception ex)
             {
@@ -59,6 +62,29 @@ namespace ScannerAndDistributionOfQRCodes.Service
             }
             
         }
+
+        public MailAccount GetMailAccount()
+        {
+            Init();
+            MailAccount mailAccount = null;
+            try
+            {
+                mailAccount = _connection.GetAllWithChildren<MailAccount>(recursive: true).FirstOrDefault();
+            }
+            catch (Exception)
+            {
+
+
+            }
+
+            if (mailAccount is null)
+            {
+                mailAccount = new MailAccount();
+                Create(mailAccount);
+            }
+            return mailAccount;
+        }
+
 
         public WholeEvent GetWholeEvent()
         {

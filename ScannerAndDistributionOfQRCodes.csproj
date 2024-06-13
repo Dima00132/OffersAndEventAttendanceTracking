@@ -108,6 +108,7 @@
 	  <None Remove="Resources\Images\file_reading_error.png" />
 	  <None Remove="Resources\Images\file_selection.png" />
 	  <None Remove="Resources\Images\guest_list.png" />
+	  <None Remove="Resources\Images\image_settings_black.png" />
 	  <None Remove="Resources\Images\image_valid_mail.png" />
 	  <None Remove="Resources\Images\qr_code_send.png" />
 	  <None Remove="Resources\Images\qr_code_verified.png" />
@@ -170,7 +171,13 @@
 	  <MauiXaml Update="View\GuestVerificationTablePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="View\ListOfEventsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\ScannerQRCodePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\SettingsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

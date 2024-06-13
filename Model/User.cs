@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ScannerAndDistributionOfQRCodes.Data.Message;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 
@@ -14,6 +15,11 @@ namespace ScannerAndDistributionOfQRCodes.Model
         [Column("guest_id")]
         [ForeignKey(typeof(Guest))]
         public int СardQuestionId { get; set; }
+
+        [Column("mail_account_id")]
+        [ForeignKey(typeof(MailAccount))]
+        public int MailAccountId { get; set; }
+
 
         private string _surname;
         public string Surname

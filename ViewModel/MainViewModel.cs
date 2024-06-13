@@ -21,50 +21,54 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         private readonly ILocalDbService _localDbService;
 
 
-        public WholeEvent Whole { get; set; }
-        public ObservableCollection<ScheduledEvent> Scheduleds { get; set; }
+        //public WholeEvent Whole { get; set; }
+        //public ObservableCollection<ScheduledEvent> Scheduleds { get; set; }
         public MainViewModel(INavigationService navigationService, ILocalDbService localDbService)
         {
             _navigationService = navigationService;
             _localDbService = localDbService;
-            Whole = localDbService.GetWholeEvent();
+            //Whole = localDbService.GetWholeEvent();
 
-            Scheduleds = Whole
-                .SortedCategories()
-                .GetWholeEvents();
-            //Learn.SortedCategories((x)=> x.LastActivity);
-            //Learn.SetUpdateDbEvent(OnEventHandlerLearn);
-
-            //Learn.SortedCategories((x) => x.LastActivity);
+            //Scheduleds = Whole
+            //    .SortedCategories()
+            //    .GetWholeEvents();
         }
-        public RelayCommand AddCommand => new(async () =>
+
+        public RelayCommand SettingsCommand => new(async () =>
         {
-
-
-            await _navigationService.NavigateByPage<AddScheduledEventPage>(Whole);
-
-
-
-            //_localDbService.Create(learnCategory);
-            //_localDbService.Update(Learn);
+            await _navigationService.NavigateByPage<SettingsPage>();
         });
-        public RelayCommand<ScheduledEvent> TapCommand => new(async (scheduledEvent) =>
+        public RelayCommand EventCommand => new(async () =>
         {
-            await _navigationService.NavigateByPage<GuestVerificationTablePage>(scheduledEvent);
+            //var  Whole = _localDbService.GetWholeEvent();
+            await _navigationService.NavigateByPage<ListOfEventsPage>();
         });
 
-        public RelayCommand<ScheduledEvent> DeleteCommand => new(async (scheduledEvent) =>
+        public RelayCommand SendingMessagesCommand => new (async () =>
         {
-            Whole.ScheduledEvents.Remove(scheduledEvent);
-            Scheduleds.Remove(scheduledEvent);
-
-            _localDbService.Update(Whole);
+            //await _navigationService.NavigateByPage<ListOfEventsPage>();
         });
 
-        public override Task OnUpdateDbService()
-        {
-            _localDbService.Update(Whole);
-            return base.OnUpdateDbService();
-        }
+        //public RelayCommand AddCommand => new(async () =>
+        //{
+        //    await _navigationService.NavigateByPage<AddScheduledEventPage>(Whole);
+        //});
+        //public RelayCommand<ScheduledEvent> TapCommand => new(async (scheduledEvent) =>
+        //{
+        //    await _navigationService.NavigateByPage<GuestVerificationTablePage>(scheduledEvent);
+        //});
+
+        //public RelayCommand<ScheduledEvent> DeleteCommand => new(async (scheduledEvent) =>
+        //{
+        //    Whole.ScheduledEvents.Remove(scheduledEvent);
+        //    Scheduleds.Remove(scheduledEvent);
+        //    _localDbService.Update(Whole);
+        //});
+
+        //public override Task OnUpdateDbService()
+        //{
+        //    _localDbService.Update(Whole);
+        //    return base.OnUpdateDbService();
+        //}
     }
 }

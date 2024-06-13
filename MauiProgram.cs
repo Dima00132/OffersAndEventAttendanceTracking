@@ -27,12 +27,13 @@ namespace ScannerAndDistributionOfQRCodes
             //    new User("Иванов", "Иван", "Иванович"),
             //    new MailServer("smtp.yandex.ru", 465, true));
 
-            var mailAccaunt = new MailAccount("6686967", "testsend@nizhny.online", "6a8dtydwniakm3fgmy1zrn1q93yd1o176k39b96y",
-            new User("Иванов", "Иван", "Иванович"),
-            new MailServer("smtp.go1.unisender.ru", 465, true));
+            //var mailAccaunt = new MailAccount("6686967", "testsend@nizhny.online", "6a8dtydwniakm3fgmy1zrn1q93yd1o176k39b96y",
+            //new User("Иванов", "Иван", "Иванович"),
+            //new MailServer("smtp.go1.unisender.ru", 465, true));
 
 
-            builder.Services.AddSingleton<IMailAccount, MailAccount>((x)=>mailAccaunt);
+            //builder.Services.AddSingleton<IMailAccount, MailAccount>((x)=>mailAccaunt);
+            builder.Services.AddSingleton<IMailAccount, MailAccount>();
             builder.Services.AddSingleton<IPopupService, PopupService>()
                 .AddTransientPopup<GuestListFromDocumentPopup, GuestListFromDocumentViewModel>()
                 .AddTransientPopup<DisplayAlertSendingMessagesErrorPopup, DisplayAlertSendingMessagesErrorViewModel>()
@@ -47,12 +48,14 @@ namespace ScannerAndDistributionOfQRCodes
             builder.Services.AddTransient<AddScheduledEventViewModel>().AddTransient<AddScheduledEventPage>();
             builder.Services.AddTransient<GuestVerificationTableViewModel>().AddTransient<GuestVerificationTablePage>();
 
+            builder.Services.AddTransient<SettingsPage>().AddTransient<SettingsViewModel>();
 
             builder.Services.AddSingleton<IDataService, DataService>();
 
             builder.Services.AddSingleton<ILocalDbService, LocalDbService>();
 
             builder.Services.AddSingleton<INavigationService, NavigationService>();
+            builder.Services.AddTransient<ListOfEventsPage>().AddTransient<ListOfEventsViewModel>();
 
             builder.Services.AddSingleton<MainPage>().AddSingleton<MainViewModel>();
 

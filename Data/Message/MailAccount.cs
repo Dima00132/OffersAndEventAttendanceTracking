@@ -17,7 +17,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
        void Create(string mailID, string mailAddress, string password, User userData, MailServer mailServer);
     }
 
-    public sealed class MailServer
+    public sealed class MailServer : IComparable<MailServer>
     {
         [PrimaryKey, AutoIncrement]
         [Column("Id")]
@@ -41,16 +41,23 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
         public string Server { get; set; }
         public int Port { get; set; }
         public bool ConnectionProtection { get; set; }
+
+        public int CompareTo(MailServer? other)
+        {
+            if (other is null)
+                return -1;
+            return other.Port.CompareTo(Port) + other.Server.CompareTo(Server) + other.ConnectionProtection.CompareTo(ConnectionProtection);
+        }
     }
 
-    public sealed class MailAccount : IMailAccount
+    public sealed class MailAccount : IMailAccount, IComparable<MailAccount>
     {
         [PrimaryKey, AutoIncrement]
         [Column("Id")]
         public int Id { get; set; }
 
         [Column("guest_id")]
-        public int СardQuestionId { get; set; }
+        public int GuestId { get; set; }
 
         public MailAccount()
         {
@@ -74,16 +81,24 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
             MailID = mailID;
         }
 
+        public int CompareTo(MailAccount? other)
+        {
+            if (other is null)
+                return -1;
+            return other.MailAddress.CompareTo(MailAddress)+ other.Password.CompareTo(Password) 
+                + other.UserData.CompareTo(UserData)+ other.MailAddress.CompareTo(MailServer)+other.MailID.CompareTo(MailID);
+        }
+
         public string MailAddress { get; set; }
         public string Password { get; set; }
 
         [Column("user")]
         [OneToOne(CascadeOperations = CascadeOperation.All)]
-        public User UserData { get; set; }
+        public User UserData { get; set; } = new User();
 
         [Column("mail_server")]
         [OneToOne(CascadeOperations = CascadeOperation.All)]
-        public MailServer MailServer { get; set; }
+        public MailServer MailServer { get; set; } = new MailServer();
 
         public string MailID { get; set; }
     }

@@ -28,10 +28,10 @@ namespace ScannerAndDistributionOfQRCodes
         protected override Window CreateWindow(IActivationState activationState) =>
             new Window(MainPage)
             {
-                MaximumHeight = 750,
-                MaximumWidth = 1300,
-                MinimumHeight = 750,
-                MinimumWidth = 1300,
+                MaximumHeight = 700,
+                MaximumWidth = 1200,
+                MinimumHeight = 700,
+                MinimumWidth = 1200,
 
             };
     }

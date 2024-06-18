@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Aspose.Email;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using ScannerAndDistributionOfQRCodes.Data.Message;
 using ScannerAndDistributionOfQRCodes.Model;
 using ScannerAndDistributionOfQRCodes.Navigation;
@@ -16,7 +18,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
     {
         private readonly INavigationService _navigationService;
         private readonly ILocalDbService _localDbService;
-        private readonly IMailAccount _mailAccount;
+        private readonly MailAccount _mailAccount;
 
         [ObservableProperty]
         //[NotifyCanExecuteChangedFor(nameof(SaveCommand))]
@@ -83,5 +85,41 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             Password = _mailAccount.Password;
         }
 
+        public RelayCommand SaveCommand => new(() =>
+        {
+            var mailAccount = new MailAccount();
+            var mailServe = new MailServer(Server,Port, ConnectionProtection);
+            var user = new User()
+            {
+                Name = Name,
+                Surname = Surname,
+                Patronymic = Patronymic
+            };
+
+            mailAccount.Create(MailID, MailAddress, Password,user,mailServe);
+
+
+
+            if (mailAccount.CompareTo(_mailAccount) == 0)
+                return;
+            if(_mailAccount is null)
+                CreateDb(mailAccount, mailServe, user);
+
+            UpdateDb(mailAccount, mailServe, user);
+        });
+
+        private void CreateDb(MailAccount mailAccount, MailServer mailServe, User user)
+        {
+            _localDbService.Create(mailServe);
+            _localDbService.Create(user);
+            _localDbService.Create(mailAccount);
+        }
+
+        private void UpdateDb(MailAccount mailAccount, MailServer mailServe, User user)
+        {
+            _localDbService.Update(mailServe);
+            _localDbService.Update(user);
+            _localDbService.Update(mailAccount);
+        }
     }
 }

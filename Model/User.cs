@@ -6,7 +6,7 @@ using SQLiteNetExtensions.Attributes;
 namespace ScannerAndDistributionOfQRCodes.Model
 {
     [Table("user_data")]
-    public partial class User : ObservableObject
+    public partial class User : ObservableObject, IComparable<User>
     {
         [PrimaryKey, AutoIncrement]
         [Column("Id")]
@@ -56,5 +56,11 @@ namespace ScannerAndDistributionOfQRCodes.Model
         public override string ToString()
             => $"{Surname} {Name} {Patronymic}";
 
+        public int CompareTo(User? other)
+        {
+            if (other is null)
+                return -1;
+            return other.Name.CompareTo(Name) + other.Patronymic.CompareTo(Patronymic) + other.Surname.CompareTo(Surname);
+        }
     }
 }

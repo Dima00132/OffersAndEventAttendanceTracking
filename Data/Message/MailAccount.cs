@@ -17,7 +17,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
        void Create(string mailID, string mailAddress, string password, User userData, MailServer mailServer);
     }
 
-    public sealed class MailServer : IComparable<MailServer>
+    public sealed class MailServer : IComparable, IComparable<MailServer>
     {
         [PrimaryKey, AutoIncrement]
         [Column("Id")]
@@ -38,9 +38,16 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
             ConnectionProtection = connectionProtection;
         }
 
-        public string Server { get; set; }
+        public string Server { get; set; } = string.Empty;
         public int Port { get; set; }
         public bool ConnectionProtection { get; set; }
+
+        public void Change(string server, int port, bool connectionProtection)
+        {
+            Server = server;
+            Port = port;
+            ConnectionProtection = connectionProtection;
+        }
 
         public int CompareTo(MailServer? other)
         {
@@ -48,9 +55,15 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
                 return -1;
             return other.Port.CompareTo(Port) + other.Server.CompareTo(Server) + other.ConnectionProtection.CompareTo(ConnectionProtection);
         }
+
+        public int CompareTo(object? obj)
+        {
+            var server = obj as MailServer;
+            return this.CompareTo(server);
+        }
     }
 
-    public sealed class MailAccount : IMailAccount, IComparable<MailAccount>
+    public sealed class MailAccount : IMailAccount, IComparable, IComparable<MailAccount>
     {
         [PrimaryKey, AutoIncrement]
         [Column("Id")]
@@ -72,6 +85,13 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
         //    MailID = mailID;
         //}
 
+        public void Change(string mailID, string mailAddress, string password)
+        {
+            MailAddress = mailAddress;
+            Password = password;
+            MailID = mailID;
+        }
+
         public void Create(string mailID, string mailAddress, string password, User userData, MailServer mailServer)
         {
             MailAddress = mailAddress;
@@ -85,12 +105,19 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
         {
             if (other is null)
                 return -1;
+    
             return other.MailAddress.CompareTo(MailAddress)+ other.Password.CompareTo(Password) 
-                + other.UserData.CompareTo(UserData)+ other.MailAddress.CompareTo(MailServer)+other.MailID.CompareTo(MailID);
+                + other.UserData.CompareTo(UserData)+ other.MailServer.CompareTo(MailServer) +other.MailID.CompareTo(MailID);
         }
 
-        public string MailAddress { get; set; }
-        public string Password { get; set; }
+        public int CompareTo(object? obj)
+        {
+            var account = obj as MailAccount;
+            return this.CompareTo(account);
+        }
+
+        public string MailAddress { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
 
         [Column("user")]
         [OneToOne(CascadeOperations = CascadeOperation.All)]
@@ -100,6 +127,6 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
         [OneToOne(CascadeOperations = CascadeOperation.All)]
         public MailServer MailServer { get; set; } = new MailServer();
 
-        public string MailID { get; set; }
+        public string MailID { get; set; } = string.Empty;
     }
 }

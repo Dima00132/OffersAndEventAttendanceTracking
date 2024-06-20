@@ -122,12 +122,12 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             _localDbService.Update(_scheduledEvent);
         });
 
-        public GuestListViewModel(INavigationService navigationService, ILocalDbService localDbService, IPopupService popupService, IMailAccount mailAccount)
+        public GuestListViewModel(INavigationService navigationService, ILocalDbService localDbService, IPopupService popupService)
         {
             _navigationService = navigationService;
             _localDbService = localDbService;
             this.popupService = popupService;
-            _mailAccount = mailAccount;
+            _mailAccount = localDbService.GetMailAccount();
         }
 
         [RelayCommand(CanExecute = nameof(CheckNameEvent))]

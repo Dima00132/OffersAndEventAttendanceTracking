@@ -21,36 +21,44 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         private readonly MailAccount _mailAccount;
 
         [ObservableProperty]
-        //[NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+        [NotifyCanExecuteChangedFor(nameof(SaveUserCommand))]
         private string _surname = string.Empty;
 
         [ObservableProperty]
-        //[NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+        [NotifyCanExecuteChangedFor(nameof(SaveUserCommand))]
         private string _name = string.Empty;
 
         [ObservableProperty]
-        //[NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+        [NotifyCanExecuteChangedFor(nameof(SaveUserCommand))]
         private string _patronymic= string.Empty;
 
-        [ObservableProperty]
-       // [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
-        private string _mail = string.Empty;
+       // [ObservableProperty]
+       //// [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+       // private string _mail = string.Empty;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveMailServerCommand))]
         public string _server;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveMailServerCommand))]
         public int _port;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveMailServerCommand))]
         public bool _connectionProtection;
 
+     
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveDomainDailCommand))]
         public string _mailAddress;
+        
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveUisenderGOCommand))]
+        public string _mailID;
 
         [ObservableProperty]
-        public string _mailID;
-        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveUisenderGOCommand))]
         public string _password;
 
 
@@ -59,16 +67,19 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             _navigationService = navigationService;
             _localDbService = localDbService;
-            // mailAccount = new MailAccount();
+            //_mailAccount = localDbService.GetMailAccount();
+
+            //var mailAccount = new MailAccount();
             //mailAccount.Create("6686967", "testsend@nizhny.online", "6a8dtydwniakm3fgmy1zrn1q93yd1o176k39b96y",
             //new User("Иванов", "Иван", "Иванович"),
             //new MailServer("smtp.go1.unisender.ru", 465, true));
+            //localDbService.Delete(_mailAccount);
 
             //localDbService.Create(mailAccount.MailServer);
             //localDbService.Create(mailAccount.UserData);
             //localDbService.Create(mailAccount);
 
-            
+
             _mailAccount = localDbService.GetMailAccount();
 
             Name = _mailAccount.UserData.Name;
@@ -85,41 +96,116 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             Password = _mailAccount.Password;
         }
 
-        public RelayCommand SaveCommand => new(() =>
+        //public RelayCommand SaveCommand => new(() =>
+        //{
+        //    _mailAccount.Change(MailID, MailAddress, Password);
+        //    _mailAccount.MailServer.Change(Server, Port, ConnectionProtection);
+        //    _mailAccount.UserData.Change(Name, Surname, Patronymic);
+        //    var mailAccount = new MailAccount();
+        //    var mailServe = new MailServer(Server, Port, ConnectionProtection);
+        //    var user = new User()
+        //    {
+        //        Name = Name,
+        //        Surname = Surname,
+        //        Patronymic = Patronymic
+        //    };
+
+        //    //mailAccount.Create(MailID, MailAddress, Password,user,mailServe);
+        //    //if (_mailAccount is null)
+        //    //    CreateDb(_mailAccount.mailAccount, mailServe, user);
+
+
+        //    if (_mailAccount.CompareTo(_mailAccount) == 0)
+        //        return;
+
+        //    UpdateDb(_mailAccount, _mailAccount.MailServer, _mailAccount.UserData);
+        //    //UpdateDb(mailAccount, mailAccount.MailServer, mailAccount.UserData);
+        //});
+
+
+        //public RelayCommand SaveUserCommand => new(() =>
+        //{
+           
+        //});
+
+        [RelayCommand(CanExecute = nameof(CheckUser))]
+        public void SaveUser()
         {
-            var mailAccount = new MailAccount();
-            var mailServe = new MailServer(Server,Port, ConnectionProtection);
-            var user = new User()
-            {
-                Name = Name,
-                Surname = Surname,
-                Patronymic = Patronymic
-            };
+            _mailAccount.UserData.Change(Surname, Name, Patronymic);
+            _localDbService.Update(_mailAccount.UserData);
+        }
 
-            mailAccount.Create(MailID, MailAddress, Password,user,mailServe);
+        private bool CheckUser() 
+        {
+            return _mailAccount.UserData.Name.CompareTo(Name) 
+               + _mailAccount.UserData.Patronymic.CompareTo(Patronymic) 
+                +_mailAccount.UserData.Surname.CompareTo(Surname) != 0;
+        }
+        //public RelayCommand SaveMailServerCommand => new(() =>
+        //{
+
+        //});
+
+        [RelayCommand(CanExecute = nameof(CheckMailServer))]
+        public void SaveMailServer()
+        {
+            _mailAccount.MailServer.Change(Server, Port, ConnectionProtection);
+            _localDbService.Update(_mailAccount.MailServer);
+        }
+
+        private bool CheckMailServer() => _mailAccount.MailServer.Server.CompareTo(Server)
+                + _mailAccount.MailServer.Port.CompareTo(Port)
+                + _mailAccount.MailServer.Server.CompareTo(Server) + _mailAccount.MailServer.Port.CompareTo(Port) != 0;
 
 
 
+        [RelayCommand(CanExecute = nameof(CheckDomainDail))]
+        public void SaveDomainDail()
+        {
+            _mailAccount.Change(MailID, MailAddress, Password);
+            _localDbService.Update(_mailAccount);
+        }
+
+        private bool CheckDomainDail()
+        {
+           return _mailAccount.MailServer.Server.CompareTo(Server) + _mailAccount.MailServer.Port.CompareTo(Port) != 0;
+        }
+
+        [RelayCommand(CanExecute = nameof(CheckUisenderGO))]
+        public void SaveUisenderGO()
+        {
+            _mailAccount.Change(MailID, MailAddress, Password);
+            _localDbService.Update(_mailAccount);
+        }
+
+        private bool CheckUisenderGO()
+        {
+            return _mailAccount.MailID.CompareTo(MailID) + _mailAccount.Password.CompareTo(Password) != 0;
+        }
+
+        private void UpdateMailAccount(MailAccount mailAccount)
+        {
             if (mailAccount.CompareTo(_mailAccount) == 0)
                 return;
-            if(_mailAccount is null)
-                CreateDb(mailAccount, mailServe, user);
-
-            UpdateDb(mailAccount, mailServe, user);
-        });
-
-        private void CreateDb(MailAccount mailAccount, MailServer mailServe, User user)
-        {
-            _localDbService.Create(mailServe);
-            _localDbService.Create(user);
-            _localDbService.Create(mailAccount);
         }
 
-        private void UpdateDb(MailAccount mailAccount, MailServer mailServe, User user)
-        {
-            _localDbService.Update(mailServe);
-            _localDbService.Update(user);
-            _localDbService.Update(mailAccount);
-        }
+        //private bool ChangeCheck(IComparable value, IComparable value2)
+        //    =>value.CompareTo(value2) == 0;
+        
+
+        //private void CreateDb(MailAccount mailAccount, MailServer mailServe, User user)
+        //{
+            
+        //    _localDbService.Create(mailServe);
+        //    _localDbService.Create(user);
+        //   _localDbService.Create(mailAccount);
+        //}
+
+        //private void UpdateDb(MailAccount mailAccount, MailServer mailServe, User user)
+        //{
+        //    _localDbService.Update(mailServe);
+        //    _localDbService.Update(user);
+        //    _localDbService.Update(mailAccount);
+        //}
     }
 }

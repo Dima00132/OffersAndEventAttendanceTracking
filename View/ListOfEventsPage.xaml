@@ -5,14 +5,15 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:cv ="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
              xmlns:model = "clr-namespace:ScannerAndDistributionOfQRCodes.Model"
-             xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel">
+             xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel"
+             Title="Мероприятия">
 
 
-    <Grid RowDefinitions="100,*">
-        <Button Grid.Row="0" Text="Добавить" BackgroundColor="Green"  Command="{Binding AddCommand}" />
-        <CollectionView Grid.Row="1" 
+    <Grid RowDefinitions="*,50" RowSpacing="5">
+        <Button Grid.Row="1" Text="Добавить мероприятие"  VerticalOptions="Start" FontSize="Title" CornerRadius="20" HorizontalOptions="Center" BackgroundColor="#D48055" ImageSource="{AppThemeBinding Light=add_event_black.png, Dark=add_event_white.png }"  Command="{Binding AddCommand}" />
+        <CollectionView Grid.Row="0" 
                         AbsoluteLayout.LayoutFlags="All"
-                        ItemsSource="{Binding Scheduleds}">
+                        ItemsSource="{Binding Scheduleds}" Margin="10" >
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type model:ScheduledEvent}">
                     <Frame>
@@ -31,9 +32,10 @@
 
                                 <Label Grid.Column="1" 
                                        TextColor="Green"
-                                       FontSize="Subtitle"  
+                                       FontSize="Body"
+                                       HorizontalOptions="End"
                                        
-                                       Text="{Binding Date, StringFormat='Дата и время проведения мероприятия {0}'}" />
+                                       Text="{Binding Date, StringFormat='Дата мероприятия: {0}'}" />
                                 <Label Grid.Column="0" Text="{Binding  NameEvent , Mode=TwoWay}"/>
                             </Grid>
                             <FlyoutBase.ContextFlyout>
@@ -41,6 +43,9 @@
                                     <!--<MenuFlyoutItem Text="Редектировать" 
                         Command="{Binding Path=ChangeCommand, Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}}"
                         CommandParameter="{Binding .}"/>-->
+                                    <!--<MenuFlyoutItem Text="Статистика"
+                                    Command="{Binding Path=ChangeCommand, Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}}"
+                                    CommandParameter="{Binding .}"/>-->
                                     <MenuFlyoutItem Text="Удалить" 
                         Command="{Binding Path= DeleteCommand, Source={RelativeSource AncestorType={x:Type viewmodel:ListOfEventsViewModel}}}"
                         CommandParameter="{Binding .}"/>

@@ -98,8 +98,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\add_event_black.png" />
+	  <None Remove="Resources\Images\add_event_white.png" />
 	  <None Remove="Resources\Images\add_user.png" />
 	  <None Remove="Resources\Images\camera_is_on.png" />
+	  <None Remove="Resources\Images\caret_down_black.png" />
+	  <None Remove="Resources\Images\caret_down_white.png" />
+	  <None Remove="Resources\Images\caret_up_black.png" />
+	  <None Remove="Resources\Images\caret_up_white.png" />
 	  <None Remove="Resources\Images\delete_image.png" />
 	  <None Remove="Resources\Images\dont_qr_code_send.png" />
 	  <None Remove="Resources\Images\dont_valid_mail.png" />
@@ -160,6 +166,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\DisplayAlertSendMessageProgressPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\EditorEventPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\GuestListFromDocumentPopup.xaml">

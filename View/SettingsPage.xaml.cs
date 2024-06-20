@@ -12,12 +12,19 @@ public partial class SettingsPage : ContentPage
         InitializeComponent();
         BindingContext = settingsViewModel;
         frames.AddRange([userFrame, mailServerFrame, domainDailFrame, uisenderGOFrame]);
+       
     }
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
         CloseFrames();
         listMinu.IsVisible = !listMinu.IsVisible;
+
+        if (listMinu.IsVisible)
+            image.SetAppTheme<FileImageSource>(Image.SourceProperty, "caret_up_black.png", "caret_up_white.png");
+        else
+            image.SetAppTheme<FileImageSource>(Image.SourceProperty, "caret_down_black.png", "caret_down_white.png");
+        //Light = caret_up_black.png, Dark = caret_up_white.png
     }
 
     private void User_TextCell_Tapped(object sender, EventArgs e)

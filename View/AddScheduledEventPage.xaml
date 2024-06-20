@@ -13,7 +13,7 @@
 
                 <Frame >
                     <Editor Text="{Binding NameEvent,Mode=TwoWay}"
-                            Placeholder ="Название мероприятия"/>
+                            Placeholder ="Название мероприятия" MaxLength="150"/>
                 </Frame>
                 <Frame >
                     <StackLayout >

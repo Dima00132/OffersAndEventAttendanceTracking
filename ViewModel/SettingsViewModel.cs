@@ -96,38 +96,6 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             Password = _mailAccount.Password;
         }
 
-        //public RelayCommand SaveCommand => new(() =>
-        //{
-        //    _mailAccount.Change(MailID, MailAddress, Password);
-        //    _mailAccount.MailServer.Change(Server, Port, ConnectionProtection);
-        //    _mailAccount.UserData.Change(Name, Surname, Patronymic);
-        //    var mailAccount = new MailAccount();
-        //    var mailServe = new MailServer(Server, Port, ConnectionProtection);
-        //    var user = new User()
-        //    {
-        //        Name = Name,
-        //        Surname = Surname,
-        //        Patronymic = Patronymic
-        //    };
-
-        //    //mailAccount.Create(MailID, MailAddress, Password,user,mailServe);
-        //    //if (_mailAccount is null)
-        //    //    CreateDb(_mailAccount.mailAccount, mailServe, user);
-
-
-        //    if (_mailAccount.CompareTo(_mailAccount) == 0)
-        //        return;
-
-        //    UpdateDb(_mailAccount, _mailAccount.MailServer, _mailAccount.UserData);
-        //    //UpdateDb(mailAccount, mailAccount.MailServer, mailAccount.UserData);
-        //});
-
-
-        //public RelayCommand SaveUserCommand => new(() =>
-        //{
-           
-        //});
-
         [RelayCommand(CanExecute = nameof(CheckUser))]
         public void SaveUser()
         {
@@ -141,10 +109,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                + _mailAccount.UserData.Patronymic.CompareTo(Patronymic) 
                 +_mailAccount.UserData.Surname.CompareTo(Surname) != 0;
         }
-        //public RelayCommand SaveMailServerCommand => new(() =>
-        //{
 
-        //});
 
         [RelayCommand(CanExecute = nameof(CheckMailServer))]
         public void SaveMailServer()
@@ -188,24 +153,5 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             if (mailAccount.CompareTo(_mailAccount) == 0)
                 return;
         }
-
-        //private bool ChangeCheck(IComparable value, IComparable value2)
-        //    =>value.CompareTo(value2) == 0;
-        
-
-        //private void CreateDb(MailAccount mailAccount, MailServer mailServe, User user)
-        //{
-            
-        //    _localDbService.Create(mailServe);
-        //    _localDbService.Create(user);
-        //   _localDbService.Create(mailAccount);
-        //}
-
-        //private void UpdateDb(MailAccount mailAccount, MailServer mailServe, User user)
-        //{
-        //    _localDbService.Update(mailServe);
-        //    _localDbService.Update(user);
-        //    _localDbService.Update(mailAccount);
-        //}
     }
 }

@@ -2,21 +2,25 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ScannerAndDistributionOfQRCodes.View.SettingsPage"
-             Title="SettingsPage">
+             Title="Настроки">
    
     <Grid ColumnDefinitions="*,*">
 
         <ScrollView Grid.Column="0">
-            <VerticalStackLayout Grid.Column="0">
-                 <Frame>
-                    <Label Text="Персонализация"/>
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1" />
-                        </Frame.GestureRecognizers>
+            <VerticalStackLayout Grid.Column="0" Margin="10">
+                <Frame >
+                    <HorizontalStackLayout HorizontalOptions="Start" Spacing="5">
+                        <Label Text="Персонализация"  FontSize="Title"/>
+                        <Image x:Name="image" VerticalOptions="End" HorizontalOptions="Start" Source="{AppThemeBinding Light=caret_down_black.png, Dark=caret_down_white.png }"/>
+                    </HorizontalStackLayout>
+                    
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1" />
+                    </Frame.GestureRecognizers>
                 </Frame>
 
                 <Frame x:Name="listMinu"  IsVisible="False">
-                    <TableView VerticalOptions="Start" Intent="Menu">
+                    <TableView>
                         <TableRoot>
                             <TableSection>
                                 <TextCell Text="Пользователь" Tapped="User_TextCell_Tapped"/>
@@ -47,8 +51,8 @@
                             </TableView.Root>
                         </TableView>
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="5">
-                            <Button Grid.Column="1" Text="Save" Command="{Binding SaveUserCommand}"/>
-                            <Button Grid.Column="0" Text="Cansel" Clicked="Cansel_Frame_Button_Clicked"/>
+                            <Button Grid.Column="1" BackgroundColor="#D48055" Text="Сохранить" Command="{Binding SaveUserCommand}"/>
+                            <Button Grid.Column="0" BackgroundColor="#D48055"  Text="Назад" Clicked="Cansel_Frame_Button_Clicked"/>
                         </Grid>
                     </StackLayout>
                 </Frame>
@@ -67,8 +71,8 @@
                             </TableView.Root>
                         </TableView>
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="5">
-                            <Button Grid.Column="1" Text="Save" Command="{Binding SaveMailServerCommand}"/>
-                            <Button Grid.Column="0" Text="Cansel" Clicked="Cansel_Frame_Button_Clicked"/>
+                            <Button Grid.Column="1" BackgroundColor="#D48055"  Text="Сохранить" Command="{Binding SaveMailServerCommand}"/>
+                            <Button Grid.Column="0" BackgroundColor="#D48055"  Text="Назад" Clicked="Cansel_Frame_Button_Clicked"/>
                         </Grid>
                         
                     </StackLayout>
@@ -86,8 +90,8 @@
                             </TableView.Root>
                         </TableView>
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="5">
-                            <Button Grid.Column="1" Text="Save" Command="{Binding SaveDomainDailCommand}"/>
-                            <Button Grid.Column="0" Text="Cansel" Clicked="Cansel_Frame_Button_Clicked"/>
+                            <Button Grid.Column="1" BackgroundColor="#D48055"  Text="Сохранить" Command="{Binding SaveDomainDailCommand}"/>
+                            <Button Grid.Column="0" BackgroundColor="#D48055"  Text="Назад" Clicked="Cansel_Frame_Button_Clicked"/>
                         </Grid>
                     </StackLayout>
                 </Frame>
@@ -99,63 +103,18 @@
                                 <TableRoot>
                                     <TableSection Title="Unisender GO">
                                         <EntryCell  Label="ID" Keyboard="Default"  Text="{Binding MailID}" />
-                                        <EntryCell  Label="Пароль" Keyboard="Default" Placeholder="Иван" Text="{Binding Password}"/>
+                                        <EntryCell  Label="Пароль" Keyboard="Default" Text="{Binding Password}"/>
                                     </TableSection>
                                 </TableRoot>
                             </TableView.Root>
                         </TableView>
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="5">
-                            <Button Grid.Column="1" Text="Save" Command="{Binding SaveUisenderGOCommand}"/>
-                            <Button Grid.Column="0" Text="Cansel" Clicked="Cansel_Frame_Button_Clicked"/>
+                            <Button Grid.Column="1" BackgroundColor="#D48055"  Text="Сохранить" Command="{Binding SaveUisenderGOCommand}"/>
+                            <Button Grid.Column="0" BackgroundColor="#D48055"  Text="Назад" Clicked="Cansel_Frame_Button_Clicked"/>
                         </Grid>
                     </StackLayout>
                 </Frame>
-
-                <!--<TableView>
-                    <TableView.Root>
-                        <TableRoot>
-                            <TableSection Title="Пользователь">
-                                <EntryCell  Label="Фамилия" Keyboard="Default" Placeholder="Иванов" Text="{Binding Surname}" />
-                                <EntryCell  Label="Имя" Keyboard="Default" Placeholder="Иван" Text="{Binding Name}"/>
-                                <EntryCell  Label="Отчество" Keyboard="Default" Placeholder="Иванович" Text="{Binding Patronymic}" />
-                            </TableSection>
-                            <TableSection Title="Mail Server">
-                                <EntryCell  Label="Сервер" Keyboard="Default"  Text="{Binding Server}" />
-                                <EntryCell  Label="Порт" Keyboard="Default"  Text="{Binding Port}"/>
-                                <SwitchCell Text="Защита соединения"  On="{Binding ConnectionProtection}" />
-                            </TableSection>
-                            <TableSection Title="Доменная почта">
-                                <EntryCell  Label="Почта" Keyboard="Default"  Text="{Binding MailAddress}" />
-                            </TableSection>
-                            <TableSection Title="Unisender GO">
-                                <EntryCell  Label="ID" Keyboard="Default"  Text="{Binding MailID}" />
-                                <EntryCell  Label="Пароль" Keyboard="Default" Placeholder="Иван" Text="{Binding Password}"/>
-                            </TableSection>
-                        </TableRoot>
-                    </TableView.Root>
-                </TableView>
-                <Border BackgroundColor="White">
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="5">
-                        <Button Grid.Column="1" Text="Save" Command="{Binding SaveCommand}"/>
-                        <Button Grid.Column="0" Text="Cansel"/>
-                    </Grid>
-                </Border>-->
             </VerticalStackLayout>
         </ScrollView>
     </Grid>
 </ContentPage>
-
-<!--//[NotifyCanExecuteChangedFor(nameof(SaveCommand))]
-       private string _surname;
-
-       [ObservableProperty]
-       //[NotifyCanExecuteChangedFor(nameof(SaveCommand))]
-       private string _name;
-
-       [ObservableProperty]
-       //[NotifyCanExecuteChangedFor(nameof(SaveCommand))]
-       private string _patronymic;
-
-       [ObservableProperty]
-      // [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
-       private string _mail;-->

@@ -13,7 +13,7 @@
 
                 <Frame >
                     <Editor Text="{Binding NameEvent,Mode=TwoWay}"
-                            Placeholder ="Название мероприятия" MaxLength="150"/>
+                            Placeholder ="Название мероприятия" VerticalTextAlignment="Center" MaxLength="150"/>
                 </Frame>
                 <Frame >
                     <StackLayout >
@@ -24,11 +24,11 @@
                 </Frame>
 
                 <Frame >
-                    <Editor Text="{Binding MessageText}"
+                    <Editor Text="{Binding MessageText}" VerticalTextAlignment="Center"
                      Placeholder ="Укажите текст приглашения"/>
                 </Frame>
                 <Frame >
-                    <Editor Text="{Binding OrganizationData}"
+                    <Editor Text="{Binding OrganizationData}" VerticalTextAlignment="Center"
                             Placeholder ="Данные организации (обязатебно)"/>
                 </Frame>
                 

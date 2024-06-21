@@ -49,6 +49,10 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             Scheduleds.Remove(scheduledEvent);
             _localDbService.Update(Whole);
         });
+        public RelayCommand<ScheduledEvent> EditorCommand => new(async (scheduledEvent) =>
+        {
+            await _navigationService.NavigateByPage<EditorEventPage>(scheduledEvent);
+        });
 
         public override Task OnUpdateDbService()
         {

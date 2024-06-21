@@ -28,7 +28,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         
         [ObservableProperty]
-        private DateTime _date;
+        private DateTime _date = DateTime.Now;
         [ObservableProperty]
         private TimeSpan _time;
         [ObservableProperty]

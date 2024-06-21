@@ -15,7 +15,7 @@ public partial class AddScheduledEventPage : ContentPage
     {
         if (e.PropertyName == "Date" | e.PropertyName == "Time")
         {
-            labelDate.Text = $"Вы выбрали {datePicker.Date.ToString("D")} {timePicker.Time}";
+            labelDate.Text = $"Вы выбрали {datePicker.Date.ToString("D")} в  {timePicker.Time.ToString("hh':'mm")}";
         }
     }
 }

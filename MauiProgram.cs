@@ -23,6 +23,8 @@ namespace ScannerAndDistributionOfQRCodes
             builder.Services.AddTransient<ScannerQRCodeViewModel>().AddTransient<ScannerQRCodePage>();
             builder.Services.AddTransient<GuestListViewModel>().AddTransient<GuestListPage>();
 
+            builder.Services.AddTransient<EditorEventViewModel>().AddTransient<EditorEventPage>();
+
             //var mailAccaunt = new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr",
             //    new User("Иванов", "Иван", "Иванович"),
             //    new MailServer("smtp.yandex.ru", 465, true));

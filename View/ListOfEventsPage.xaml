@@ -43,9 +43,9 @@
                                     <!--<MenuFlyoutItem Text="Редектировать" 
                         Command="{Binding Path=ChangeCommand, Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}}"
                         CommandParameter="{Binding .}"/>-->
-                                    <!--<MenuFlyoutItem Text="Статистика"
-                                    Command="{Binding Path=ChangeCommand, Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}}"
-                                    CommandParameter="{Binding .}"/>-->
+                                    <MenuFlyoutItem Text="Редектировать"
+                                    Command="{Binding Path=EditorCommand, Source={RelativeSource AncestorType={x:Type viewmodel:ListOfEventsViewModel}}}"
+                                    CommandParameter="{Binding .}"/>
                                     <MenuFlyoutItem Text="Удалить" 
                         Command="{Binding Path= DeleteCommand, Source={RelativeSource AncestorType={x:Type viewmodel:ListOfEventsViewModel}}}"
                         CommandParameter="{Binding .}"/>

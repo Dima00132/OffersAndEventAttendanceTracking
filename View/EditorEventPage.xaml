@@ -2,11 +2,54 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ScannerAndDistributionOfQRCodes.View.EditorEventPage"
-             Title="EditorEventPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="Редактор">
+    
+    <Grid RowDefinitions="*,50">
+        <ScrollView Grid.Row="0" >
+            <StackLayout 
+              Orientation="Vertical"
+             Spacing="15"
+             Padding="5" Margin="10">
+
+                <Frame >
+                    <StackLayout Spacing="5">
+                        <Label Text="Мероприятие" FontSize="Subtitle"/>
+                        <Editor Text="{Binding NameEvent,Mode=TwoWay}" VerticalTextAlignment="Center"
+                                Placeholder ="Название мероприятия" MaxLength="150"/>
+                    </StackLayout>
+                    
+                    
+                </Frame>
+                <Frame >
+                    <StackLayout  Spacing="5">
+                        <Label x:Name="labelDate" Text="Дата и время мероприятия" FontSize="Subtitle" />
+                        <TimePicker x:Name="timePicker" HorizontalOptions="Start" Format="H" PropertyChanged="Date_PropertyChanged"  Time="{Binding Time}"/>
+                        <DatePicker x:Name="datePicker" HorizontalOptions="Start" MinimumDate="{Binding MinDate}" PropertyChanged="Date_PropertyChanged"  Date="{Binding Date}"/>
+                    </StackLayout>
+                </Frame>
+
+                <Frame >
+                    <StackLayout Spacing="5">
+                        <Label Text="Текст в приглашение" FontSize="Subtitle"/>
+                        <Editor Text="{Binding MessageText}" VerticalTextAlignment="Center" Placeholder ="Укажите текст приглашения"/>
+                    </StackLayout>
+                </Frame>
+                <Frame >
+                    <StackLayout Spacing="5">
+                        <Label Text="Контакты организации (обязательно)" FontSize="Subtitle"/>
+                        <Editor Text="{Binding OrganizationData}" VerticalTextAlignment="Center" Placeholder ="Данные организации (обязатебно)"/>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+
+        <Button Grid.Row="1"
+        
+         Text="Сохранить"
+            
+         BackgroundColor="Gray"
+         FontSize="Large"
+            
+         Command="{Binding  AddScheduledEventCommand}"  />
+    </Grid>
 </ContentPage>

@@ -2,10 +2,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ScannerAndDistributionOfQRCodes.View.EditorEventPage"
+             xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel"
              Title="Редактор">
-    
-    <Grid RowDefinitions="*,50">
-        <ScrollView Grid.Row="0" >
+
+    <Grid RowDefinitions="50,*" Margin="10" ColumnSpacing="10">
+        <ScrollView Grid.Row="1" >
             <StackLayout 
               Orientation="Vertical"
              Spacing="15"
@@ -40,16 +41,11 @@
                         <Editor Text="{Binding OrganizationData}" VerticalTextAlignment="Center" Placeholder ="Данные организации (обязатебно)"/>
                     </StackLayout>
                 </Frame>
+
             </StackLayout>
         </ScrollView>
 
-        <Button Grid.Row="1"
-        
-         Text="Сохранить"
-            
-         BackgroundColor="Gray"
-         FontSize="Large"
-            
-         Command="{Binding  AddScheduledEventCommand}"  />
+        <Button Grid.Row="0" Text="Сохранить"  BackgroundColor="#D48055" VerticalOptions="Center" HorizontalOptions="End" FontSize="Large"
+                Command="{Binding  Source={RelativeSource AncestorType={x:Type viewmodel:EditorEventViewModel}} , Path=ChangeScheduledEventCommand}"  />
     </Grid>
 </ContentPage>

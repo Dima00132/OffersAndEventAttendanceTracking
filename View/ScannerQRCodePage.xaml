@@ -55,15 +55,18 @@
                         <Frame>
                             <Label  Text="{Binding Guest.User.Patronymic}" />
                         </Frame>
-                        <Frame>
+                        
+                        
+                        <Frame IsVisible="False">
                             <Label  Text="{Binding Guest.ArrivalTime, StringFormat='Время прибытя {0}'}"/>
                             <Frame.Triggers>
                                 <DataTrigger TargetType="Frame"
-                                             Binding="{Binding Guest.VrificatQRCode.IsVerifiedQRCode}" Value="False">
+                                             Binding="{Binding Guest.VrificatQRCode.IsVerifiedQRCode}" Value="True">
                                     <Setter  Property="IsVisible" Value="True"/>
                                 </DataTrigger>
                             </Frame.Triggers>
                         </Frame>
+                        
                         <Image x:Name="errorImage" WidthRequest="75" HeightRequest="75" Source="error_user.png">
                             <Image.Triggers>
                                 <DataTrigger TargetType="Image"
@@ -78,19 +81,20 @@
                                 </DataTrigger>
                             </Image.Triggers>
                         </Image>
+                        
                         <Grid >
-                            <Button  Grid.Column="0" Text="Подтвердить" VerticalOptions="Start" BackgroundColor="#D48055" Command="{Binding CnfirmCommand}" >
-                                <Button.Triggers>
-                                    <DataTrigger TargetType="Button"
-                                                 Binding="{Binding Guest.VrificatQRCode.IsVerifiedQRCode}" Value="True">
-                                        <Setter  Property="IsVisible" Value="False"/>
-                                    </DataTrigger>
-                                </Button.Triggers>
-                            </Button>
-                            <Button Grid.Column="0" Text="Назад" VerticalOptions="Start" BackgroundColor="#D48055"  Command="{Binding BackCommand}" >
+                            <Button  Grid.Column="0" Text="Подтвердить" IsVisible="False" VerticalOptions="Start" BackgroundColor="#D48055" Command="{Binding CnfirmCommand}" >
                                 <Button.Triggers>
                                     <DataTrigger TargetType="Button"
                                                  Binding="{Binding Guest.VrificatQRCode.IsVerifiedQRCode}" Value="False">
+                                        <Setter  Property="IsVisible" Value="True"/>
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+                            <Button Grid.Column="0" Text="Назад" IsVisible="False" VerticalOptions="Start" BackgroundColor="#D48055"  Command="{Binding BackCommand}" >
+                                <Button.Triggers>
+                                    <DataTrigger TargetType="Button"
+                                                 Binding="{Binding Guest.VrificatQRCode.IsVerifiedQRCode}" Value="True">
                                         <Setter  Property="IsVisible" Value="True"/>
                                     </DataTrigger>
                                 </Button.Triggers>

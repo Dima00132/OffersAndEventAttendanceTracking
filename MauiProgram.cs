@@ -24,6 +24,9 @@ namespace ScannerAndDistributionOfQRCodes
             builder.Services.AddTransient<GuestListViewModel>().AddTransient<GuestListPage>();
 
             builder.Services.AddTransient<EditorEventViewModel>().AddTransient<EditorEventPage>();
+            builder.Services.AddTransient<StatisticsViewModel>().AddTransient<StatisticsPage>();
+
+        
 
             //var mailAccaunt = new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr",
             //    new User("Иванов", "Иван", "Иванович"),

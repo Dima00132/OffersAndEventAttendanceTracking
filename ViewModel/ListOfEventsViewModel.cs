@@ -40,6 +40,12 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         });
         public RelayCommand<ScheduledEvent> TapCommand => new(async (scheduledEvent) =>
         {
+            var timeOfEvent = scheduledEvent.Date - DateTime.Now.AddDays(1);
+            if (timeOfEvent.Days < -1)
+            {
+                await _navigationService.NavigateByPage<StatisticsPage>(scheduledEvent);
+                return;
+            }
             await _navigationService.NavigateByPage<GuestVerificationTablePage>(scheduledEvent);
         });
 
@@ -49,6 +55,12 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             Scheduleds.Remove(scheduledEvent);
             _localDbService.Update(Whole);
         });
+        public RelayCommand<ScheduledEvent> StatisticsCommand => new(async (scheduledEvent) =>
+        {
+            await _navigationService.NavigateByPage<StatisticsPage>(scheduledEvent);
+        });
+
+        
         public RelayCommand<ScheduledEvent> EditorCommand => new(async (scheduledEvent) =>
         {
             await _navigationService.NavigateByPage<EditorEventPage>(scheduledEvent);

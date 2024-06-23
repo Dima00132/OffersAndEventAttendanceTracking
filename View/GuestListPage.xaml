@@ -129,40 +129,15 @@
                 </Grid>
             </Grid>
 
-            <Grid RowDefinitions="100,*" Grid.Column="1">
-                <Grid   Grid.Row="0" ColumnDefinitions="100,100,100"  ColumnSpacing="20" VerticalOptions="Start" HorizontalOptions="Center">
-                    <ImageButton Grid.Column="0" VerticalOptions="Start" HorizontalOptions="Center"  Source="add_user.png"  Command="{Binding AddGuestCommand}" ToolTipProperties.Text="Добавить гостя" />
-                    <ImageButton Grid.Column="1"  VerticalOptions="Start" HorizontalOptions="Center" Source="sending_messages.png" Command="{Binding SendCommand}" ToolTipProperties.Text="Отправить сообщения"/>
-                    <ImageButton Grid.Column="2" VerticalOptions="Start" HorizontalOptions="Center" Source="file_selection.png" Command="{Binding ParseCommand}" ToolTipProperties.Text="Выбрать файл"/>
-                </Grid>
-                
-                <Frame Grid.Row="1" IsVisible="{Binding IsEditor}"  BorderColor="White">
-                    <Frame  CornerRadius="50" BorderColor="#D48055" HeightRequest="520" >
-                        <StackLayout Spacing="20">
-                            <Frame>
-                                <Entry  Text="{Binding Surname}" MaxLength="40"/>
-                            </Frame>
-                            <Frame>
-                                <Entry  Text="{Binding Name}" MaxLength="40"/>
-                            </Frame>
-                            <Frame>
-                                <Entry  Text="{Binding Patronymic}" MaxLength="40"/>
-                            </Frame>
-                            <Frame>
-                                <Entry  Text="{Binding Mail}" MaxLength="40"/>
-                            </Frame>
-                        <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
-                            <Button Grid.Column="0" Text="Отменить" VerticalOptions="Start" BackgroundColor="#D48055"  Command="{Binding CancelCommand}" />
-                            <Button Grid.Column="1" Text="Сохранить"  VerticalOptions="End" BackgroundColor="#D48055"  Command="{Binding SaveCommand}" />
-                        </Grid>
-                    </StackLayout>
-
-                    </Frame>
-                </Frame>
-
+        <Grid RowDefinitions="100,*" Grid.Column="1">
+            <Grid   Grid.Row="0" ColumnDefinitions="100,100,100"  ColumnSpacing="20" VerticalOptions="Start" HorizontalOptions="Center">
+                <ImageButton Grid.Column="0" VerticalOptions="Start" HorizontalOptions="Center"  Source="add_user.png"  Command="{Binding AddGuestCommand}" ToolTipProperties.Text="Добавить гостя" />
+                <ImageButton Grid.Column="1"  VerticalOptions="Start" HorizontalOptions="Center" Source="sending_messages.png" Command="{Binding SendCommand}" ToolTipProperties.Text="Отправить сообщения"/>
+                <ImageButton Grid.Column="2" VerticalOptions="Start" HorizontalOptions="Center" Source="file_selection.png" Command="{Binding ParseCommand}" ToolTipProperties.Text="Выбрать файл"/>
             </Grid>
-            <!--<Frame Grid.Column="1" IsVisible="{Binding IsEditor}"  BorderColor="White">
-                <Frame  CornerRadius="50" BorderColor="#00cfff" HeightRequest="520" >
+
+            <Frame Grid.Row="1" IsVisible="{Binding IsEditor}"  BorderColor="White">
+                <Frame  CornerRadius="50" BorderColor="#D48055" HeightRequest="520" >
                     <StackLayout Spacing="20">
                         <Frame>
                             <Entry  Text="{Binding Surname}" MaxLength="40"/>
@@ -177,15 +152,15 @@
                             <Entry  Text="{Binding Mail}" MaxLength="40"/>
                         </Frame>
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
-                            <Button Grid.Column="0" Text="Отменить" VerticalOptions="Start" BackgroundColor="Gray"  Command="{Binding CancelCommand}" />
-                            <Button Grid.Column="1" Text="Сохранить"  VerticalOptions="End" BackgroundColor="Green"  Command="{Binding SaveCommand}" />
+                            <Button Grid.Column="0" Text="Отменить" VerticalOptions="Start" BackgroundColor="#D48055"  Command="{Binding CancelCommand}" />
+                            <Button Grid.Column="1" Text="Сохранить"  VerticalOptions="End" BackgroundColor="#D48055"  Command="{Binding SaveCommand}" />
                         </Grid>
-
-
                     </StackLayout>
 
                 </Frame>
-            </Frame>-->
+            </Frame>
+
         </Grid>
+    </Grid>
     <!--</Grid>-->
 </ContentPage>

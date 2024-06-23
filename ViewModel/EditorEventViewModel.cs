@@ -21,20 +21,25 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         private ScheduledEvent _scheduledEvent;
 
         [ObservableProperty]
-        //[NotifyCanExecuteChangedFor(nameof(AddScheduledEventCommand))]
+        [NotifyCanExecuteChangedFor(nameof(ChangeScheduledEventCommand))]
         private string _nameEvent;
         [ObservableProperty]
         private DateTime _minDate = DateTime.Now;
 
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(ChangeScheduledEventCommand))]
         private DateTime _date;
+
         [ObservableProperty]
         private TimeSpan _time;
+
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(ChangeScheduledEventCommand))]
         private string _messageText ;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(ChangeScheduledEventCommand))]
         private string _organizationData ;
 
         public EditorEventViewModel(INavigationService navigationService, ILocalDbService localDbService)
@@ -44,25 +49,24 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         }
 
 
-        [RelayCommand(CanExecute = nameof(CheckNameEvent))]
-        public async Task AddScheduledEvent()
+        [RelayCommand(CanExecute = nameof(CheckEvent))]
+        public async Task ChangeScheduledEvent()
         {
-            //var newDate = new DateTime(Date.Year, Date.Month, Date.Day, Time.Hours, Time.Minutes, 0);
-            //var text = $"{newDate.ToString("D")} в {newDate.ToString("HH:mm")} <br/>{MessageText}";
-            //var nameEvent = NameEvent.Replace('\r', ' ').Replace('\n', ' ');
-            //var sheduledEvent = new ScheduledEvent(nameEvent, newDate)
-            //{
-            //    MessageText = new MessageText(text, OrganizationData)
-            //};
-            //_whole.Add(sheduledEvent);
-            //_localDbService.Create(sheduledEvent);
-            //_localDbService.Create(sheduledEvent.MessageText);
-            //_localDbService.Update(_whole);
-
-            //await _navigationService.NavigateBackUpdate();
+            var newDate = new DateTime(Date.Year, Date.Month, Date.Day, Time.Hours, Time.Minutes, 0);
+            _scheduledEvent.Change(NameEvent, newDate);
+            _scheduledEvent.MessageText.Change(MessageText, OrganizationData);
+            _localDbService.Update(_scheduledEvent.MessageText);
+            _localDbService.Update(_scheduledEvent);
+            await _navigationService.NavigateBack().ConfigureAwait(false);
         }
 
-        public bool CheckNameEvent() => !string.IsNullOrEmpty(NameEvent);
+        public bool CheckEvent()
+        {
+            if(_scheduledEvent is null)
+                return false;
+            return !string.IsNullOrEmpty(NameEvent) & Date >= DateTime.Now & !string.IsNullOrEmpty(MessageText) 
+                & !string.IsNullOrEmpty(OrganizationData);
+        }
 
         public override Task OnNavigatingTo(object? parameter, object? parameterSecond = null)
         {
@@ -74,9 +78,9 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                 Time =  new TimeSpan(scheduledEvent.Date.Hour, scheduledEvent.Date.Minute, scheduledEvent.Date.Second);
                 MessageText = scheduledEvent.MessageText.Text;
                 OrganizationData = scheduledEvent.MessageText.OrganizationData;
-
             }
             return base.OnNavigatingTo(parameter, parameterSecond);
         }
     }
 }
+ 

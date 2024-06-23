@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ScannerAndDistributionOfQRCodes.View.StatisticsPage"
+             xmlns:model = "clr-namespace:ScannerAndDistributionOfQRCodes.Model"
+             xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel"
+             Title="Статистика">
+    <ScrollView>
+        <StackLayout Margin="10" Spacing="10">
+            <Label Text="{Binding ScheduledEvent.NameEvent}"/>
+            <Label Text="{Binding ScheduledEvent.Date, StringFormat='Время проведения мероприятия {0}'}"/>
+            <Label Text="{Binding ScheduledEvent.Guests.Count, StringFormat='Приглашение гостей {0}'}"/>
+            <Label Text="{Binding ScheduledEvent.CountArrivedGuests, StringFormat='Пришло гостей {0}'}"/>
+            <Frame >
+                <HorizontalStackLayout HorizontalOptions="Start" Spacing="5">
+                    <Label Text="Список гостей"  FontSize="Title"/>
+                    <Image x:Name="image" VerticalOptions="End" HorizontalOptions="Start" Source="{AppThemeBinding Light=caret_down_black.png, Dark=caret_down_white.png }"/>
+                </HorizontalStackLayout>
+
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1" />
+                </Frame.GestureRecognizers>
+            </Frame>
+
+            <Frame x:Name="listGuests" IsVisible="False">
+                <!--<ListView  AbsoluteLayout.LayoutFlags="All"
+                ItemsSource="{Binding Path= Guests, Source={RelativeSource AncestorType={x:Type viewmodel:StatisticsViewModel}}}"/>-->
+                <ListView x:Name="RunningLateOptions" 
+                          ItemsSource="{Binding Guests}"/>
+            </Frame>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

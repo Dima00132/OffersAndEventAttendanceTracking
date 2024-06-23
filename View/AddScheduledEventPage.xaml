@@ -2,10 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ScannerAndDistributionOfQRCodes.View.AddScheduledEventPage"
-             Title="AddScheduledEventPage">
-    
-    <Grid RowDefinitions="*,50">
-        <ScrollView Grid.Row="0" >
+             Title="Создание мероприятия">
+
+    <Grid RowDefinitions="50,*" Margin="10" RowSpacing="10">
+        <ScrollView Grid.Row="1" >
             <StackLayout 
                   Orientation="Vertical"
                  Spacing="15"
@@ -36,13 +36,7 @@
             </StackLayout>
         </ScrollView>
 
-        <Button Grid.Row="1"
-            
-             Text="Сохранить"
-                
-             BackgroundColor="Gray"
-             FontSize="Large"
-                
-             Command="{Binding  AddScheduledEventCommand}"  />
+        <Button Grid.Row="0" Text="Сохранить"  BackgroundColor="#D48055" VerticalOptions="Center" HorizontalOptions="End"
+             FontSize="Large" Command="{Binding  AddScheduledEventCommand}"  />
     </Grid>
 </ContentPage>

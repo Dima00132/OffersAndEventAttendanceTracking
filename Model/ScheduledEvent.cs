@@ -58,7 +58,13 @@ namespace ScannerAndDistributionOfQRCodes.Model
         public ScheduledEvent()
         {
         }
-        public ScheduledEvent(string nameEvent, DateTime date)
+        public ScheduledEvent(string nameEvent, DateTime  date)
+        {
+            NameEvent = nameEvent;
+            Date = date;
+        }
+
+        public void Change(string nameEvent,DateTime date)
         {
             NameEvent = nameEvent;
             Date = date;

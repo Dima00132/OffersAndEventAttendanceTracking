@@ -13,6 +13,7 @@ namespace ScannerAndDistributionOfQRCodes.Navigation
         Task NavigateToMainPage(object? parameter = null);
         Task NavigateByPage<T>(object? parameter = null, object? parameterSecond = null) where T : Page;
         public Task NavigateByViewModel<T>(object? parameter = null) where T : ViewModelBase;
+        Task NavigateBack();
         Task NavigateBackUpdate();
     }
 }

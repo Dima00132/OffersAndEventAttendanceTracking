@@ -90,7 +90,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.Parser
 
         private void IterateThroughRow(SheetData sheetData, SharedStringTable sharedStringTable)
         {
-                foreach (Row row in sheetData.Elements<Row>().Skip(1))
+                foreach (Row row in sheetData.Elements<Row>())
                     IterateThroughCell(row, sharedStringTable);
         }
 

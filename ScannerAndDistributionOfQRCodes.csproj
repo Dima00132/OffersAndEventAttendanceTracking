@@ -106,6 +106,7 @@
 	  <None Remove="Resources\Images\caret_down_white.png" />
 	  <None Remove="Resources\Images\caret_up_black.png" />
 	  <None Remove="Resources\Images\caret_up_white.png" />
+	  <None Remove="Resources\Images\check_mark.png" />
 	  <None Remove="Resources\Images\delete_image.png" />
 	  <None Remove="Resources\Images\dont_qr_code_send.png" />
 	  <None Remove="Resources\Images\dont_valid_mail.png" />
@@ -126,6 +127,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AForge.Video.DirectShow" Version="2.2.5" />
+		<PackageReference Include="Aspose.Cells" Version="24.6.0" />
 		<PackageReference Include="Aspose.Email" Version="24.5.0" />
 		<PackageReference Include="BarCode" Version="2024.5.3" />
 		<PackageReference Include="Bytescout.Spreadsheet" Version="4.7.1.2054" />
@@ -156,6 +158,9 @@
 	  <Compile Update="View\GuestListFromDocumentPopup.xaml.cs">
 	    <DependentUpon>GuestListFromDocumentPopup.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="View\NewsletterView\MailingPage.xaml.cs">
+	    <DependentUpon>MailingPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -181,6 +186,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\ListOfEventsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\NewsletterView\MailingPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\NewsletterView\MessageBroadcastDisplayPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\ScannerQRCodePage.xaml">

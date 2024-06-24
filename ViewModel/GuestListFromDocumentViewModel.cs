@@ -73,6 +73,8 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ConfirmCommand))]
         private string _mail;
+        [ObservableProperty]
+        private bool _isSkipFirstLine = true;
 
         private ScheduledEvent _scheduledEvent;
 
@@ -95,8 +97,10 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         private List<Guest> GetGuests(List<Dictionary<string, string>> listxlsxParser)
         {
-            var guests = new List<Guest>(); 
-            foreach (var item in listxlsxParser)
+            
+             var guests = new List<Guest>();
+            var newLstxlsxParser = IsSkipFirstLine ? listxlsxParser.Skip(1) : listxlsxParser;
+            foreach (var item in newLstxlsxParser)
             {
                 if (!CheckingPresenceOfColumn(item, [Mail, Name, Surname, Patronymic]))
                     continue;

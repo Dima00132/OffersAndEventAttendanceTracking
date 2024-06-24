@@ -10,7 +10,9 @@ using ScannerAndDistributionOfQRCodes.Navigation;
 using ScannerAndDistributionOfQRCodes.Service;
 using ScannerAndDistributionOfQRCodes.Service.Interface;
 using ScannerAndDistributionOfQRCodes.View;
+using ScannerAndDistributionOfQRCodes.View.NewsletterView;
 using ScannerAndDistributionOfQRCodes.ViewModel;
+using ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel;
 
 
 namespace ScannerAndDistributionOfQRCodes
@@ -25,7 +27,7 @@ namespace ScannerAndDistributionOfQRCodes
 
             builder.Services.AddTransient<EditorEventViewModel>().AddTransient<EditorEventPage>();
             builder.Services.AddTransient<StatisticsViewModel>().AddTransient<StatisticsPage>();
-
+            builder.Services.AddTransient<MailingViewModel>().AddTransient<MailingPage>();
         
 
             //var mailAccaunt = new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr",
@@ -42,7 +44,8 @@ namespace ScannerAndDistributionOfQRCodes
             builder.Services.AddSingleton<IPopupService, PopupService>()
                 .AddTransientPopup<GuestListFromDocumentPopup, GuestListFromDocumentViewModel>()
                 .AddTransientPopup<DisplayAlertSendingMessagesErrorPopup, DisplayAlertSendingMessagesErrorViewModel>()
-                .AddTransientPopup<DisplayAlertSendMessageProgressPopup, DisplayAlertSendMessageProgressViewModel>();
+                .AddTransientPopup<DisplayAlertSendMessageProgressPopup, DisplayAlertSendMessageProgressViewModel>()
+                .AddTransientPopup<MessageBroadcastDisplayPopup, MessageBroadcastDisplayViewModel>();
             //builder.Services.AddSingleton<IPopupService, PopupService>().AddTransientPopup<DisplayAlertSendingMessagesErrorPopup, DisplayAlertSendingMessagesErrorViewModel>();
             //builder.Services .AddTransient<GuestListFromDocumentViewModel>().AddTransient<GuestListFromDocumentPopup>();
 

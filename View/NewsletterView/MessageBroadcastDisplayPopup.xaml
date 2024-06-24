@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ScannerAndDistributionOfQRCodes.View.NewsletterView.MessageBroadcastDisplayPopup"
+              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               xmlns:mail = "clr-namespace:ScannerAndDistributionOfQRCodes.Data.Message"
+               xmlns:model = "clr-namespace:ScannerAndDistributionOfQRCodes.Model"
+               xmlns:view ="clr-namespace:ScannerAndDistributionOfQRCodes.View"
+               xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel"
+               CanBeDismissedByTappingOutsideOfPopup ="False"
+               x:Name="messageBroadcastDisplayPopup">
+    
+    <Border Padding="0" HeightRequest="600"
+       WidthRequest="450"
+       Stroke="Transparent"
+       BackgroundColor="{AppThemeBinding Light=#FFEAE7EC, Dark=#1f1f1f  }">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="28"/>
+        </Border.StrokeShape>
+        <StackLayout >
+            <Grid ColumnDefinitions="*,20">
+                <Entry Grid.Column="0" Placeholder="Укажите конку с почтой" Text="{Binding ColumnNumber}" TextTransform="Uppercase" 
+                       MaxLength="2" TextChanged="Entry_TextChanged" />
+                <Image Grid.Column="1" x:Name="imageEntry" IsVisible="False" Source="check_mark.png"/>
+            </Grid>
+            <Grid x:Name="parserButton" IsVisible="False" ColumnDefinitions="*,20">
+                <Button   Text="Добавить файл" Command="{Binding ParserCommand}"/>
+                <Image x:Name="imageButton" IsVisible="False" Source="check_mark.png"/>
+            </Grid>
+            <Button x:Name="sendButton" Text="Отправит" IsVisible="False" Command="{Binding SendCommand}"/>
+        </StackLayout>
+    </Border>
+</toolkit:Popup>

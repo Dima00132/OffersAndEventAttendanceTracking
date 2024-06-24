@@ -21,7 +21,7 @@
             </Frame>
 
             <Frame BorderColor="White">
-                <Button Text="Рассылка сообщений" />
+                <Button Text="Рассылка сообщений" Command="{Binding SendingMessagesCommand}" />
             </Frame>
         </VerticalStackLayout>
     </Grid>

@@ -215,6 +215,7 @@ namespace ScannerAndDistributionOfQRCodes
             CountHowManyGuestsHaveArrived();
             Guest.VrificatQRCode.IsVerifiedQRCode = true;
             Guest.ArrivalTime = DateTime.Now;
+            ScheduledEvent.CountArrivedGuests++;
             _localDbService.Update(Guest.VrificatQRCode);
             _localDbService.Update(Guest);
             _localDbService.Update(ScheduledEvent);
@@ -234,14 +235,10 @@ namespace ScannerAndDistributionOfQRCodes
                 var result = DecodeQRCode.Decode(bitmap);
                 if (!string.IsNullOrEmpty(result))
                 {
-                    ///camera_is_on.png
                     SearchByQRHash(result);    
                     IsCameraLaunched = TurnOffCamera();
 
                 }
-
-
-
             }
         }
 

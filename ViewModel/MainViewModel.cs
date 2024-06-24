@@ -11,6 +11,7 @@ using ScannerAndDistributionOfQRCodes.Model;
 using ScannerAndDistributionOfQRCodes.Navigation;
 using ScannerAndDistributionOfQRCodes.Service.Interface;
 using ScannerAndDistributionOfQRCodes.View;
+using ScannerAndDistributionOfQRCodes.View.NewsletterView;
 using ScannerAndDistributionOfQRCodes.ViewModel.Base;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
@@ -46,7 +47,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         public RelayCommand SendingMessagesCommand => new (async () =>
         {
-            //await _navigationService.NavigateByPage<ListOfEventsPage>();
+            await _navigationService.NavigateByPage<MailingPage>();
         });
 
         //public RelayCommand AddCommand => new(async () =>

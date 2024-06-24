@@ -55,6 +55,16 @@ namespace ScannerAndDistributionOfQRCodes.Model
             get => _messageText;
             set => SetProperty(ref _messageText, value);
         }
+
+        public bool IsEventWasHeld
+        {
+            get
+            {
+                var timeOfEvent = Date - DateTime.Now.AddDays(1);
+                return timeOfEvent.Days < -1;
+            }
+        }
+
         public ScheduledEvent()
         {
         }

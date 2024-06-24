@@ -9,7 +9,7 @@
     <Grid RowDefinitions="50,*">
 
         
-        <Grid Grid.Row="0" ColumnDefinitions="800,*">
+        <Grid Grid.Row="0" ColumnDefinitions="750,*" ColumnSpacing="5">
             <Label Grid.Column="0" Text="{Binding ScheduledEvent.NameEvent}" HorizontalOptions="Center" VerticalOptions="Center"  FontSize="14" />
             <Grid Grid.Column="1">
                 <Label    HorizontalOptions="Center" VerticalOptions="Center" FontSize="Micro"  >
@@ -28,9 +28,9 @@
 
 
 
-        <Grid Grid.Row="1"  ColumnDefinitions="800,*">
-            <Frame Grid.Column="1" IsVisible="{Binding IsEditor}"  CornerRadius="70" BorderColor="White" >
-                <Frame  CornerRadius="50"  HeightRequest="520">
+        <Grid Grid.Row="1" ColumnSpacing="10" ColumnDefinitions="750,*">
+            <Frame Grid.Column="1" HeightRequest="550" WidthRequest="400" IsVisible="{Binding IsEditor}"   BorderColor="White" >
+                <Frame   HeightRequest="500">
                     <Frame.Triggers>
                         <DataTrigger TargetType="Frame"
                                      Binding="{Binding Guest.VrificatQRCode.IsVerifiedQRCode, Mode=TwoWay}"
@@ -108,7 +108,7 @@
             </Frame>
 
 
-            <StackLayout Grid.Column="0" Spacing="10">
+            <StackLayout Grid.Column="0" Spacing="10"  >
                     <Picker  ItemsSource="{Binding ItemsPicker}" 
                      SelectedIndex="{Binding CurrentDeviceCameraName}" 
                      TextColor="Black" 
@@ -116,7 +116,7 @@
 
                     <Image  x:Name="caemtra" 
                     Source="{Binding QRImage}" 
-                    WidthRequest="450" HeightRequest="450"/>
+                    WidthRequest="700" HeightRequest="400"/>
                     <Button Command="{Binding StartScannerCommand}">
                      <Button.Triggers>
                             <DataTrigger TargetType="Button"

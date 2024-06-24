@@ -4,7 +4,8 @@
              x:Class="ScannerAndDistributionOfQRCodes.View.GuestListPage"
              xmlns:model = "clr-namespace:ScannerAndDistributionOfQRCodes.Model"
              xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             >
 
     <!--[ObservableProperty]
  private int _countGuest;
@@ -51,10 +52,10 @@
 
             <CollectionView Grid.Row="1" 
             AbsoluteLayout.LayoutFlags="All"
-            ItemsSource="{Binding Guests}">
+            ItemsSource="{Binding Guests}" >
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type model:Guest}">
-                        <Frame CornerRadius="5" MaximumHeightRequest="70"  MinimumHeightRequest="70">
+                        <Frame CornerRadius="5" MaximumHeightRequest="70"  MinimumHeightRequest="70" BorderColor="Gray" BackgroundColor="{AppThemeBinding Light=White, Dark=#1f1f1f }">
                                 <Grid ColumnDefinitions="*,100">
                                     <Label Grid.Column="0">
                                         <Label.Text>
@@ -129,37 +130,34 @@
                 </Grid>
             </Grid>
 
-        <Grid RowDefinitions="100,*" Grid.Column="1">
+        <Grid RowDefinitions="100,*" Grid.Column="1" BackgroundColor="{AppThemeBinding Light=White, Dark=#1f1f1f }">
             <Grid   Grid.Row="0" ColumnDefinitions="100,100,100"  ColumnSpacing="20" VerticalOptions="Start" HorizontalOptions="Center">
                 <ImageButton Grid.Column="0" VerticalOptions="Start" HorizontalOptions="Center"  Source="add_user.png"  Command="{Binding AddGuestCommand}" ToolTipProperties.Text="Добавить гостя" />
                 <ImageButton Grid.Column="1"  VerticalOptions="Start" HorizontalOptions="Center" Source="sending_messages.png" Command="{Binding SendCommand}" ToolTipProperties.Text="Отправить сообщения"/>
                 <ImageButton Grid.Column="2" VerticalOptions="Start" HorizontalOptions="Center" Source="file_selection.png" Command="{Binding ParseCommand}" ToolTipProperties.Text="Выбрать файл"/>
             </Grid>
 
-            <Frame Grid.Row="1" IsVisible="{Binding IsEditor}"  BorderColor="White">
-                <Frame  CornerRadius="50" BorderColor="#D48055" HeightRequest="520" >
-                    <StackLayout Spacing="20">
-                        <Frame>
-                            <Entry  Text="{Binding Surname}" MaxLength="40"/>
-                        </Frame>
-                        <Frame>
-                            <Entry  Text="{Binding Name}" MaxLength="40"/>
-                        </Frame>
-                        <Frame>
-                            <Entry  Text="{Binding Patronymic}" MaxLength="40"/>
-                        </Frame>
-                        <Frame>
-                            <Entry  Text="{Binding Mail}" MaxLength="40"/>
-                        </Frame>
-                        <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
-                            <Button Grid.Column="0" Text="Отменить" VerticalOptions="Start" BackgroundColor="#D48055"  Command="{Binding CancelCommand}" />
-                            <Button Grid.Column="1" Text="Сохранить"  VerticalOptions="End" BackgroundColor="#D48055"  Command="{Binding SaveCommand}" />
-                        </Grid>
-                    </StackLayout>
-
-                </Frame>
+            <Frame Grid.Row="1" IsVisible="{Binding IsEditor}" WidthRequest="360" HeightRequest="490"  BorderColor="White">
+                <StackLayout Spacing="15">
+                    <Frame>
+                        <Entry  Text="{Binding Surname}" Placeholder="Фамилия"  MaxLength="40"/>
+                    </Frame>
+                    <Frame>
+                        <Entry  Text="{Binding Name}" Placeholder="Имя" MaxLength="40"/>
+                    </Frame>
+                    <Frame>
+                        <Entry  Text="{Binding Patronymic}" Placeholder="Отчество" MaxLength="40"/>
+                    </Frame>
+                    <Frame>
+                        <Entry  Text="{Binding Mail}" Placeholder="Email адрес" MaxLength="40"/>
+                    </Frame>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                        <Button Grid.Column="0" Text="Отменить" VerticalOptions="Start" BackgroundColor="#D48055"  Command="{Binding CancelCommand}" />
+                        <Button Grid.Column="1" Text="Сохранить"  VerticalOptions="End" BackgroundColor="#D48055"  Command="{Binding SaveCommand}" />
+                    </Grid>
+                </StackLayout>
             </Frame>
-
+            <!--PlaceholderColor="Wheat"-->
         </Grid>
     </Grid>
     <!--</Grid>-->

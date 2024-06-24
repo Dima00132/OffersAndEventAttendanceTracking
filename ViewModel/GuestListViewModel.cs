@@ -213,7 +213,8 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         public bool CheckNameEvent()
         {
             return !string.IsNullOrEmpty(Surname) & !string.IsNullOrEmpty(Name)
-                & !string.IsNullOrEmpty(Patronymic) & EmailValidator.CheckingEmailFormat(Mail) & EmailValidator.CheckEmailDomain(Mail);
+                & !string.IsNullOrEmpty(Patronymic) & EmailValidator.CheckingEmailFormat(Mail);
+            // & EmailValidator.CheckEmailDomain(Mail)
         }
         private void UpdateCountProperty()
         {

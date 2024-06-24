@@ -6,12 +6,22 @@
              xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel"
              Title="Статистика">
     <ScrollView>
-        <StackLayout Margin="10" Spacing="10">
-            <Label Text="{Binding ScheduledEvent.NameEvent}"/>
-            <Label Text="{Binding ScheduledEvent.Date, StringFormat='Время проведения мероприятия {0}'}"/>
-            <Label Text="{Binding ScheduledEvent.Guests.Count, StringFormat='Приглашение гостей {0}'}"/>
-            <Label Text="{Binding ScheduledEvent.CountArrivedGuests, StringFormat='Пришло гостей {0}'}"/>
-            <Frame >
+        <StackLayout  >
+            <Grid ColumnDefinitions="*,250" BackgroundColor="{AppThemeBinding Light=White, Dark=#1f1f1f }">
+                <StackLayout Grid.Column="0" Margin="20" Spacing="10">
+                    <Label Text="{Binding ScheduledEvent.NameEvent , StringFormat='Мероприятие: {0}'}"  FontSize="Medium" FontAutoScalingEnabled="False"/>
+                    <Label Text="{Binding ScheduledEvent.Date, StringFormat='Время проведения мероприятия : {0}'}" FontSize="Medium"/>
+                    <Label Text="{Binding ScheduledEvent.Guests.Count, StringFormat='Приглашение гостей - {0}'}" FontSize="Medium"/>
+                    <Label Text="{Binding CountArrivedGuests, StringFormat='Пришло гостей - {0}'}" FontSize="Medium"/>
+                </StackLayout>
+
+                <Frame  Grid.Column="1" VerticalOptions="Start" IsVisible="{Binding IsEventWasHeld}" BackgroundColor="{AppThemeBinding Light=White, Dark=#1f1f1f }" BorderColor="{AppThemeBinding Light=White, Dark=#1f1f1f }">
+                    <Button Text="Печать в Xlsx формате" BackgroundColor="#D48055" Command="{Binding SealCommand}" />
+                </Frame>
+            </Grid>
+            
+
+            <Frame HorizontalOptions="Start"   BackgroundColor="{AppThemeBinding Light=White, Dark=#1f1f1f }" BorderColor="{AppThemeBinding Light=White, Dark=#1f1f1f }">
                 <HorizontalStackLayout HorizontalOptions="Start" Spacing="5">
                     <Label Text="Список гостей"  FontSize="Title"/>
                     <Image x:Name="image" VerticalOptions="End" HorizontalOptions="Start" Source="{AppThemeBinding Light=caret_down_black.png, Dark=caret_down_white.png }"/>
@@ -22,9 +32,7 @@
                 </Frame.GestureRecognizers>
             </Frame>
 
-            <Frame x:Name="listGuests" IsVisible="False">
-                <!--<ListView  AbsoluteLayout.LayoutFlags="All"
-                ItemsSource="{Binding Path= Guests, Source={RelativeSource AncestorType={x:Type viewmodel:StatisticsViewModel}}}"/>-->
+            <Frame x:Name="listGuests" IsVisible="False" BackgroundColor="{AppThemeBinding Light=White, Dark=#1f1f1f }" BorderColor="{AppThemeBinding Light=White, Dark=#1f1f1f }">
                 <ListView x:Name="RunningLateOptions" 
                           ItemsSource="{Binding Guests}"/>
             </Frame>

@@ -17,38 +17,39 @@ using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Storage;
 using System.Threading;
 using ScannerAndDistributionOfQRCodes.Data.Record_File;
+using Bytescout.Spreadsheet.Charts;
+using DocumentFormat.OpenXml.Drawing.Charts;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
+
+
     public partial class  StatisticsViewModel:ViewModelBase
     {
-        private readonly INavigationService _navigationService;
-        private readonly ILocalDbService _localDbService;
         [ObservableProperty]
         private ScheduledEvent _scheduledEvent;
         [ObservableProperty]
-        public List<string> _guests;
+        public List<StatisticsGuest> _guests = [];
         [ObservableProperty]
         public bool _isEventWasHeld;
         [ObservableProperty]
         public int _countArrivedGuests;
 
+        public string[] _title = ["Фамилия", "Имя", "Отчество", "Отправлено", "Явка", "Время прибытия"];
 
-
-
-        public StatisticsViewModel(INavigationService navigationService, ILocalDbService localDbService)
+        private List<string[]> GetStatisticsOnGuests()
         {
-            _navigationService = navigationService;
-            _localDbService = localDbService;
-        }
-
-        private List<string[]> GetGuestsStatistics()
-        {
-            var guestList = new List<string[]>();
-            foreach (var item in Guests)
-                guestList.Add(item.Split('|'));
+            var guestList = new List<string[]>() { _title };
+            foreach (var item in ScheduledEvent.Guests)
+            {
+                var statisics = item.GetStatisticsGuest();
+                string[] guestString = [statisics.Surname, statisics.Name, statisics.Patronymic,
+                    statisics.IsMessageSent, statisics.IsVerifiedQRCode, statisics.ArrivalTime];
+                guestList.Add(guestString);
+            }
             return guestList;
         }
+
         public RelayCommand SealCommand => new(async () => 
         {
             using var stream = new MemoryStream();
@@ -58,7 +59,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             {
                 try
                 {
-                    new RecordXlsx().Record(GetGuestsStatistics(), fileSaveResult.FilePath);
+                    new RecordXlsx().Record(GetStatisticsOnGuests(), fileSaveResult.FilePath);
                 }
                 catch (Exception ex)
                 {
@@ -72,18 +73,17 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             }
         });
 
-
-
-        public override Task OnNavigatingTo(object? parameter, object? parameterSecond = null)
+        public override Task OnNavigatingToAsync(object? parameter, object? parameterSecond = null)
         {
             if (parameter is ScheduledEvent scheduledEvent)
             {
                 ScheduledEvent = scheduledEvent;
-                Guests = scheduledEvent.Guests.Select(x=> x.GetStatisticsString()).ToList();
+                foreach (var item in scheduledEvent.Guests)
+                    Guests.Add(item.GetStatisticsGuest());
                 IsEventWasHeld = scheduledEvent.IsEventWasHeld;
                 CountArrivedGuests = scheduledEvent.Guests.Count(x=>x.VrificatQRCode.IsVerifiedQRCode);
             }
-            return base.OnNavigatingTo(parameter, parameterSecond);
+            return base.OnNavigatingToAsync(parameter, parameterSecond);
         }
     }
 }

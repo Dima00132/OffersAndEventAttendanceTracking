@@ -105,7 +105,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         });
         public RelayCommand ParseCommand => new(async () =>
         {
-            await popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.ListOfParsedGuests(_scheduledEvent, new XlsxParser())).ConfigureAwait(false);
+            await popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.ListOfParsedGuestsAsync(_scheduledEvent, new XlsxParser())).ConfigureAwait(false);
             UpdateCountProperty();
             _localDbService.Update(_scheduledEvent);
         });
@@ -221,7 +221,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             CountSendMessage = GetCountSendMessage();
             CountNotValidMail = GetNotValidMail();
         }
-        public override Task OnNavigatingTo(object? parameter, object? parameterSecond = null)
+        public override Task OnNavigatingToAsync(object? parameter, object? parameterSecond = null)
         {
             if (parameter is ScheduledEvent scheduledEvent)
             {
@@ -230,7 +230,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                 UpdateCountProperty();
                 isStart = false;
             }
-            return base.OnNavigatingTo(parameter);
+            return base.OnNavigatingToAsync(parameter);
         }
     }
 }

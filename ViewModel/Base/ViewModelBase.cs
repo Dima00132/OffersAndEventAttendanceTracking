@@ -9,17 +9,17 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.Base
 {
     public class ViewModelBase:ObservableObject
     {
-        public virtual Task OnNavigatingTo(object? parameter, object? parameterSecond = null)
+        public virtual Task OnNavigatingToAsync(object? parameter, object? parameterSecond = null)
              => Task.CompletedTask;
-        public virtual Task OnNavigatedFrom(bool isForwardNavigation)
+        public virtual Task OnNavigatedFromAsync(bool isForwardNavigation)
             => Task.CompletedTask;
-        public virtual Task OnNavigatedTo()
+        public virtual Task OnNavigatedToAsync()
             => Task.CompletedTask;
-        public virtual Task OnUpdate()
+        public virtual Task OnUpdateAsync()
             => Task.CompletedTask;
-        public virtual Task OnUpdateDbService()
+        public virtual Task OnUpdateDbServiceAsync()
           => Task.CompletedTask;
-        public virtual Task OnStart()
+        public virtual Task OnStartAsync()
             => Task.CompletedTask;
 
     }

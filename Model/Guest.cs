@@ -92,12 +92,10 @@ namespace ScannerAndDistributionOfQRCodes.Model
         private string RemoveSpaces(string value)
             =>value.Replace(" ", "");
 
-        public string GetStatisticsString()
+        public StatisticsGuest GetStatisticsGuest()
         {
-            var presenceAtEvent = VrificatQRCode.IsVerifiedQRCode ? "|  Присутствовал на мероприятие" : "|  Не присутствовал на мероприятие";
-            var arrivalTime = VrificatQRCode.IsVerifiedQRCode ? $"|  Время прибытия  {ArrivalTime.ToString()}" : "";
-            var isSendMesseng = Mail.IsMessageSent ? "|  Приглашение отправлено" : "Приглашение не отправлено";
-            return $"Гость | {User}  {isSendMesseng}  {presenceAtEvent}  {arrivalTime} ";
+            return new StatisticsGuest(User.Surname,User.Name,User.Patronymic,Mail.IsMessageSent?"OK":"NO"
+                    ,VrificatQRCode.IsVerifiedQRCode?"OK":"NO",VrificatQRCode.IsVerifiedQRCode?ArrivalTime.ToString():"NO");
         }
     }
 }

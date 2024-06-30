@@ -52,9 +52,15 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
 
         private MimeEntity GetMessageBody(BodyBuilder body)
         {
-            var imageFoot = body.LinkedResources.Add("qr", SreamImage);
-            imageFoot.ContentId = MimeUtils.GenerateMessageId();
-            body.HtmlBody = $@"<p>{ReceiverName}</p><br/><p>{MessageText.Text}</p><img src=""cid:{imageFoot.ContentId}""/><br /><div style=""border-top:3px solid #61028d"">&nbsp;</div><p>{MessageText.OrganizationData}</p>";
+            var htmlImage = string.Empty;
+            if (SreamImage is not null)
+            {
+                var imageFoot = body.LinkedResources.Add("qr", SreamImage);
+                imageFoot.ContentId = MimeUtils.GenerateMessageId();
+                htmlImage = $"<img src=\"cid:{imageFoot.ContentId}\"/><br /><div style=\"border-top:3px solid #61028d\">&nbsp;";
+            }
+            body.HtmlBody = $@"<p>{ReceiverName}</p><br/><p>{MessageText.Text}</p>{htmlImage}</div><p>{MessageText.OrganizationData}</p>";
+            //body.HtmlBody = $@"<p>{ReceiverName}</p><br/><p>{MessageText.Text}</p><img src=""cid:{imageFoot.ContentId}""/><br /><div style=""border-top:3px solid #61028d"">&nbsp;</div><p>{MessageText.OrganizationData}</p>";
             return body.ToMessageBody();
         }
 

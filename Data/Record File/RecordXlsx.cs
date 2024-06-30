@@ -20,6 +20,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.Record_File
         }
         public void Record(List<string[]> strings, string filePath)
         {
+            //////
             using Workbook workbook = new Workbook(filePath);
             RecordXlsxFile(strings, workbook);
             workbook.Save(filePath, SaveFormat.Xlsx);
@@ -27,9 +28,9 @@ namespace ScannerAndDistributionOfQRCodes.Data.Record_File
 
         private void RecordXlsxFile(List<string[]> strings, Workbook workbook )
         {
+            Worksheet sheet = workbook.Worksheets[0];
             for (int i = 0; i < strings.Count; i++)
             {
-                Worksheet sheet = workbook.Worksheets[i];
                 for (int y = 0; y < strings[i].Length; y++)
                 {
                     Aspose.Cells.Cell cell = sheet.Cells[i, y];

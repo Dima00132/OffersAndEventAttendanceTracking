@@ -13,13 +13,13 @@ public partial class GuestVerificationTablePage : TabbedPage
 
     protected override void OnAppearing()
     {
-        _guestVerificationTableViewModel.OnUpdate();
+        _guestVerificationTableViewModel.OnUpdateAsync();
         base.OnAppearing();
     }
 
     protected override void OnDisappearing()
     {
-        _guestVerificationTableViewModel.OnUpdateDbService();
+        _guestVerificationTableViewModel.OnUpdateDbServiceAsync();
         base.OnDisappearing();
     }
 }

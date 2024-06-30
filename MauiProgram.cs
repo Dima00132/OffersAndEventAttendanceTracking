@@ -24,12 +24,9 @@ namespace ScannerAndDistributionOfQRCodes
 
             builder.Services.AddTransient<ScannerQRCodeViewModel>().AddTransient<ScannerQRCodePage>();
             builder.Services.AddTransient<GuestListViewModel>().AddTransient<GuestListPage>();
-
             builder.Services.AddTransient<EditorEventViewModel>().AddTransient<EditorEventPage>();
             builder.Services.AddTransient<StatisticsViewModel>().AddTransient<StatisticsPage>();
             builder.Services.AddTransient<MailingViewModel>().AddTransient<MailingPage>();
-        
-
             //var mailAccaunt = new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr",
             //    new User("Иванов", "Иван", "Иванович"),
             //    new MailServer("smtp.yandex.ru", 465, true));
@@ -37,37 +34,20 @@ namespace ScannerAndDistributionOfQRCodes
             //var mailAccaunt = new MailAccount("6686967", "testsend@nizhny.online", "6a8dtydwniakm3fgmy1zrn1q93yd1o176k39b96y",
             //new User("Иванов", "Иван", "Иванович"),
             //new MailServer("smtp.go1.unisender.ru", 465, true));
-
-
-            //builder.Services.AddSingleton<IMailAccount, MailAccount>((x)=>mailAccaunt);
             builder.Services.AddSingleton<IMailAccount, MailAccount>();
             builder.Services.AddSingleton<IPopupService, PopupService>()
                 .AddTransientPopup<GuestListFromDocumentPopup, GuestListFromDocumentViewModel>()
                 .AddTransientPopup<DisplayAlertSendingMessagesErrorPopup, DisplayAlertSendingMessagesErrorViewModel>()
                 .AddTransientPopup<DisplayAlertSendMessageProgressPopup, DisplayAlertSendMessageProgressViewModel>()
                 .AddTransientPopup<MessageBroadcastDisplayPopup, MessageBroadcastDisplayViewModel>();
-            //builder.Services.AddSingleton<IPopupService, PopupService>().AddTransientPopup<DisplayAlertSendingMessagesErrorPopup, DisplayAlertSendingMessagesErrorViewModel>();
-            //builder.Services .AddTransient<GuestListFromDocumentViewModel>().AddTransient<GuestListFromDocumentPopup>();
-
-
-            //builder.Services.AddTransient<ScannerQRCodePage>();
-            //builder.Services.AddTransient<GuestListPage>();
-
             builder.Services.AddTransient<AddScheduledEventViewModel>().AddTransient<AddScheduledEventPage>();
             builder.Services.AddTransient<GuestVerificationTableViewModel>().AddTransient<GuestVerificationTablePage>();
-
             builder.Services.AddTransient<SettingsPage>().AddTransient<SettingsViewModel>();
-
             builder.Services.AddSingleton<IDataService, DataService>();
-
             builder.Services.AddSingleton<ILocalDbService, LocalDbService>();
-
             builder.Services.AddSingleton<INavigationService, NavigationService>();
             builder.Services.AddTransient<ListOfEventsPage>().AddTransient<ListOfEventsViewModel>();
-
             builder.Services.AddSingleton<MainPage>().AddSingleton<MainViewModel>();
-
-
             return builder;
         }
     }

@@ -74,10 +74,10 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             await _navigationService.NavigateByPage<EditorEventPage>(scheduledEvent);
         });
 
-        public override Task OnUpdateDbService()
+        public override Task OnUpdateDbServiceAsync()
         {
             _localDbService.Update(Whole);
-            return base.OnUpdateDbService();
+            return base.OnUpdateDbServiceAsync();
         }
     }
 }

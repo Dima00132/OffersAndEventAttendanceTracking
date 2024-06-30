@@ -89,14 +89,14 @@ namespace ScannerAndDistributionOfQRCodes
             _localDbService = localDbService;
         }
 
-        public override Task OnNavigatingTo(object? parameter, object? parameterSecond = null)
+        public override Task OnNavigatingToAsync(object? parameter, object? parameterSecond = null)
         {
             if (parameter is ScheduledEvent scheduledEvent)
             {
                 ScheduledEvent = scheduledEvent;
                 CountHowManyGuestsHaveArrived();
             }
-            return base.OnNavigatingTo(parameter);
+            return base.OnNavigatingToAsync(parameter);
         }
         private bool  ConnectingCamera()
         {

@@ -42,11 +42,11 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             _navigationService = navigationService;
             _localDbService = localDbService;
         }
-        public override Task OnNavigatingTo(object? parameter, object? parameterSecond = null)
+        public override Task OnNavigatingToAsync(object? parameter, object? parameterSecond = null)
         {
             if (parameter is WholeEvent whole)
                 _whole = whole;
-            return base.OnNavigatingTo(parameter);
+            return base.OnNavigatingToAsync(parameter);
         }
 
         [RelayCommand(CanExecute = nameof(CheckNameEvent))]

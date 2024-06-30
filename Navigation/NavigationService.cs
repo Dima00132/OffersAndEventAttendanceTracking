@@ -76,7 +76,7 @@ namespace ScannerAndDistributionOfQRCodes.Navigation
                 toPage.NavigatedTo += Page_NavigatedToAsync;
                 var toViewModel = GetPageViewModelBase(toPage);
                 if (toViewModel is not null)
-                    await toViewModel.OnNavigatingTo(parameter, parameterSecond);
+                    await toViewModel.OnNavigatingToAsync(parameter, parameterSecond);
                 await Navigation.PushAsync(toPage, IsAnimated);
                 toPage.NavigatedFrom += Page_NavigatedFromAsync;
             }
@@ -102,7 +102,7 @@ namespace ScannerAndDistributionOfQRCodes.Navigation
         {
             var fromViewModel = GetPageViewModelBase(p);
             if (fromViewModel is not null)
-                return fromViewModel.OnNavigatedFrom(isForward);
+                return fromViewModel.OnNavigatedFromAsync(isForward);
             return Task.CompletedTask;
         }
         private ViewModelBase GetPageViewModelBase(Page toPage)
@@ -120,7 +120,7 @@ namespace ScannerAndDistributionOfQRCodes.Navigation
         {
             var fromViewModel = GetPageViewModelBase(page);
             if (fromViewModel is not null)
-                return fromViewModel.OnNavigatedTo();
+                return fromViewModel.OnNavigatedToAsync();
             return Task.CompletedTask;
         }
 
@@ -151,7 +151,7 @@ namespace ScannerAndDistributionOfQRCodes.Navigation
             {
                 var page = Navigation.NavigationStack[^2];
                 if (page?.BindingContext is ViewModelBase viewModel)
-                    viewModel.OnUpdate();
+                    viewModel.OnUpdateAsync();
                 return Navigation.PopAsync(IsAnimated);
             }
             throw new InvalidOperationException("No pages to navigate back to!");

@@ -33,8 +33,41 @@
             </Frame>
 
             <Frame x:Name="listGuests" IsVisible="False" BackgroundColor="{AppThemeBinding Light=White, Dark=#1f1f1f }" BorderColor="{AppThemeBinding Light=White, Dark=#1f1f1f }">
-                <ListView x:Name="RunningLateOptions" 
-                          ItemsSource="{Binding Guests}"/>
+                <StackLayout>
+                    <Grid ColumnDefinitions="*,*,*,*,*,*">
+                        <Label Grid.Column="0" Text="Фамилия"/>
+                        <Label Grid.Column="1" Text="Имя"/>
+                        <Label Grid.Column="2" Text="Отчество"/>
+                        <Label Grid.Column="3" Text="Отправлено"/>
+                        <Label Grid.Column="4" Text="Явка"/>
+                        <Label Grid.Column="5" Text="Время прибытия"/>
+                    </Grid>
+                    <CollectionView x:Name="RunningLateOptions" 
+          ItemsSource="{Binding Guests}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,*,*,*,*,*">
+                                    <Label Grid.Column="0" Text="{Binding Surname}"/>
+                                    <Label Grid.Column="1" Text="{Binding Name}"/>
+                                    <Label Grid.Column="2" Text="{Binding Patronymic}"/>
+                                    <Label Grid.Column="3" Text="{Binding IsMessageSent}"/>
+                                    <Label Grid.Column="4" Text="{Binding IsVerifiedQRCode}"/>
+                                    <Label Grid.Column="5" Text="{Binding ArrivalTime}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+                
+                <!--<Grid ColumnDefinitions="*,*,*,*,*,*">
+                    <Label Grid.Column="0" Text="{Binding Surname}"/>
+                    <Label Grid.Column="1" Text="{Binding Name}"/>
+                    <Label Grid.Column="2" Text="{Binding Patronymic}"/>
+                    <Label Grid.Column="3" Text="{Binding IsMessageSent}"/>
+                    <Label Grid.Column="4" Text="{Binding IsVerifiedQRCode}"/>
+                    <Label Grid.Column="5" Text="{Binding ArrivalTime}"/>
+                </Grid>-->
+                
             </Frame>
         </StackLayout>
     </ScrollView>

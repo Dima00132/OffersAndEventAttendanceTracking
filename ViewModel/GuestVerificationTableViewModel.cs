@@ -22,29 +22,29 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             _guestListViewModel = guestListViewModel;
         }
 
-        public override Task OnUpdate()
+        public override Task OnUpdateAsync()
         {
-            ScannerQRCodeViewModel?.OnUpdate();
-            GuestListViewModel?.OnUpdate();
-            return base.OnUpdate();
+            ScannerQRCodeViewModel?.OnUpdateAsync();
+            GuestListViewModel?.OnUpdateAsync();
+            return base.OnUpdateAsync();
         }
 
-        public override Task OnUpdateDbService()
+        public override Task OnUpdateDbServiceAsync()
         {
-            ScannerQRCodeViewModel?.OnUpdateDbService();
-            GuestListViewModel?.OnUpdateDbService();
-            return base.OnUpdateDbService();
+            ScannerQRCodeViewModel?.OnUpdateDbServiceAsync();
+            GuestListViewModel?.OnUpdateDbServiceAsync();
+            return base.OnUpdateDbServiceAsync();
         }
 
-        public override Task OnNavigatingTo(object? parameter, object? parameterSecond = null)
+        public override Task OnNavigatingToAsync(object? parameter, object? parameterSecond = null)
         {
             if (parameter is ScheduledEvent scheduledEvent)
             {
-                ScannerQRCodeViewModel?.OnNavigatingTo(scheduledEvent);
-                GuestListViewModel?.OnNavigatingTo(scheduledEvent);
+                ScannerQRCodeViewModel?.OnNavigatingToAsync(scheduledEvent);
+                GuestListViewModel?.OnNavigatingToAsync(scheduledEvent);
 
             }
-            return base.OnNavigatingTo(parameter);
+            return base.OnNavigatingToAsync(parameter);
         }
     }
 }

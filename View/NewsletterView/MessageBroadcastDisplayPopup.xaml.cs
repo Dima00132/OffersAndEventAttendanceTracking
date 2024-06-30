@@ -22,9 +22,20 @@ public partial class MessageBroadcastDisplayPopup: Popup
             }
             else
             {
+                imageEntry.IsVisible = false;
                 parserButton.IsVisible = false;
-                imageButton.IsVisible = false;
+                sendButton.IsEnabled = false;
             }
         }
+    }
+
+    private void sendButton_Clicked(object sender, EventArgs e)
+    {
+        stateSend.IsVisible = true;
+    }
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        stateSend.IsVisible = false;
     }
 }

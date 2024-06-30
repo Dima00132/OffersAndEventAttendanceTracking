@@ -182,20 +182,28 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             return result;
         }
 
-        public async Task ListOfParsedGuests(ScheduledEvent scheduledEvent, IParser xlsxParser)
+        public async Task ListOfParsedGuestsAsync(ScheduledEvent scheduledEvent, IParser xlsxParser)
         {
             var result = await GetFileAsync();
-            _scheduledEvent = scheduledEvent;
-            try
+            if(result is null)
             {
-                var stream = await result.OpenReadAsync().ConfigureAwait(true);
-                _listxlsxParser = xlsxParser.Pars(stream);              
-            }
-            catch(Exception  ex)
-            {
-                DisplayAlertError($"Произлшла ошибка при чтение файла!\n {ex.Message} \n Повторите попытку заново!");
+                IsError = true;
                 return;
             }
+            _scheduledEvent = scheduledEvent;
+            var stream = await result.OpenReadAsync().ConfigureAwait(true);
+            _listxlsxParser = xlsxParser.Pars(stream);
+
+            //try
+            //{
+            //    var stream = await result.OpenReadAsync().ConfigureAwait(true);
+            //    _listxlsxParser = xlsxParser.Pars(stream);              
+            //}
+            //catch(Exception  ex)
+            //{
+            //    DisplayAlertError($"Произлшла ошибка при чтение файла!\n {ex.Message} \n Повторите попытку заново!");
+            //    return;
+            //}
             if (CheckingListFilling(_listxlsxParser)) 
             {
                 DisplayAlertError($"Файл {result.FileName} не содержит необходимых данных");

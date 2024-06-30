@@ -9,7 +9,7 @@
                xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel"
                CanBeDismissedByTappingOutsideOfPopup ="False"
                x:Name="messageBroadcastDisplayPopup">
-    
+
     <Border Padding="0" HeightRequest="600"
        WidthRequest="450"
        Stroke="Transparent"
@@ -17,17 +17,63 @@
         <Border.StrokeShape>
             <RoundRectangle CornerRadius="28"/>
         </Border.StrokeShape>
-        <StackLayout >
-            <Grid ColumnDefinitions="*,20">
+        <Grid RowDefinitions="*,50">
+            <StackLayout Grid.Column="0" Margin="10" Spacing="10" >
+                <Grid ColumnDefinitions="*,40" ColumnSpacing="5">
                 <Entry Grid.Column="0" Placeholder="Укажите конку с почтой" Text="{Binding ColumnNumber}" TextTransform="Uppercase" 
-                       MaxLength="2" TextChanged="Entry_TextChanged" />
+                       MaxLength="2" TextChanged="Entry_TextChanged" >
+                    <Entry.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            EventName="TextChanged"
+                            Command="{Binding TextChangedCommand}" />
+                    </Entry.Behaviors>
+                </Entry>
                 <Image Grid.Column="1" x:Name="imageEntry" IsVisible="False" Source="check_mark.png"/>
             </Grid>
-            <Grid x:Name="parserButton" IsVisible="False" ColumnDefinitions="*,20">
-                <Button   Text="Добавить файл" Command="{Binding ParserCommand}"/>
-                <Image x:Name="imageButton" IsVisible="False" Source="check_mark.png"/>
+            <Grid x:Name="parserButton" IsVisible="False" ColumnDefinitions="*,40" ColumnSpacing="5">
+                <Button Grid.Column="0"  Text="Добавить файл" Command="{Binding ParserCommand}" Clicked="Button_Clicked" />
+                    <Image Grid.Column="1" x:Name="imageButton" IsVisible="{Binding IsReadyToShip}" Source="check_mark.png"/>
             </Grid>
-            <Button x:Name="sendButton" Text="Отправит" IsVisible="False" Command="{Binding SendCommand}"/>
-        </StackLayout>
+                <Grid  IsVisible="{Binding IsReadyToShip}"  ColumnDefinitions="*,40" ColumnSpacing="5">
+                <Label>
+                    <Label.Text>
+                        <MultiBinding StringFormat="{} Всего данных  {0} валидных  {1} ">
+                            <Binding Path="CountOfMils" />
+                            <Binding Path="CountOfCorrectMils"  />
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
+            </Grid>
+
+            <!--<Button x:Name="sendButton" Text="Отправит" IsVisible="{Binding IsCorrectMailFile}" Command="{Binding SendCommand}"/>-->
+
+            <Grid x:Name="stateSend"  IsVisible="False"  ColumnDefinitions="*,40" ColumnSpacing="5">
+                <Label>
+                    <Label.Text>
+                        <MultiBinding StringFormat="{} Отправлено соооющений  {0} из {1}  : Ошибок  {2} ">
+                            <Binding Path="CountSendMessages" />
+                                <Binding Path="CountOfMils"/>
+                                <Binding Path="CountUnsendMessages"  />
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
+            </Grid>
+
+            <ScrollView IsVisible="{Binding IsErrorMessages}">
+                <ListView ItemsSource="{Binding ErrorMessages }"/>
+            </ScrollView>
+           
+
+            <!--<Button x:Name="backButton" Text="Назад" IsVisible="{Binding IsSendMessages}"
+                    Command="{Binding CancelCommand}" CommandParameter="{Binding Source={x:Reference messageBroadcastDisplayPopup}}"/>-->
+
+            </StackLayout>
+
+            <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="5">
+                <Button Grid.Column="1" x:Name="sendButton" Text="Отправить" IsEnabled="{Binding IsReadyToShip}" Clicked="sendButton_Clicked" Command="{Binding SendCommand}"/>
+                <Button Grid.Column="0"  Text="Назад"  Command="{Binding CancelCommand}" CommandParameter="{Binding Source={x:Reference messageBroadcastDisplayPopup}}"/>
+            </Grid>
+            
+        </Grid>
     </Border>
 </toolkit:Popup>

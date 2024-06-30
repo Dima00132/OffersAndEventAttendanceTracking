@@ -16,8 +16,8 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
 {
     public partial class MailingViewModel : ViewModelBase
     {
-        private readonly INavigationService _navigationService;
-        private readonly ILocalDbService _localDbService;
+        //private readonly INavigationService _navigationService;
+        //private readonly ILocalDbService _localDbService;
         private readonly IPopupService _popupService;
         private readonly MailAccount _mailAccount;
 
@@ -34,8 +34,8 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
   
         public MailingViewModel(INavigationService navigationService, ILocalDbService localDbService, IPopupService popupService)
         {
-            _navigationService = navigationService;
-            _localDbService = localDbService;
+            //_navigationService = navigationService;
+            //_localDbService = localDbService;
             _popupService = popupService;
             //_mailAccount = localDbService.GetMailAccount();
 
@@ -72,7 +72,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
         public RelayCommand SendCommand => new(async () =>
         {
             var textMessage = new MessageText(TextMessage, _organizationData);
-            await _popupService.ShowPopupAsync<MessageBroadcastDisplayViewModel>(onPresenting: viewModel => viewModel.MessageBroadcast(_mailAccount,_streamImage, textMessage)).ConfigureAwait(false);
+            await _popupService.ShowPopupAsync<MessageBroadcastDisplayViewModel>(onPresenting: viewModel => viewModel.MessageBroadcast(_mailAccount, _imageFile, textMessage)).ConfigureAwait(false);
         });
 
     }

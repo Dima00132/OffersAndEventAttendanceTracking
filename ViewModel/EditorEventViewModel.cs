@@ -68,7 +68,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                 & !string.IsNullOrEmpty(OrganizationData);
         }
 
-        public override Task OnNavigatingTo(object? parameter, object? parameterSecond = null)
+        public override Task OnNavigatingToAsync(object? parameter, object? parameterSecond = null)
         {
             if(parameter is ScheduledEvent scheduledEvent )
             {
@@ -79,7 +79,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                 MessageText = scheduledEvent.MessageText.Text;
                 OrganizationData = scheduledEvent.MessageText.OrganizationData;
             }
-            return base.OnNavigatingTo(parameter, parameterSecond);
+            return base.OnNavigatingToAsync(parameter, parameterSecond);
         }
     }
 }

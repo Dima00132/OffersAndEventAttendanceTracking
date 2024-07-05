@@ -1,32 +1,21 @@
 ﻿using AForge.Video;
-using Camera.MAUI;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.ApplicationModel;
-using QRCoder;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Tracing;
+
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZXing.Common;
-using ZXing.Windows.Compatibility;
-using ZXing;
+
 using ScannerAndDistributionOfQRCodes.ViewModel.Base;
-using System.Reflection;
+
 using AForge.Video.DirectShow;
-using System.Threading;
+
 using System.Collections.ObjectModel;
 using ScannerAndDistributionOfQRCodes.Model;
-using ScannerAndDistributionOfQRCodes.Navigation;
+
 using ScannerAndDistributionOfQRCodes.Service.Interface;
-using System.Security.Policy;
+
 using ScannerAndDistributionOfQRCodes.Data.QRCode;
-using ScannerAndDistributionOfQRCodes.Data.QRCode.QRCodeInterface;
-using static SQLite.SQLite3;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 
 namespace ScannerAndDistributionOfQRCodes
@@ -61,31 +50,19 @@ namespace ScannerAndDistributionOfQRCodes
             }
         }
 
-        
-
         private bool _isChangesDeviceCamera = false;
         private bool _isConnecting = false;
-
         private readonly ScannerQR _scannerQR;
-        //private IDecodeQRCode _decodeQRCode;
-        //private IEncodeQRCode _encodeQRCode;
-        
-
-        Dictionary<string, string> MonikerStringName = new();
-        private readonly INavigationService _navigationService;
+        private Dictionary<string, string> _monikerStringName = [];
         private readonly ILocalDbService _localDbService;
 
-        public ScannerQRCodeViewModel(INavigationService navigationService, ILocalDbService localDbService)
+        public ScannerQRCodeViewModel(ILocalDbService localDbService)
         {
             _scannerQR = new ScannerQR(UpdateQrCodeAsync);
             var filterInfoCollection = _scannerQR.GetVideoInputDevice();
             SetMonikerStringName(filterInfoCollection);
             SetItemsPicker();
-
-            //_decodeQRCode = new DecodeQRCode();
-            //_encodeQRCode = new EncodeQRCode();
             SetImageOfCameraOn();
-            _navigationService = navigationService;
             _localDbService = localDbService;
         }
 
@@ -119,17 +96,17 @@ namespace ScannerAndDistributionOfQRCodes
         {
             if (currentDeviceCameraName == -1)
                 return string.Empty;
-            return MonikerStringName[ItemsPicker[currentDeviceCameraName]];
+            return _monikerStringName[ItemsPicker[currentDeviceCameraName]];
         }
         private void SetItemsPicker()
         {
-            for (int i = 0; i < MonikerStringName.Count; i++)
-                ItemsPicker.Add(MonikerStringName.ElementAt(i).Key);
+            for (int i = 0; i < _monikerStringName.Count; i++)
+                ItemsPicker.Add(_monikerStringName.ElementAt(i).Key);
         }
         private void SetMonikerStringName(FilterInfoCollection filterInfoCollection)
         {
             for (int i = 0; i < filterInfoCollection.Count; i++)
-                MonikerStringName[filterInfoCollection[i].Name] = filterInfoCollection[i].MonikerString;
+                _monikerStringName[filterInfoCollection[i].Name] = filterInfoCollection[i].MonikerString;
         }
 
         private bool CheckingConnectionAndChangingCamera()
@@ -154,40 +131,26 @@ namespace ScannerAndDistributionOfQRCodes
         public  void StartScanner()
         {
             if (CheckingAvailabilityOfCameras())
-                return;
-           
+                return;  
             if (ConnectingCamera())
                 return;
-
             TurnCamera(IsCameraLaunched);
-            //if (IsCameraLaunched)
-            //    TurnOffCamera();
-            //else
-            //    TurnOnCamera();
-
-
         }
 
         private void TurnCamera(bool turnOnOrOff)
         {
             IsCameraLaunched = turnOnOrOff ? TurnOffCamera() : TurnOnCamera();
-            //if (turnOnOrOff)
-            //    TurnOffCamera();
-            //else
-            //    TurnOnCamera();
         }
 
         private bool TurnOnCamera()
         {
             _scannerQR.StartCamera();
-            //IsCameraLaunched = true;
             return true;
         }
         private bool TurnOffCamera()
         {
             SetImageOfCameraOn();
-            _scannerQR.StopCamera();
-            //IsCameraLaunched = false;
+            _scannerQR.StopCamera();    
             return false;
         }
 

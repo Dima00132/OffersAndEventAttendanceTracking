@@ -57,7 +57,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             _scheduledEvent.MessageText.Change(MessageText, OrganizationData);
             _localDbService.Update(_scheduledEvent.MessageText);
             _localDbService.Update(_scheduledEvent);
-            await _navigationService.NavigateBack().ConfigureAwait(false);
+            await _navigationService.NavigateBackAsync().ConfigureAwait(false);
         }
 
         public bool CheckEvent()

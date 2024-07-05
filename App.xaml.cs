@@ -12,7 +12,7 @@ namespace ScannerAndDistributionOfQRCodes
             // _initializing = new InitializingApplicationSettings(navigationService, dataService);
             InitializeComponent();
             MainPage = new NavigationPage();
-            navigationService.NavigateToMainPage();
+            navigationService.NavigateToMainPageAsync();
            
         }
 

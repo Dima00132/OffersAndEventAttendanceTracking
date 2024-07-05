@@ -19,7 +19,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
 
 
 
-    public class InternetCS
+    public sealed class InternetCS
     {
         [DllImport("wininet.dll")]
         private extern static bool InternetGetConnectedState(out int Description, int ReservedValue);

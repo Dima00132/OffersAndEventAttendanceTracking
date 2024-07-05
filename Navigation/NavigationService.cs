@@ -37,14 +37,14 @@ namespace ScannerAndDistributionOfQRCodes.Navigation
         public bool IsAnimated { get; set; }
         public NavigationService(IServiceProvider services)=> _services = services;
 
-        public Task NavigateToMainPage(object? parameter = null)
+        public Task NavigateToMainPageAsync(object? parameter = null)
                     => NavigateToPageAsync<MainPage>(parameter);
-        public Task NavigateByPage<T>(object? parameter = null, object? parameterSecond = null) where T : Page
+        public Task NavigateByPageAsync<T>(object? parameter = null, object? parameterSecond = null) where T : Page
                 => NavigateToPageAsync<T>(parameter, parameterSecond);
    
 
 
-        public Task NavigateByViewModel<T>(object? parameter = null) where T : ViewModelBase
+        public Task NavigateByViewModelAsync<T>(object? parameter = null) where T : ViewModelBase
         {
 
             //if (viewModelView.ContainsKey(typeof(T)))
@@ -136,7 +136,7 @@ namespace ScannerAndDistributionOfQRCodes.Navigation
             throw new NullReferenceException($"Не найден сервер в {_services.GetType().FullName}");
         }
 
-        public Task NavigateBack()
+        public Task NavigateBackAsync()
         {
             if (Navigation.NavigationStack.Count > 1)
             {
@@ -145,7 +145,7 @@ namespace ScannerAndDistributionOfQRCodes.Navigation
             throw new InvalidOperationException("No pages to navigate back to!");
         }
 
-        public Task NavigateBackUpdate()
+        public Task NavigateBackUpdateAsync()
         {
             if (Navigation.NavigationStack.Count > 1)
             {

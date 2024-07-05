@@ -70,7 +70,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
         public RelayCommand<Popup> CancelCommand => new(async (popup) =>
         {
             if (IsSendMessages)
-                _navigationService?.NavigateBack();
+                _navigationService?.NavigateBackAsync();
             popup?.Close();  
         });
 

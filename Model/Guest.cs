@@ -1,22 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Exchange.WebServices.Data;
-using MailKit.Net.Smtp;
-using MailKit;
-using MimeKit;
-using MailKit.Security;
-using MimeKit.Utils;
-using Bytescout.Spreadsheet.Charts;
 using DocumentFormat.OpenXml.Wordprocessing;
-using ScannerAndDistributionOfQRCodes.Service.Interface;
-using System.Net.Mail;
-using ScannerAndDistributionOfQRCodes.Data.Message;
 using ScannerAndDistributionOfQRCodes.Data.QRCode;
 using ScannerAndDistributionOfQRCodes.Data.Message.Mail;
 

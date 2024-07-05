@@ -36,24 +36,16 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
   
         public RelayCommand AddCommand => new(async () =>
         {
-            await _navigationService.NavigateByPage<AddScheduledEventPage>(Whole);
+            await _navigationService.NavigateByPageAsync<AddScheduledEventPage>(Whole);
         });
         public RelayCommand<ScheduledEvent> TapCommand => new(async (scheduledEvent) =>
         {
-            //var timeOfEvent = scheduledEvent.Date - DateTime.Now.AddDays(1);
             if (scheduledEvent.IsEventWasHeld)
             {
-                await _navigationService.NavigateByPage<StatisticsPage>(scheduledEvent);
+                await _navigationService.NavigateByPageAsync<StatisticsPage>(scheduledEvent);
                 return;
             }
-
-            //var timeOfEvent = scheduledEvent.Date - DateTime.Now.AddDays(1);
-            //if (timeOfEvent.Days < -1)
-            //{
-            //    await _navigationService.NavigateByPage<StatisticsPage>(scheduledEvent);
-            //    return;
-            //}
-            await _navigationService.NavigateByPage<GuestVerificationTablePage>(scheduledEvent);
+            await _navigationService.NavigateByPageAsync<GuestVerificationTablePage>(scheduledEvent);
         });
 
         public RelayCommand<ScheduledEvent> DeleteCommand => new(async (scheduledEvent) =>
@@ -65,13 +57,13 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         public RelayCommand<ScheduledEvent> StatisticsCommand => new(async (scheduledEvent) =>
         {
-            await _navigationService.NavigateByPage<StatisticsPage>(scheduledEvent);
+            await _navigationService.NavigateByPageAsync<StatisticsPage>(scheduledEvent);
         });
 
         
         public RelayCommand<ScheduledEvent> EditorCommand => new(async (scheduledEvent) =>
         {
-            await _navigationService.NavigateByPage<EditorEventPage>(scheduledEvent);
+            await _navigationService.NavigateByPageAsync<EditorEventPage>(scheduledEvent);
         });
 
         public override Task OnUpdateDbServiceAsync()

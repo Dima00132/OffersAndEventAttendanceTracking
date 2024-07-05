@@ -10,10 +10,10 @@ namespace ScannerAndDistributionOfQRCodes.Navigation
     public interface INavigationService
     {
         bool IsAnimated { get; set; }
-        Task NavigateToMainPage(object? parameter = null);
-        Task NavigateByPage<T>(object? parameter = null, object? parameterSecond = null) where T : Page;
-        public Task NavigateByViewModel<T>(object? parameter = null) where T : ViewModelBase;
-        Task NavigateBack();
-        Task NavigateBackUpdate();
+        Task NavigateToMainPageAsync(object? parameter = null);
+        Task NavigateByPageAsync<T>(object? parameter = null, object? parameterSecond = null) where T : Page;
+        public Task NavigateByViewModelAsync<T>(object? parameter = null) where T : ViewModelBase;
+        Task NavigateBackAsync();
+        Task NavigateBackUpdateAsync();
     }
 }

@@ -64,7 +64,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             _localDbService.Create(sheduledEvent.MessageText);
             _localDbService.Update(_whole);
 
-            await _navigationService.NavigateBackUpdate();
+            await _navigationService.NavigateBackUpdateAsync();
         }
 
         public bool CheckNameEvent() => !string.IsNullOrEmpty(NameEvent);

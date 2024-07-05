@@ -60,8 +60,11 @@ namespace ScannerAndDistributionOfQRCodes.Model
         {
             get
             {
-                var timeOfEvent = Date - DateTime.Now.AddDays(1);
-                return timeOfEvent.Days < -1;
+                var timeOfEvent1 = Date.ToUniversalTime() - DateTime.Now.ToUniversalTime();
+                return timeOfEvent1.TotalHours < -12;
+                //var g = timeOfEvent1.TotalHours;
+                //var timeOfEvent = Date - DateTime.Now.AddDays(1);
+                //return timeOfEvent.Days < -1;
             }
         }
 

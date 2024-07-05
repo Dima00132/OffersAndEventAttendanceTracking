@@ -53,10 +53,6 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             IsEnabledSend = CountMessages != 0 & CountMessages != ProgressSend;
         }
 
-
-
-
-
         public RelayCommand SendCommand => new(async () =>
         {
             await SendMessageAsync(_scheduledEvent, _mailAccount, _gueets).ConfigureAwait(true);

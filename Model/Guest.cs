@@ -94,8 +94,8 @@ namespace ScannerAndDistributionOfQRCodes.Model
 
         public StatisticsGuest GetStatisticsGuest()
         {
-            return new StatisticsGuest(User.Surname,User.Name,User.Patronymic,Mail.IsMessageSent?"OK":"NO"
-                    ,VrificatQRCode.IsVerifiedQRCode?"OK":"NO",VrificatQRCode.IsVerifiedQRCode?ArrivalTime.ToString():"NO");
+            return new StatisticsGuest(User.Surname,User.Name,User.Patronymic,Mail.IsMessageSent?"OK":"ON"
+                    , VrificatQRCode.IsVerifiedQRCode?"OK":"ON", VrificatQRCode.IsVerifiedQRCode?ArrivalTime.ToString():"ON");
         }
     }
 }

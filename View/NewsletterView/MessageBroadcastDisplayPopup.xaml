@@ -11,13 +11,18 @@
                x:Name="messageBroadcastDisplayPopup"
                Color="{AppThemeBinding Light=#FFEAE7EC, Dark=#1f1f1f  }">
 
-    <Border Padding="0" HeightRequest="600"
-       WidthRequest="450"
-       Stroke="Transparent"
-       BackgroundColor="{AppThemeBinding Light=#FFEAE7EC, Dark=#1f1f1f  }">
-        <Grid RowDefinitions="*,50" Margin="5">
-            <StackLayout Grid.Column="0" Margin="10" Spacing="15" >
-                <Grid ColumnDefinitions="*,55,40" ColumnSpacing="5">
+    <Border Padding="0" 
+            HeightRequest="600"
+            WidthRequest="450"
+            Stroke="Transparent"
+            BackgroundColor="{AppThemeBinding Light=#FFEAE7EC, Dark=#1f1f1f  }">
+        <Grid RowDefinitions="*,50" 
+              Margin="5">
+            <StackLayout Grid.Column="0" 
+                         Margin="10" 
+                         Spacing="15" >
+                <Grid ColumnDefinitions="*,55,40" 
+                      ColumnSpacing="5">
                     <Label Text="Укажите под какой колонкой находится данные с почтой в xlsx документе"/>
                     <Entry Grid.Column="1" HorizontalOptions="Start" Text="{Binding ColumnNumber}" TextTransform="Uppercase" 
                        MaxLength="2" TextChanged="Entry_TextChanged" >

@@ -10,7 +10,7 @@
             CanBeDismissedByTappingOutsideOfPopup ="False"
             x:Name="displayAlertSendingMessagesErrorPopup">
 
-    <toolkit:Popup.Resources>
+    <!--<toolkit:Popup.Resources>
         <Style TargetType="{x:Type view:DisplayAlertSendingMessagesErrorPopup}">
             <Setter Property="Size" Value="500,700" />
             <Setter Property="Color" Value="Red" />
@@ -18,12 +18,20 @@
             <Setter Property="VerticalOptions" Value="Start" />
             <Setter Property="CanBeDismissedByTappingOutsideOfPopup" Value="True" />
         </Style>
-    </toolkit:Popup.Resources>
+    </toolkit:Popup.Resources>-->
 
-    <Frame>
+    <Border Padding="0" HeightRequest="600"
+       WidthRequest="450"
+       Stroke="Transparent"
+       BackgroundColor="{AppThemeBinding Light=#FFEAE7EC, Dark=#1f1f1f  }">
 
-        <Grid RowDefinitions="50,*,50" RowSpacing="5">
-            <Label Grid.Row="0" Text="{Binding CountGuest,StringFormat='Ошибок при отправке сообщений {0}'}"/>
+        <Grid RowDefinitions="50,*,50" 
+              Margin="5" 
+              RowSpacing="5">
+            <Label Grid.Row="0" 
+                   VerticalOptions="Center"
+                   FontSize="Medium"
+                   Text="{Binding CountGuest,StringFormat='Ошибок при отправке сообщений {0}'}"/>
             
             <CollectionView Grid.Row="1" 
                     AbsoluteLayout.LayoutFlags="All"
@@ -31,8 +39,9 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type mail:ErrorMessage( model:Guest) }">
                         <Frame Padding="5">
-                            <Grid RowDefinitions="20,35" >
-                                <Label Grid.Row="0" FontSize="Caption">
+                            <Grid RowDefinitions="20,*" >
+                                <Label Grid.Row="0" 
+                                       FontSize="Caption">
                                     <Label.Text>
                                         <MultiBinding StringFormat="{}{0}  mail: {1}">
                                             <Binding Path="ErrorObject.User" />
@@ -41,7 +50,10 @@
                                     </Label.Text>
                                 </Label>
                                 <Button Grid.Row="1" 
-                                        HorizontalOptions="Start" FontSize="Body" VerticalOptions="Start" Text="Посмотреть сообщение ошибки" BackgroundColor="White" 
+                                        HorizontalOptions="Start" 
+                                        FontSize="Body"
+                                        VerticalOptions="Start"
+                                        Text="Посмотреть сообщение ошибки" BackgroundColor="White" 
                                         ImageSource="erroe_image.png" TextColor="#ff3b1f" 
                                         Command="{Binding Path= ViewErrorMessageCommand ,Source={RelativeSource AncestorType={x:Type viewmodel:DisplayAlertSendingMessagesErrorViewModel}}}"
                                         CommandParameter="{Binding .}"/>
@@ -51,10 +63,14 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <Grid Grid.Row="2"  ColumnSpacing="5">
-                <Button  Text="Назад" Command="{Binding CancelCommand}" CommandParameter="{Binding Source={x:Reference displayAlertSendingMessagesErrorPopup}}"/>
+            <Grid Grid.Row="2"  
+                  ColumnSpacing="5">
+                <Button  Text="Назад" 
+                         BackgroundColor="#D48055" 
+                         Command="{Binding CancelCommand}" 
+                         CommandParameter="{Binding Source={x:Reference displayAlertSendingMessagesErrorPopup}}"/>
             </Grid>
         </Grid>
-    </Frame>
+    </Border>
 
 </toolkit:Popup>

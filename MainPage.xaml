@@ -10,69 +10,27 @@
 
 
     <Grid RowDefinitions="50,*">
-
-
-        <ImageButton Grid.Row="0" HorizontalOptions="End" Source="image_settings_black.png" Command="{Binding SettingsCommand}"/>
+        <Button Grid.Row="0"
+                Text="Настройки"
+                BackgroundColor="#D48055"
+                HorizontalOptions="End" 
+                ImageSource="{AppThemeBinding Light=settings_black.png, Dark=settings_white.png }"  
+                Command="{Binding SettingsCommand}"/>
         
-        
-        <VerticalStackLayout  Grid.Row="1"  Spacing="5">
-            <Frame BorderColor="White" >
-                <Button Text="Мероприятеие"  Command="{Binding EventCommand}" />
-            </Frame>
-
-            <Frame BorderColor="White">
-                <Button Text="Рассылка сообщений" Command="{Binding SendingMessagesCommand}" />
-            </Frame>
+        <VerticalStackLayout  Grid.Row="1"  Spacing="15">
+            <Button Text="Мероприятие" 
+                    HorizontalOptions="Center"
+                    FontSize="Large"
+                    BackgroundColor="#D48055"
+                    ImageSource="{AppThemeBinding Light=event_black.png, Dark=event_white.png }" 
+                    Command="{Binding EventCommand}" CornerRadius="30" />
+            <Button Text="Рассылка сообщений"
+                    HorizontalOptions="Center"
+                    FontSize="Large" 
+                    CornerRadius="30" 
+                    BackgroundColor="#D48055"
+                    ImageSource="{AppThemeBinding Light=sending_messages_black.png, Dark=sending_messages_white.png }" 
+                    Command="{Binding SendingMessagesCommand}" />
         </VerticalStackLayout>
     </Grid>
-   
-
-    <!--<Grid RowDefinitions="100,*">
-        <Button Grid.Row="0" Text="Добавить" BackgroundColor="Green"  Command="{Binding AddCommand}" />
-        <CollectionView Grid.Row="1" 
-                        AbsoluteLayout.LayoutFlags="All"
-                        ItemsSource="{Binding Scheduleds}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="{x:Type model:ScheduledEvent}">
-                    <Frame>
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer
-                                Command="{Binding  Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}} , Path=TapCommand}"
-                                CommandParameter="{Binding .}" />
-                        </Frame.GestureRecognizers>
-
-                        <StackLayout>
-                            <Grid >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <Label Grid.Column="1" 
-                                       TextColor="Green"
-                                       FontSize="Subtitle"  
-                                       
-                                       Text="{Binding Date, StringFormat='Дата и время проведения мероприятия {0}'}" />
-                                <Label Grid.Column="0" Text="{Binding  NameEvent , Mode=TwoWay}"/>
-                            </Grid>
-                            <FlyoutBase.ContextFlyout>
-                                <MenuFlyout>
-                                    --><!--<MenuFlyoutItem Text="Редектировать" 
-                        Command="{Binding Path=ChangeCommand, Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}}"
-                        CommandParameter="{Binding .}"/>--><!--
-                                    <MenuFlyoutItem Text="Удалить" 
-                        Command="{Binding Path= DeleteCommand, Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}}"
-                        CommandParameter="{Binding .}"/>
-
-                                </MenuFlyout>
-                            </FlyoutBase.ContextFlyout>
-                        </StackLayout>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </Grid>-->
-
-
-
 </ContentPage>

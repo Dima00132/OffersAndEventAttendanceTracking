@@ -58,16 +58,6 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </StackLayout>
-                
-                <!--<Grid ColumnDefinitions="*,*,*,*,*,*">
-                    <Label Grid.Column="0" Text="{Binding Surname}"/>
-                    <Label Grid.Column="1" Text="{Binding Name}"/>
-                    <Label Grid.Column="2" Text="{Binding Patronymic}"/>
-                    <Label Grid.Column="3" Text="{Binding IsMessageSent}"/>
-                    <Label Grid.Column="4" Text="{Binding IsVerifiedQRCode}"/>
-                    <Label Grid.Column="5" Text="{Binding ArrivalTime}"/>
-                </Grid>-->
-                
             </Frame>
         </StackLayout>
     </ScrollView>

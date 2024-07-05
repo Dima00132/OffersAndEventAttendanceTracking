@@ -17,13 +17,13 @@ public partial class MessageBroadcastDisplayPopup: Popup
         {
             if (entry.Text.Length > 0)
             {
-                parserButton.IsVisible = true;
+                parserGrid.IsVisible = true;
                 imageEntry.IsVisible = true;
             }
             else
             {
                 imageEntry.IsVisible = false;
-                parserButton.IsVisible = false;
+                parserGrid.IsVisible = false;
                 sendButton.IsEnabled = false;
             }
         }
@@ -32,10 +32,14 @@ public partial class MessageBroadcastDisplayPopup: Popup
     private void sendButton_Clicked(object sender, EventArgs e)
     {
         stateSend.IsVisible = true;
+        parserButton.IsEnabled = false;
+        parserGrid.IsVisible = false;
     }
 
     private void Button_Clicked(object sender, EventArgs e)
     {
         stateSend.IsVisible = false;
     }
+
+
 }

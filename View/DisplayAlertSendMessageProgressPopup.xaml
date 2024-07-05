@@ -40,29 +40,4 @@
 
         </Grid>
     </Border>
-    
-    
-    
-    
-    <!--<Grid RowDefinitions="*,70">
-        <Grid Grid.Row="0" ColumnDefinitions="*,*" ColumnSpacing="5">
-            <Label Grid.Column="0" TextColor="Green" VerticalOptions="Center" >
-                <Label.Text>
-                    <MultiBinding StringFormat="{} отправлено {0} из {1} собщений">
-                        <Binding Path="ProgressSend" />
-                        <Binding Path="CountMessages"  />
-                    </MultiBinding>
-                </Label.Text>
-            </Label>
-            <Label Grid.Column="1" VerticalOptions="Center"  Text="{Binding ProgressErrorSend, StringFormat='Ошибок при отправке - {0}'}" TextColor="Red" />
-        </Grid>
-
-        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="5">
-            <Button Grid.Column="0" Text="Отправить сообщение" IsVisible="{Binding IsVisibleSend}"
-                    Command="{Binding SendCommand}"/>
-            <Button Grid.Column="1" Padding="5" Text="Назад" Command="{Binding CancelCommand}" CommandParameter="{Binding Source={x:Reference displayAlertSendMessageProgressPopup}}"/>
-        </Grid>
-        
-    </Grid>-->
-    
 </toolkit:Popup>

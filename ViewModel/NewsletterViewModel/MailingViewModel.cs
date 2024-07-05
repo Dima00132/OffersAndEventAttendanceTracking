@@ -22,9 +22,13 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
         private readonly MailAccount _mailAccount;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SendCommand))]
         private string _textMessage;
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SendCommand))]
         private string _organizationData;
+        [ObservableProperty]
+        private string _subject;
 
         [ObservableProperty]
         private string _imageFile;
@@ -58,22 +62,28 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
             FilePickerFileType? customFileType =
             new(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                    { DevicePlatform.WinUI, new[] { ".png" } }
+                    { DevicePlatform.WinUI, new[] { ".png",".jpg" } }
             });
 
             var result = await FilePicker.PickAsync(new PickOptions
             {
                 FileTypes = customFileType
             }).ConfigureAwait(true);
+            if (result is null)
+                return;
             ImageFile = result.FullPath;
             _streamImage = await result.OpenReadAsync().ConfigureAwait(true);
         });
 
-        public RelayCommand SendCommand => new(async () =>
+        [RelayCommand(CanExecute =nameof(CheckDataTextMessageAndOrganizationData))]
+        public async Task SendAsync()
         {
-            var textMessage = new MessageText(TextMessage, _organizationData);
-            await _popupService.ShowPopupAsync<MessageBroadcastDisplayViewModel>(onPresenting: viewModel => viewModel.MessageBroadcast(_mailAccount, _imageFile, textMessage)).ConfigureAwait(false);
-        });
+            var textMessage = new MessageText(TextMessage, OrganizationData);
+            await _popupService.ShowPopupAsync<MessageBroadcastDisplayViewModel>(onPresenting: viewModel => viewModel.MessageBroadcast(_mailAccount, _imageFile, textMessage, Subject)).ConfigureAwait(false);
+        }
+
+        private bool CheckDataTextMessageAndOrganizationData()
+            => !string.IsNullOrEmpty(TextMessage) & !string.IsNullOrEmpty(OrganizationData);
 
     }
 }

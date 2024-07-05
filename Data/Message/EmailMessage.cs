@@ -55,7 +55,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
             var htmlImage = string.Empty;
             if (SreamImage is not null)
             {
-                var imageFoot = body.LinkedResources.Add("qr", SreamImage);
+                var imageFoot = body.LinkedResources.Add($"Image_{ToAddress}", SreamImage);
                 imageFoot.ContentId = MimeUtils.GenerateMessageId();
                 htmlImage = $"<img src=\"cid:{imageFoot.ContentId}\"/><br /><div style=\"border-top:3px solid #61028d\">&nbsp;";
             }

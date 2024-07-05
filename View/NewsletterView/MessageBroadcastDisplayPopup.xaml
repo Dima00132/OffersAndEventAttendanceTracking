@@ -8,72 +8,60 @@
                xmlns:view ="clr-namespace:ScannerAndDistributionOfQRCodes.View"
                xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel"
                CanBeDismissedByTappingOutsideOfPopup ="False"
-               x:Name="messageBroadcastDisplayPopup">
+               x:Name="messageBroadcastDisplayPopup"
+               Color="{AppThemeBinding Light=#FFEAE7EC, Dark=#1f1f1f  }">
 
     <Border Padding="0" HeightRequest="600"
        WidthRequest="450"
        Stroke="Transparent"
        BackgroundColor="{AppThemeBinding Light=#FFEAE7EC, Dark=#1f1f1f  }">
-        <Border.StrokeShape>
-            <RoundRectangle CornerRadius="28"/>
-        </Border.StrokeShape>
-        <Grid RowDefinitions="*,50">
-            <StackLayout Grid.Column="0" Margin="10" Spacing="10" >
-                <Grid ColumnDefinitions="*,40" ColumnSpacing="5">
-                <Entry Grid.Column="0" Placeholder="Укажите конку с почтой" Text="{Binding ColumnNumber}" TextTransform="Uppercase" 
+        <Grid RowDefinitions="*,50" Margin="5">
+            <StackLayout Grid.Column="0" Margin="10" Spacing="15" >
+                <Grid ColumnDefinitions="*,55,40" ColumnSpacing="5">
+                    <Label Text="Укажите под какой колонкой находится данные с почтой в xlsx документе"/>
+                    <Entry Grid.Column="1" HorizontalOptions="Start" Text="{Binding ColumnNumber}" TextTransform="Uppercase" 
                        MaxLength="2" TextChanged="Entry_TextChanged" >
-                    <Entry.Behaviors>
-                        <toolkit:EventToCommandBehavior
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
                             EventName="TextChanged"
                             Command="{Binding TextChangedCommand}" />
-                    </Entry.Behaviors>
-                </Entry>
-                <Image Grid.Column="1" x:Name="imageEntry" IsVisible="False" Source="check_mark.png"/>
-            </Grid>
-            <Grid x:Name="parserButton" IsVisible="False" ColumnDefinitions="*,40" ColumnSpacing="5">
-                <Button Grid.Column="0"  Text="Добавить файл" Command="{Binding ParserCommand}" Clicked="Button_Clicked" />
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Image Grid.Column="2" x:Name="imageEntry" IsVisible="False" Source="check_mark.png"/>
+                </Grid>
+                <Grid x:Name="parserGrid" IsVisible="False" ColumnDefinitions="*,40" ColumnSpacing="5">
+                    <Button x:Name="parserButton" Grid.Column="0"  BackgroundColor="#d48055"  Text="Добавить файл" Command="{Binding ParserCommand}" Clicked="Button_Clicked" />
                     <Image Grid.Column="1" x:Name="imageButton" IsVisible="{Binding IsReadyToShip}" Source="check_mark.png"/>
-            </Grid>
-                <Grid  IsVisible="{Binding IsReadyToShip}"  ColumnDefinitions="*,40" ColumnSpacing="5">
-                <Label>
-                    <Label.Text>
-                        <MultiBinding StringFormat="{} Всего данных  {0} валидных  {1} ">
-                            <Binding Path="CountOfMils" />
-                            <Binding Path="CountOfCorrectMils"  />
-                        </MultiBinding>
-                    </Label.Text>
-                </Label>
-            </Grid>
-
-            <!--<Button x:Name="sendButton" Text="Отправит" IsVisible="{Binding IsCorrectMailFile}" Command="{Binding SendCommand}"/>-->
-
-            <Grid x:Name="stateSend"  IsVisible="False"  ColumnDefinitions="*,40" ColumnSpacing="5">
-                <Label>
-                    <Label.Text>
-                        <MultiBinding StringFormat="{} Отправлено соооющений  {0} из {1}  : Ошибок  {2} ">
-                            <Binding Path="CountSendMessages" />
-                                <Binding Path="CountOfMils"/>
+                </Grid>
+                <Grid IsVisible="{Binding IsReadyToShip}"  ColumnDefinitions="*,40" ColumnSpacing="5">
+                    <Label>
+                        <Label.Text>
+                            <MultiBinding StringFormat="{} Всего данных  {0}    Валидных  {1} ">
+                                <Binding Path="CountOfMils" />
+                                <Binding Path="CountOfCorrectMils"  />
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                </Grid>
+                <Grid x:Name="stateSend"  IsVisible="False"  ColumnDefinitions="*,40" ColumnSpacing="5">
+                    <Label>
+                        <Label.Text>
+                            <MultiBinding StringFormat="{} Отправлено соооющений  {0} из {1}  : Ошибок  {2} ">
+                                <Binding Path="CountSendMessages" />
+                                <Binding Path="CountOfCorrectMils"/>
                                 <Binding Path="CountUnsendMessages"  />
-                        </MultiBinding>
-                    </Label.Text>
-                </Label>
-            </Grid>
-
-            <ScrollView IsVisible="{Binding IsErrorMessages}">
-                <ListView ItemsSource="{Binding ErrorMessages }"/>
-            </ScrollView>
-           
-
-            <!--<Button x:Name="backButton" Text="Назад" IsVisible="{Binding IsSendMessages}"
-                    Command="{Binding CancelCommand}" CommandParameter="{Binding Source={x:Reference messageBroadcastDisplayPopup}}"/>-->
-
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                </Grid>
+                <Frame IsVisible="{Binding IsErrorMessages}">
+                    <CollectionView  ItemsSource="{Binding ErrorMessages }"/>
+                </Frame>
             </StackLayout>
-
             <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="5">
-                <Button Grid.Column="1" x:Name="sendButton" Text="Отправить" IsEnabled="{Binding IsReadyToShip}" Clicked="sendButton_Clicked" Command="{Binding SendCommand}"/>
-                <Button Grid.Column="0"  Text="Назад"  Command="{Binding CancelCommand}" CommandParameter="{Binding Source={x:Reference messageBroadcastDisplayPopup}}"/>
+                <Button Grid.Column="1" BackgroundColor="#d48055" x:Name="sendButton" Text="Отправить" IsEnabled="{Binding IsReadyToShip}" Clicked="sendButton_Clicked" Command="{Binding SendCommand}"/>
+                <Button Grid.Column="0" BackgroundColor="#d48055" Text="Назад" IsEnabled="{Binding IsMessagesDoNotSend}"  Command="{Binding CancelCommand}" CommandParameter="{Binding Source={x:Reference messageBroadcastDisplayPopup}}"/>
             </Grid>
-            
         </Grid>
     </Border>
 </toolkit:Popup>

@@ -9,7 +9,13 @@
             
             <Frame>
                 <StackLayout>
-                    <Label Text="Текст сообщения"/>
+                    <Label Text="Tемы"/>
+                    <Editor Text="{Binding Subject}"/>
+                </StackLayout>
+            </Frame>
+            <Frame>
+                <StackLayout>
+                    <Label Text="Cообщения"/>
                     <Editor Text="{Binding TextMessage}" AutoSize="TextChanges"/>
                 </StackLayout>
             </Frame>
@@ -25,21 +31,9 @@
 
                 <Button Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center" Text="Добвить картинку" Command="{Binding AddImageCommand}"/>
             </Grid>
-           
+
             <Button Text="Отправить" HorizontalOptions="Center" Command="{Binding SendCommand}"/>
         </StackLayout>
-        <!--<TableView >
-                <TableRoot>
-                    <TableSection Title="Текст сообщения">
-                        
-                        <EntryCell Label="Оглавоение" Text="{Binding Title}"/>
-                        <EntryCell Label="Текст сообщения" Text="{Binding TextMessage}"/>
-                    </TableSection>
-                </TableRoot>
-            </TableView>-->
     </ScrollView>
 </ContentPage>
-    <!--[ObservableProperty]
-private string _textMessage;
-[ObservableProperty]
-private string _title;-->
+

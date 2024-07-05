@@ -3,6 +3,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Vml;
+using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Utilities.IO;
 using ScannerAndDistributionOfQRCodes.Data.Message;
 using ScannerAndDistributionOfQRCodes.Data.Message.Mail;
 using ScannerAndDistributionOfQRCodes.Data.Parser;
@@ -21,12 +23,13 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
 {
     public partial class MessageBroadcastDisplayViewModel : ViewModelBase
     {
+        private string _subject;
         private MailAccount _mailAccount;
         private string _imageFile;
         private MessageText _textMessage;
         private List<Dictionary<string, string>> _listxlsxParser;
         [ObservableProperty]
-        private List<Mail> _listMail = new List<Mail>();
+        private List<Mail> _listMail = [];
         [ObservableProperty]
         private string _columnNumber;
 
@@ -52,9 +55,11 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
 
         [ObservableProperty]
         private bool _isErrorMessages;
+        [ObservableProperty]
+        private bool _isMessagesDoNotSend = true;
 
         [ObservableProperty]
-        private List<string> _errorMessages= new List<string>();
+        private List<string> _errorMessages= [];
         private readonly INavigationService _navigationService;
 
         public MessageBroadcastDisplayViewModel(INavigationService navigationService)
@@ -62,9 +67,9 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
             _navigationService = navigationService;
         }
 
-        public RelayCommand<Popup> CancelCommand => new((popup) =>
+        public RelayCommand<Popup> CancelCommand => new(async (popup) =>
         {
-            if(IsSendMessages)
+            if (IsSendMessages)
                 _navigationService?.NavigateBack();
             popup?.Close();  
         });
@@ -79,50 +84,44 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
             await Task.Run(() => 
             {
                 IsReadyToShip = false; 
-                IsSendMessages = true; 
+                IsSendMessages = true;
+                IsMessagesDoNotSend = false;
             }).ConfigureAwait(false);
-
-
-            if (!string.IsNullOrEmpty(_imageFile))
-            {
-                using var stream = new FileStream(_imageFile, FileMode.Open);
-                await SendAsync(stream).ConfigureAwait(true);
-            }
-            else
-                await SendAsync().ConfigureAwait(true);
-            
-            //CountSendMessages = ListMail.Count(x => x.IsMessageSent);
-            //CountUnsendMessages = ErrorMessages.Count;
-
+            await SendAsync().ConfigureAwait(true);
         });
 
-        private async Task SendAsync(Stream stream = null)
+
+
+        private async Task SendAsync()
         {
             
             ErrorMessages.Clear();
-            foreach (var item in ListMail)
+
+            
+            foreach (var item in ListMail.Where(x=>x.IsValidMail))
             {
                 try
                 {
-                    throw new SendMailMessageException("sdfsdf");
+                    using var stream = string.IsNullOrEmpty(_imageFile) ? null : new FileStream(_imageFile, FileMode.Open);
+
                     await Task.Run(() =>
                     {
-                        item.SendingMessages("", _textMessage,
-                        _mailAccount, "", stream);
+                        item.SendingMessages(_subject, _textMessage,
+                        _mailAccount,stream: stream);
                     }).ConfigureAwait(false);
+
                     CountSendMessages += item.IsMessageSent ? 1:0;
-
-
-
                 }
-                catch (SendMailMessageException ex)
+                catch (Exception ex) 
                 {
                     ErrorMessages.Add(ex.Message);
                     CountUnsendMessages++;
                 }
+
             }
             if (ErrorMessages.Count != 0)
                 IsErrorMessages = true;
+            IsMessagesDoNotSend = true;
         }
 
 
@@ -149,24 +148,12 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
 
             var stream = await result.OpenReadAsync().ConfigureAwait(true);
             _listxlsxParser = xlsxParser.Pars(stream);
-            //try
-            //{
-            //    var stream = await result.OpenReadAsync().ConfigureAwait(true);
-            //    _listxlsxParser = xlsxParser.Pars(stream);
-            //}
-            //catch (Exception ex)
-            //{
-            //    DisplayAlertError($"Произлшла ошибка при чтение файла!\n {ex.Message} \n Повторите попытку заново!");
-                
-            //    return;
-            //}
 
             if (CheckingListFilling(_listxlsxParser))
             {
-                DisplayAlertError($"Файл {result.FileName} не содержит необходимых или корректных данных");
+                DisplayAlertErrorAsync($"Файл {result.FileName} не содержит необходимых или корректных данных");
                 return;
             }
-
             IsReadyToShip = true;
         }
 
@@ -188,12 +175,11 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
             return CountOfCorrectMils == 0;
         }
 
-        private void DisplayAlertError(string errorMessage)
+        private async Task DisplayAlertErrorAsync(string errorMessage) 
+            => await Application.Current.MainPage.DisplayAlert("Предупреждение", errorMessage, "Ок").ConfigureAwait(false);
+        public void MessageBroadcast(MailAccount mailAccount, string imageFile, MessageText textMessage,string subject)
         {
-            Application.Current.MainPage.DisplayAlert("Предупреждение", errorMessage, "Ок");
-        }
-        public void MessageBroadcast(MailAccount mailAccount, string imageFile, MessageText textMessage)
-        {
+            _subject = string.IsNullOrEmpty(subject) ? string.Empty : subject;
             _mailAccount = mailAccount;
             _imageFile = imageFile;
             _textMessage = textMessage;

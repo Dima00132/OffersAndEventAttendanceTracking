@@ -4,12 +4,13 @@ using SQLiteNetExtensions.Attributes;
 using DocumentFormat.OpenXml.Wordprocessing;
 using ScannerAndDistributionOfQRCodes.Model;
 using ScannerAndDistributionOfQRCodes.Data.Message.Mail;
+using System;
 
 
 namespace ScannerAndDistributionOfQRCodes.Data.QRCode
 {
     [Table("verified_qr_code")]
-    public partial class VerificationQRCode : ObservableObject
+    public sealed partial class VerificationQRCode : ObservableObject
     {
         [PrimaryKey, AutoIncrement]
         [Column("Id")]
@@ -51,11 +52,21 @@ namespace ScannerAndDistributionOfQRCodes.Data.QRCode
         public bool CompareQRHashCode(string hash) =>
             QRHashCode.Equals(hash);
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             if (obj is VerificationQRCode verificationQRCode)
                 return verificationQRCode.QRHashCode.Equals(QRHashCode) & IsVerifiedQRCode == verificationQRCode.IsVerifiedQRCode;
             return false;
+        }
+
+        public override int GetHashCode()
+        {
+            var qRHashCode = QRHashCode.GetHashCode();
+            var verifiedQRCode = IsVerifiedQRCode.GetHashCode();
+            unchecked
+            {
+                return qRHashCode + verifiedQRCode;
+            } 
         }
     }
 }

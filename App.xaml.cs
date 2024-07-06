@@ -2,7 +2,7 @@
 
 namespace ScannerAndDistributionOfQRCodes
 {
-    public partial class App : Application
+    public sealed partial class App : Application
     {
 
        // private readonly ISettingsApplication _settingsApplication;

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
-    public partial class  AddScheduledEventViewModel :ViewModelBase
+    public sealed partial class  AddScheduledEventViewModel :ViewModelBase
     {
         private readonly INavigationService _navigationService;
         private readonly ILocalDbService _localDbService;
@@ -42,7 +42,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             _navigationService = navigationService;
             _localDbService = localDbService;
         }
-        public override Task OnNavigatingToAsync(object? parameter, object? parameterSecond = null)
+        public override Task OnNavigatingToAsync(object parameter, object parameterSecond = null)
         {
             if (parameter is WholeEvent whole)
                 _whole = whole;
@@ -53,7 +53,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         public async Task AddScheduledEvent()
         {
             var newDate = new DateTime(Date.Year, Date.Month, Date.Day, Time.Hours, Time.Minutes, 0);
-            var text = $"{newDate.ToString("D")} в {newDate.ToString("HH:mm")} <br/>{MessageText}";
+            var text = $"{newDate:D} в {newDate:HH:mm} <br/>{MessageText}";
             var nameEvent = NameEvent.Replace('\r', ' ').Replace('\n',' ') ;
             var sheduledEvent = new ScheduledEvent(nameEvent, newDate)
             {

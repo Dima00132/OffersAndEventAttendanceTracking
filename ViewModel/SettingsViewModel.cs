@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
-    public partial class SettingsViewModel:ViewModelBase
+    public sealed partial class SettingsViewModel:ViewModelBase
     {
         private readonly INavigationService _navigationService;
         private readonly ILocalDbService _localDbService;

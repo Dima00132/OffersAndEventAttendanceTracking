@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
-    public partial class GuestVerificationTableViewModel:ViewModelBase
+    public sealed partial class GuestVerificationTableViewModel:ViewModelBase
     {
         [ObservableProperty]
         private  ScannerQRCodeViewModel _scannerQRCodeViewModel;
@@ -36,7 +36,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             return base.OnUpdateDbServiceAsync();
         }
 
-        public override Task OnNavigatingToAsync(object? parameter, object? parameterSecond = null)
+        public override Task OnNavigatingToAsync(object parameter, object parameterSecond = null)
         {
             if (parameter is ScheduledEvent scheduledEvent)
             {

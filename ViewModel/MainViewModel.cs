@@ -16,7 +16,7 @@ using ScannerAndDistributionOfQRCodes.ViewModel.Base;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
-    public partial class MainViewModel : ViewModelBase
+    public sealed partial class MainViewModel : ViewModelBase
     {
         private readonly INavigationService _navigationService;
         private readonly ILocalDbService _localDbService;

@@ -3,7 +3,7 @@ using ScannerAndDistributionOfQRCodes.ViewModel;
 
 namespace ScannerAndDistributionOfQRCodes.View;
 
-public partial class DisplayAlertSendMessageProgressPopup : Popup
+public sealed partial class DisplayAlertSendMessageProgressPopup : Popup
 {
 	public DisplayAlertSendMessageProgressPopup(DisplayAlertSendMessageProgressViewModel displayAlertSendMessageProgressViewModel)
 	{

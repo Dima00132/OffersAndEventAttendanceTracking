@@ -1,6 +1,6 @@
 namespace ScannerAndDistributionOfQRCodes.View;
 
-public partial class ScannerQRCodePage : ContentPage
+public sealed partial class ScannerQRCodePage : ContentPage
 {
     public ScannerQRCodePage()
     {

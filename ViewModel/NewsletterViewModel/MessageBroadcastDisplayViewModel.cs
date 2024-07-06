@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
 {
-    public partial class MessageBroadcastDisplayViewModel : ViewModelBase
+    public sealed partial class MessageBroadcastDisplayViewModel : ViewModelBase
     {
         private string _subject;
         private MailAccount _mailAccount;
@@ -67,11 +67,11 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
             _navigationService = navigationService;
         }
 
-        public RelayCommand<Popup> CancelCommand => new(async (popup) =>
+        public RelayCommand<Popup> CancelCommand => new((popup) =>
         {
             if (IsSendMessages)
                 _navigationService?.NavigateBackAsync();
-            popup?.Close();  
+            popup?.Close();
         });
 
         public RelayCommand TextChangedCommand => new(() =>
@@ -127,7 +127,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
 
         public RelayCommand ParserCommand => new(async()=>
         {
-            FilePickerFileType? customFileType =
+            FilePickerFileType customFileType =
             new(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
                     { DevicePlatform.WinUI, new[] { ".xlsx" } }
@@ -163,7 +163,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
             ListMail.Clear();
             foreach (var item in listxlsxParser)
             {
-                if (item.TryGetValue(ColumnNumber, out string? value))
+                if (item.TryGetValue(ColumnNumber, out string value))
                 {
                     var mail = new Mail(value);
                     ListMail.Add(mail);

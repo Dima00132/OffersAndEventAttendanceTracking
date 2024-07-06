@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
-    public partial class DisplayAlertSendMessageProgressViewModel : ViewModelBase
+    public sealed partial class DisplayAlertSendMessageProgressViewModel : ViewModelBase
     {
         private readonly IPopupService _popupService;
         private ILocalDbService _localDbService;
@@ -36,7 +36,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             _popupService = popupService;
         }
 
-        public RelayCommand<Popup> CancelCommand => new(async (popup) =>
+        public RelayCommand<Popup> CancelCommand => new((popup) =>
         {
             popup.Close();
         });

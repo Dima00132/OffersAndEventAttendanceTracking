@@ -2,7 +2,7 @@ using ScannerAndDistributionOfQRCodes.ViewModel;
 
 namespace ScannerAndDistributionOfQRCodes.View;
 
-public partial class StatisticsPage : ContentPage
+public sealed partial class StatisticsPage : ContentPage
 {
 	public StatisticsPage(StatisticsViewModel  statisticsViewModel)
 	{

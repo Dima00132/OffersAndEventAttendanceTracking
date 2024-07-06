@@ -4,7 +4,7 @@ using ScannerAndDistributionOfQRCodes.ViewModel;
 
 namespace ScannerAndDistributionOfQRCodes.View;
 
-public partial class GuestListPage : ContentPage
+public sealed partial class GuestListPage : ContentPage
 {
     public GuestListPage()
     {

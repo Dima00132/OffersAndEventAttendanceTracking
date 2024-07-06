@@ -82,7 +82,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message.Mail
             return mailWithoutSpaces;
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             if (obj is Mail mail)
                 return mail.MailAddress.Equals(MailAddress);

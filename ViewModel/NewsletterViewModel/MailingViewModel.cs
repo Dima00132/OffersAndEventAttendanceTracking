@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
 {
-    public partial class MailingViewModel : ViewModelBase
+    public sealed partial class MailingViewModel : ViewModelBase
     {
         //private readonly INavigationService _navigationService;
         //private readonly ILocalDbService _localDbService;
@@ -59,7 +59,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
 
         public RelayCommand AddImageCommand => new(async() =>
         {
-            FilePickerFileType? customFileType =
+            FilePickerFileType customFileType =
             new(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
                     { DevicePlatform.WinUI, new[] { ".png",".jpg" } }
@@ -79,7 +79,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
         public async Task SendAsync()
         {
             var textMessage = new MessageText(TextMessage, OrganizationData);
-            await _popupService.ShowPopupAsync<MessageBroadcastDisplayViewModel>(onPresenting: viewModel => viewModel.MessageBroadcast(_mailAccount, _imageFile, textMessage, Subject)).ConfigureAwait(false);
+            await _popupService.ShowPopupAsync<MessageBroadcastDisplayViewModel>(onPresenting: viewModel => viewModel.MessageBroadcast(_mailAccount, ImageFile, textMessage, Subject)).ConfigureAwait(false);
         }
 
         private bool CheckDataTextMessageAndOrganizationData()

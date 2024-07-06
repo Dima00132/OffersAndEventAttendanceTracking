@@ -24,7 +24,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
 
 
-    public partial class  StatisticsViewModel:ViewModelBase
+    public sealed partial class  StatisticsViewModel:ViewModelBase
     {
         [ObservableProperty]
         private ScheduledEvent _scheduledEvent;
@@ -73,7 +73,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             }
         });
 
-        public override Task OnNavigatingToAsync(object? parameter, object? parameterSecond = null)
+        public override Task OnNavigatingToAsync(object parameter, object parameterSecond = null)
         {
             if (parameter is ScheduledEvent scheduledEvent)
             {

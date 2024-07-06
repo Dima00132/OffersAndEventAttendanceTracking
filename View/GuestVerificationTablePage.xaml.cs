@@ -2,7 +2,7 @@ using ScannerAndDistributionOfQRCodes.ViewModel;
 
 namespace ScannerAndDistributionOfQRCodes.View;
 
-public partial class GuestVerificationTablePage : TabbedPage
+public sealed partial class GuestVerificationTablePage : TabbedPage
 {
     private readonly GuestVerificationTableViewModel _guestVerificationTableViewModel;
     public GuestVerificationTablePage(GuestVerificationTableViewModel guestVerificationTableViewModel)

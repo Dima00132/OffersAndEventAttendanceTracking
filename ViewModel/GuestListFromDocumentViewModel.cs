@@ -23,14 +23,14 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
     public sealed class CustomGuestMailComparer : IEqualityComparer<Guest>
     {
-        public bool Equals(string? x, string? y)
+        public bool Equals(string x, string y)
         {
             if (x is null || y is null) return false;
             return x.ToLower() == y.ToLower();
 
         }
 
-        public bool Equals(Guest? x, Guest? y)
+        public bool Equals(Guest x, Guest y)
         {
             if (x is null || y is null) return false;
             return x.Mail.MailAddress == y.Mail.MailAddress;
@@ -43,7 +43,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
     }
 
 
-    public partial class GuestListFromDocumentViewModel : ViewModelBase
+    public sealed partial class GuestListFromDocumentViewModel : ViewModelBase
     {
         private readonly ILocalDbService _localDbService;
         [ObservableProperty]
@@ -119,11 +119,11 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             return true;
         }
 
-        public RelayCommand<Popup> SaveCommand => new(async (popup) =>
+        public RelayCommand<Popup> SaveCommand => new((popup) =>
         {
             foreach (var item in Guests)
             {
-                var isGuestOnList = _scheduledEvent.Guests.Count(x => x.VrificatQRCode.QRHashCode.Equals(item.VrificatQRCode.QRHashCode)) != 0?true:false;
+                var isGuestOnList = _scheduledEvent.Guests.Count(x => x.VrificatQRCode.QRHashCode.Equals(item.VrificatQRCode.QRHashCode)) != 0 ? true : false;
                 if (isGuestOnList)
                     continue;
                 _scheduledEvent.Guests.Add(item);
@@ -134,7 +134,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         });
 
 
-        public RelayCommand<Popup> CancelCommand => new(async (popup) =>
+        public RelayCommand<Popup> CancelCommand => new((popup) =>
         {
             popup.Close();
         });
@@ -169,7 +169,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
         private async Task< FileResult> GetFileAsync()
         {
-            FilePickerFileType? customFileType =
+            FilePickerFileType customFileType =
                 new(new Dictionary<DevicePlatform, IEnumerable<string>>
                 {
                     { DevicePlatform.WinUI, new[] { ".xlsx" } }

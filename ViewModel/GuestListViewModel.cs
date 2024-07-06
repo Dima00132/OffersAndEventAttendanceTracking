@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
-    public partial class GuestListViewModel : ViewModelBase
+    public sealed partial class GuestListViewModel : ViewModelBase
     {
         private readonly INavigationService _navigationService;
         private readonly ILocalDbService _localDbService;
@@ -80,8 +80,8 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             set => SetProperty(ref _сountNotValidMail, value);
 
         }
-        public RelayCommand<string?> PerformSearchCommand => new(async (string? query) => await OnSearchTextChangedAsync(query));
-        public RelayCommand<Guest> ChangeCommand => new(async (guest) =>
+        public RelayCommand<string> PerformSearchCommand => new(async (string query) => await OnSearchTextChangedAsync(query));
+        public RelayCommand<Guest> ChangeCommand => new((guest) =>
         {
             Cancel();
             Guest = guest;
@@ -89,7 +89,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             IsVisibleChangeGuest = true;
             IsEditor = true;
         });
-        public RelayCommand AddGuestCommand => new(async () =>
+        public RelayCommand AddGuestCommand => new(() =>
         {
             Cancel();
             IsVisibleAddGuest = true;
@@ -105,9 +105,9 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         });
         public RelayCommand ParseCommand => new(async () =>
         {
-            await popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: viewModel => viewModel.ListOfParsedGuestsAsync(_scheduledEvent, new XlsxParser())).ConfigureAwait(false);
+            await popupService.ShowPopupAsync<GuestListFromDocumentViewModel>(onPresenting: async viewModel =>  viewModel.ListOfParsedGuestsAsync(ScheduledEvent, new XlsxParser())).ConfigureAwait(false);
             UpdateCountProperty();
-            _localDbService.Update(_scheduledEvent);
+            _localDbService.Update(ScheduledEvent);
         });
         public RelayCommand UpdateCommand => new(() =>
         {
@@ -116,10 +116,10 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             Guests = null;
             Guests =  ScheduledEvent.Guests;
         });   
-        public RelayCommand<Guest> DeleteCommand => new(async (guest) =>
+        public RelayCommand<Guest> DeleteCommand => new((guest) =>
         {
             Guests.Remove(guest);
-            _localDbService.Update(_scheduledEvent);
+            _localDbService.Update(ScheduledEvent);
         });
 
         public GuestListViewModel(INavigationService navigationService, ILocalDbService localDbService, IPopupService popupService)
@@ -131,7 +131,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         }
 
         [RelayCommand(CanExecute = nameof(CheckNameEvent))]
-        public async Task Save()
+        public void Save()
         {
             if (IsVisibleAddGuest)
                 Guests.Add(CreationGuest());
@@ -140,7 +140,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             IsEditor = false;
             ClearValues();
             UpdateCountProperty();
-            _localDbService.Update(_scheduledEvent);
+            _localDbService.Update(ScheduledEvent);
         }
 
         [RelayCommand]
@@ -163,12 +163,12 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             var query = keyword as string;
             if (string.IsNullOrEmpty(query))
             {
-                Guests = _scheduledEvent.Guests;
+                Guests = ScheduledEvent.Guests;
                 return;
             }
             if (!string.IsNullOrEmpty(query) && query.Length >= 1)
             {
-                var data = await Task.FromResult(_scheduledEvent.FindsQuestionByRequest(query)).ConfigureAwait(false);
+                var data = await Task.FromResult(ScheduledEvent.FindsQuestionByRequest(query)).ConfigureAwait(false);
                 if (data is not null)
                     Guests = new ObservableCollection<Guest>(data);
             }
@@ -181,7 +181,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                 return;
             }
             await popupService
-                .ShowPopupAsync<DisplayAlertSendMessageProgressViewModel>(onPresenting: viewModel => viewModel.ProgresslListSendMessages(gueets, _scheduledEvent, _mailAccount, _localDbService))
+                .ShowPopupAsync<DisplayAlertSendMessageProgressViewModel>(onPresenting: viewModel => viewModel.ProgresslListSendMessages(gueets, ScheduledEvent, _mailAccount, _localDbService))
                 .ConfigureAwait(false);
             UpdateCountProperty();
         }
@@ -221,7 +221,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             CountSendMessage = GetCountSendMessage();
             CountNotValidMail = GetNotValidMail();
         }
-        public override Task OnNavigatingToAsync(object? parameter, object? parameterSecond = null)
+        public override Task OnNavigatingToAsync(object parameter, object parameterSecond = null)
         {
             if (parameter is ScheduledEvent scheduledEvent)
             {

@@ -17,7 +17,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.QRCode
 
             byte[] qrCodeBytes = qRCode.GetGraphic(20);
 
-            MainThread.BeginInvokeOnMainThread(async () =>
+            MainThread.BeginInvokeOnMainThread(() =>
             {
                 imageSource.Source = ImageSource.FromStream(() => new MemoryStream(qrCodeBytes));
             });

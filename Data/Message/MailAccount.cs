@@ -49,14 +49,14 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
             ConnectionProtection = connectionProtection;
         }
 
-        public int CompareTo(MailServer? other)
+        public int CompareTo(MailServer other)
         {
             if (other is null)
                 return -1;
             return other.Port.CompareTo(Port) + other.Server.CompareTo(Server) + other.ConnectionProtection.CompareTo(ConnectionProtection);
         }
 
-        public int CompareTo(object? obj)
+        public int CompareTo(object obj)
         {
             var server = obj as MailServer;
             return this.CompareTo(server);
@@ -101,7 +101,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
             MailID = mailID;
         }
 
-        public int CompareTo(MailAccount? other)
+        public int CompareTo(MailAccount other)
         {
             if (other is null)
                 return -1;
@@ -110,7 +110,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
                 + other.UserData.CompareTo(UserData)+ other.MailServer.CompareTo(MailServer) +other.MailID.CompareTo(MailID);
         }
 
-        public int CompareTo(object? obj)
+        public int CompareTo(object obj)
         {
             var account = obj as MailAccount;
             return this.CompareTo(account);

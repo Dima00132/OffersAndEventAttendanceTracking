@@ -23,7 +23,7 @@ namespace ScannerAndDistributionOfQRCodes
 {
 
 
-    public partial class MainPage : ContentPage
+    public sealed partial class MainPage : ContentPage
     {
         private readonly MainViewModel _mainViewModel;
 

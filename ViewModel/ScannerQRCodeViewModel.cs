@@ -1,26 +1,19 @@
 ﻿using AForge.Video;
-
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
 using System.Drawing;
-
 using ScannerAndDistributionOfQRCodes.ViewModel.Base;
-
 using AForge.Video.DirectShow;
-
 using System.Collections.ObjectModel;
 using ScannerAndDistributionOfQRCodes.Model;
-
 using ScannerAndDistributionOfQRCodes.Service.Interface;
-
 using ScannerAndDistributionOfQRCodes.Data.QRCode;
 
 
 
 namespace ScannerAndDistributionOfQRCodes
 {
-    public partial class ScannerQRCodeViewModel : ViewModelBase
+    public sealed partial class ScannerQRCodeViewModel : ViewModelBase
     {
         [ObservableProperty]
         private ImageSource _qRImage;
@@ -58,7 +51,7 @@ namespace ScannerAndDistributionOfQRCodes
 
         public ScannerQRCodeViewModel(ILocalDbService localDbService)
         {
-            _scannerQR = new ScannerQR(UpdateQrCodeAsync);
+            _scannerQR = new ScannerQR(UpdateQrCode);
             var filterInfoCollection = _scannerQR.GetVideoInputDevice();
             SetMonikerStringName(filterInfoCollection);
             SetItemsPicker();
@@ -66,7 +59,7 @@ namespace ScannerAndDistributionOfQRCodes
             _localDbService = localDbService;
         }
 
-        public override Task OnNavigatingToAsync(object? parameter, object? parameterSecond = null)
+        public override Task OnNavigatingToAsync(object parameter, object parameterSecond = null)
         {
             if (parameter is ScheduledEvent scheduledEvent)
             {
@@ -184,7 +177,7 @@ namespace ScannerAndDistributionOfQRCodes
             _localDbService.Update(ScheduledEvent);
         });
 
-        private void UpdateQrCodeAsync(object obj,NewFrameEventArgs eventArgs)
+        private void UpdateQrCode(object obj,NewFrameEventArgs eventArgs)
         {
             var bitmap = (Bitmap)eventArgs.Frame.Clone();
             using MemoryStream stream = new MemoryStream();

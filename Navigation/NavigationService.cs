@@ -23,7 +23,7 @@ namespace ScannerAndDistributionOfQRCodes.Navigation
         {
             get
             {
-                INavigation? navigation = Application.Current?.MainPage?.Navigation;
+                INavigation navigation = Application.Current?.MainPage?.Navigation;
                 if (navigation is not null)
                     return navigation;
                 else
@@ -37,14 +37,14 @@ namespace ScannerAndDistributionOfQRCodes.Navigation
         public bool IsAnimated { get; set; }
         public NavigationService(IServiceProvider services)=> _services = services;
 
-        public Task NavigateToMainPageAsync(object? parameter = null)
+        public Task NavigateToMainPageAsync(object parameter = null)
                     => NavigateToPageAsync<MainPage>(parameter);
-        public Task NavigateByPageAsync<T>(object? parameter = null, object? parameterSecond = null) where T : Page
+        public Task NavigateByPageAsync<T>(object parameter = null, object parameterSecond = null) where T : Page
                 => NavigateToPageAsync<T>(parameter, parameterSecond);
    
 
 
-        public Task NavigateByViewModelAsync<T>(object? parameter = null) where T : ViewModelBase
+        public Task NavigateByViewModelAsync<T>(object parameter = null) where T : ViewModelBase
         {
 
             //if (viewModelView.ContainsKey(typeof(T)))
@@ -57,19 +57,19 @@ namespace ScannerAndDistributionOfQRCodes.Navigation
         }
 
 
-        private async Task NavigateToPageAsync(Type typePage,object? parameter = null) 
+        private async Task NavigateToPageAsync(Type typePage,object parameter = null) 
         {
             if(ResolvePage(typePage) is Page toPage)
                 await InitializecircutPageAsync(toPage, parameter);
         }
 
-        private async Task NavigateToPageAsync<T>(object? parameter = null, object? parameterSecond = null) where T : Page
+        private async Task NavigateToPageAsync<T>(object parameter = null, object parameterSecond = null) where T : Page
         {
             if (ResolvePage<T>() is T toPage)
                 await InitializecircutPageAsync(toPage, parameter, parameterSecond);
         }
 
-        private async Task InitializecircutPageAsync(Page toPage, object? parameter = null, object? parameterSecond = null)
+        private async Task InitializecircutPageAsync(Page toPage, object parameter = null, object parameterSecond = null)
         {
             if (toPage is not null)
             {
@@ -84,7 +84,7 @@ namespace ScannerAndDistributionOfQRCodes.Navigation
                 throw new InvalidOperationException($"Unable to resolve type");
         }
 
-        private async void Page_NavigatedFromAsync(object? sender, NavigatedFromEventArgs e)
+        private async void Page_NavigatedFromAsync(object sender, NavigatedFromEventArgs e)
         {
             bool isForwardNavigation = Navigation.NavigationStack.Count > 1
                 && Navigation.NavigationStack[^2] == sender;
@@ -95,10 +95,10 @@ namespace ScannerAndDistributionOfQRCodes.Navigation
                     thisPage.NavigatedTo -= Page_NavigatedToAsync;
                     thisPage.NavigatedFrom -= Page_NavigatedFromAsync;
                 }
-                await CallNavigatedFrom(thisPage, isForwardNavigation);
+                await CallNavigatedFromAsync(thisPage, isForwardNavigation);
             }
         }
-        private Task CallNavigatedFrom(Page p, bool isForward)
+        private Task CallNavigatedFromAsync(Page p, bool isForward)
         {
             var fromViewModel = GetPageViewModelBase(p);
             if (fromViewModel is not null)
@@ -111,7 +111,7 @@ namespace ScannerAndDistributionOfQRCodes.Navigation
                 return viewModel;
             throw new NullReferenceException($"Не найден BindingContext в Page {toPage?.GetType().FullName}");
         }
-        private async void Page_NavigatedToAsync(object? sender, NavigatedToEventArgs e)
+        private async void Page_NavigatedToAsync(object sender, NavigatedToEventArgs e)
         { 
             if(sender is Page toPage)
              await CallNavigatedTo(toPage); 
@@ -125,7 +125,7 @@ namespace ScannerAndDistributionOfQRCodes.Navigation
         }
 
 
-        private T? ResolvePage<T>() where T : Page
+        private T ResolvePage<T>() where T : Page
           => _services.GetService<T>();
 
         private object ResolvePage(Type type)

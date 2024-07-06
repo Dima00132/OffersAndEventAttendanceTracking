@@ -92,7 +92,7 @@ namespace ScannerAndDistributionOfQRCodes.Model
         }
         private bool CompareUser(string name, string request)
             => String.Compare(name, 0, request, 0, request.Length, StringComparison.OrdinalIgnoreCase) == 0;
-        public Guest? SearchForGuestByQRHashCode(string hash)
+        public Guest SearchForGuestByQRHashCode(string hash)
             =>Guests.FirstOrDefault(x => x.VrificatQRCode.CompareQRHashCode(hash),null);
     }
 }

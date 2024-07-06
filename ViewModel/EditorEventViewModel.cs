@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
-    public partial class EditorEventViewModel:ViewModelBase
+    public sealed partial class EditorEventViewModel:ViewModelBase
     {
         private readonly INavigationService _navigationService;
         private readonly ILocalDbService _localDbService;
@@ -68,7 +68,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                 & !string.IsNullOrEmpty(OrganizationData);
         }
 
-        public override Task OnNavigatingToAsync(object? parameter, object? parameterSecond = null)
+        public override Task OnNavigatingToAsync(object parameter, object parameterSecond = null)
         {
             if(parameter is ScheduledEvent scheduledEvent )
             {

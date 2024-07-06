@@ -2,7 +2,7 @@ using CommunityToolkit.Maui.Views;
 using ScannerAndDistributionOfQRCodes.ViewModel;
 namespace ScannerAndDistributionOfQRCodes.View;
 
-public partial class GuestListFromDocumentPopup  : Popup
+public sealed partial class GuestListFromDocumentPopup  : Popup
 {
 	public GuestListFromDocumentPopup(GuestListFromDocumentViewModel guestListFromDocumentViewModel)
 	{

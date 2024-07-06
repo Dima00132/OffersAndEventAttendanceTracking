@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
-    public partial class ListOfEventsViewModel:ViewModelBase
+    public sealed partial class ListOfEventsViewModel:ViewModelBase
     {
         private readonly INavigationService _navigationService;
         private readonly ILocalDbService _localDbService;
@@ -48,7 +48,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             await _navigationService.NavigateByPageAsync<GuestVerificationTablePage>(scheduledEvent);
         });
 
-        public RelayCommand<ScheduledEvent> DeleteCommand => new(async (scheduledEvent) =>
+        public RelayCommand<ScheduledEvent> DeleteCommand => new((scheduledEvent) =>
         {
             Whole.ScheduledEvents.Remove(scheduledEvent);
             Scheduleds.Remove(scheduledEvent);

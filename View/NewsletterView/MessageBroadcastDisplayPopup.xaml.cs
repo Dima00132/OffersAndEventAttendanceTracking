@@ -3,7 +3,7 @@ using ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel;
 
 namespace ScannerAndDistributionOfQRCodes.View.NewsletterView;
 
-public partial class MessageBroadcastDisplayPopup: Popup
+public sealed partial class MessageBroadcastDisplayPopup: Popup
 {
 	public MessageBroadcastDisplayPopup(MessageBroadcastDisplayViewModel messageBroadcastDisplayViewModel)
 	{

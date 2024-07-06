@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ScannerAndDistributionOfQRCodes.Service.PopupService
 {
-    public class PopupService : IPopupService
+    public sealed class PopupService : IPopupService
     {
         public void ShowPopup(Popup popup)
         {

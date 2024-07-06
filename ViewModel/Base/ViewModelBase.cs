@@ -9,7 +9,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.Base
 {
     public class ViewModelBase:ObservableObject
     {
-        public virtual Task OnNavigatingToAsync(object? parameter, object? parameterSecond = null)
+        public virtual Task OnNavigatingToAsync(object parameter, object parameterSecond = null)
              => Task.CompletedTask;
         public virtual Task OnNavigatedFromAsync(bool isForwardNavigation)
             => Task.CompletedTask;

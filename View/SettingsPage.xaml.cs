@@ -4,14 +4,15 @@ using System.Collections.Generic;
 
 namespace ScannerAndDistributionOfQRCodes.View;
 
-public partial class SettingsPage : ContentPage
+public sealed partial class SettingsPage : ContentPage
 {
-    List<Frame> frames = new List<Frame>();
+    private static readonly List<Frame> _frames = [];
+    
     public SettingsPage(SettingsViewModel settingsViewModel)
     {
         InitializeComponent();
         BindingContext = settingsViewModel;
-        frames.AddRange([userFrame, mailServerFrame, domainDailFrame, uisenderGOFrame]);
+        _frames.AddRange([userFrame, mailServerFrame, domainDailFrame, uisenderGOFrame]);
        
     }
 
@@ -55,7 +56,7 @@ public partial class SettingsPage : ContentPage
 
     private void CloseFrames(Frame dontCloseFrame = null)
     {
-        foreach (var frame in frames.Where(x=>x!= dontCloseFrame))
+        foreach (var frame in _frames.Where(x=>x!= dontCloseFrame))
             frame.IsVisible = false;
     }
 }

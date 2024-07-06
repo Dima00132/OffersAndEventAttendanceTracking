@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
-    public partial class DisplayAlertSendingMessagesErrorViewModel : ViewModelBase
+    public sealed partial class DisplayAlertSendingMessagesErrorViewModel : ViewModelBase
     {
         [ObservableProperty]
         private ObservableCollection<ErrorMessage<Guest>> _guests = [];
@@ -26,7 +26,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             await Application.Current.MainPage.DisplayAlert("Сообщение ошибки", $"{x.Message}", "Ок");
         });
 
-        public RelayCommand<Popup> CancelCommand => new(async (popup) =>
+        public RelayCommand<Popup> CancelCommand => new((popup) =>
         {
             popup.Close();
         });

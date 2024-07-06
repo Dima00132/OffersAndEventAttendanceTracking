@@ -2,7 +2,7 @@ using ScannerAndDistributionOfQRCodes.ViewModel;
 
 namespace ScannerAndDistributionOfQRCodes.View;
 
-public partial class AddScheduledEventPage : ContentPage
+public sealed partial class AddScheduledEventPage : ContentPage
 {
 	public AddScheduledEventPage(AddScheduledEventViewModel addScheduledEventViewModel)
 	{

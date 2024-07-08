@@ -16,6 +16,7 @@
 		<OutputType>Exe</OutputType>
 		<RootNamespace>ScannerAndDistributionOfQRCodes</RootNamespace>
 		<UseMaui>true</UseMaui>
+		<UseRidGraph>true</UseRidGraph>
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
@@ -42,13 +43,13 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<GenerateAppInstallerFile>False</GenerateAppInstallerFile>
 		<AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-		<PackageCertificateThumbprint>6E67632A8BEA0250D4FE315672F715D3608CD895</PackageCertificateThumbprint>
+		<PackageCertificateThumbprint>6DFCA7273404E9064EDB2777BBE167A352374428</PackageCertificateThumbprint>
 		<AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
-		<AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+		<AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
 		<AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
 		<GenerateTestArtifacts>True</GenerateTestArtifacts>
-		<AppInstallerUri>D:\QRCode</AppInstallerUri>
-		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+		<AppInstallerUri>C:\Release</AppInstallerUri>
+		<HoursBetweenUpdateChecks>672</HoursBetweenUpdateChecks>
 		<PlatformTarget>x64</PlatformTarget>
 	</PropertyGroup>
 

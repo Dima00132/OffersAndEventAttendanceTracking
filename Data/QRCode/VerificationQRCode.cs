@@ -55,18 +55,24 @@ namespace ScannerAndDistributionOfQRCodes.Data.QRCode
         public override bool Equals(object obj)
         {
             if (obj is VerificationQRCode verificationQRCode)
+            {
+                if (verificationQRCode.QRHashCode is null | verificationQRCode.IsVerifiedQRCode  ==  null)
+                    return false;
                 return verificationQRCode.QRHashCode.Equals(QRHashCode) & IsVerifiedQRCode == verificationQRCode.IsVerifiedQRCode;
+            }
+                
             return false;
         }
 
-        public override int GetHashCode()
-        {
-            var qRHashCode = QRHashCode.GetHashCode();
-            var verifiedQRCode = IsVerifiedQRCode.GetHashCode();
-            unchecked
-            {
-                return qRHashCode + verifiedQRCode;
-            } 
-        }
+        //public override int GetHashCode()
+        //{
+        //    if()
+        //    var qRHashCode = QRHashCode.GetHashCode();
+        //    var verifiedQRCode = IsVerifiedQRCode.GetHashCode();
+        //    unchecked
+        //    {
+        //        return qRHashCode + verifiedQRCode;
+        //    } 
+        
     }
 }

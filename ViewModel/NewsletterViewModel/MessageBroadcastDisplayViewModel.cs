@@ -1,10 +1,7 @@
-﻿using CommunityToolkit.Maui.Views;
+﻿using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Vml;
-using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Utilities.IO;
 using ScannerAndDistributionOfQRCodes.Data.Message;
 using ScannerAndDistributionOfQRCodes.Data.Message.Mail;
 using ScannerAndDistributionOfQRCodes.Data.Parser;
@@ -12,12 +9,7 @@ using ScannerAndDistributionOfQRCodes.Data.Parser.Interface;
 using ScannerAndDistributionOfQRCodes.Model;
 using ScannerAndDistributionOfQRCodes.Navigation;
 using ScannerAndDistributionOfQRCodes.ViewModel.Base;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
 {
@@ -42,8 +34,6 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
         [ObservableProperty]
         private int _countOfCorrectMils;
 
-
-
         [ObservableProperty]
         private int _countSendMessages;
 
@@ -57,14 +47,15 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
         private bool _isErrorMessages;
         [ObservableProperty]
         private bool _isMessagesDoNotSend = true;
-
         [ObservableProperty]
-        private List<string> _errorMessages= [];
+        private List<ErrorMessage<Mail>> _errorMessages = [];
+        private IPopupService _popupService;
         private readonly INavigationService _navigationService;
 
-        public MessageBroadcastDisplayViewModel(INavigationService navigationService)
+        public MessageBroadcastDisplayViewModel(INavigationService navigationService, IPopupService popupService)
         {
             _navigationService = navigationService;
+            _popupService = popupService;
         }
 
         public RelayCommand<Popup> CancelCommand => new((popup) =>
@@ -90,14 +81,9 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
             await SendAsync().ConfigureAwait(true);
         });
 
-
-
         private async Task SendAsync()
-        {
-            
+        {       
             ErrorMessages.Clear();
-
-            
             foreach (var item in ListMail.Where(x=>x.IsValidMail))
             {
                 try
@@ -114,7 +100,8 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
                 }
                 catch (Exception ex) 
                 {
-                    ErrorMessages.Add(ex.Message);
+
+                    ErrorMessages.Add(new ErrorMessage<Mail>(item, ex.Message));
                     CountUnsendMessages++;
                 }
 
@@ -123,8 +110,10 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
                 IsErrorMessages = true;
             IsMessagesDoNotSend = true;
         }
-
-
+        public RelayCommand<ErrorMessage<Mail>> ViewErrorMessageCommand => new(async (x) =>
+        {
+            await Application.Current.MainPage.DisplayAlert("Сообщение ошибки", $"{x.Message}", "Ок").ConfigureAwait(false);
+        });
         public RelayCommand ParserCommand => new(async()=>
         {
             FilePickerFileType customFileType =

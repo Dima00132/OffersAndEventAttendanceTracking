@@ -9,16 +9,7 @@
             xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel"
             CanBeDismissedByTappingOutsideOfPopup ="False"
             x:Name="displayAlertSendingMessagesErrorPopup">
-
-    <!--<toolkit:Popup.Resources>
-        <Style TargetType="{x:Type view:DisplayAlertSendingMessagesErrorPopup}">
-            <Setter Property="Size" Value="500,700" />
-            <Setter Property="Color" Value="Red" />
-            <Setter Property="HorizontalOptions" Value="Center" />
-            <Setter Property="VerticalOptions" Value="Start" />
-            <Setter Property="CanBeDismissedByTappingOutsideOfPopup" Value="True" />
-        </Style>
-    </toolkit:Popup.Resources>-->
+ 
 
     <Border Padding="0" HeightRequest="600"
        WidthRequest="450"

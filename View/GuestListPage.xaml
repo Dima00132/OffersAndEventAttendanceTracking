@@ -7,48 +7,22 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              >
 
-    <!--[ObservableProperty]
- private int _countGuest;
- [ObservableProperty]
- private int _countSendMessage;-->
+    <Grid ColumnDefinitions="800,*" >
 
-    <!--<Grid RowDefinitions="100,*">-->
-        <!--<Grid   Grid.Row="0" ColumnDefinitions="*,100,100,100" ColumnSpacing="10">
-            <ImageButton Grid.Column="1"  Source="add_user.png"  Command="{Binding AddGuestCommand}" ToolTipProperties.Text="Добавить гостя" />
-            <ImageButton Grid.Column="2"   Source="sending_messages.png" Command="{Binding SendCommand}" ToolTipProperties.Text="Отправить сообщения"/>
-            <ImageButton Grid.Column="3" ToolTipProperties.Text="Выбрать файл" Source="file_selection.png" Command="{Binding ParseCommand}"/>
-        </Grid>-->
-        
-        
-
-        <Grid ColumnDefinitions="800,*" >
-
-            <Grid Grid.Column="0"  RowDefinitions="50,*,40" RowSpacing="5">
-                <Grid Grid.Row="0" ColumnDefinitions="*,50">
-                    <SearchBar Grid.Column="0" 
+        <Grid Grid.Column="0"  RowDefinitions="50,*,40" RowSpacing="5">
+            <Grid Grid.Row="0" ColumnDefinitions="*,50">
+                <SearchBar Grid.Column="0" 
                         x:Name="CompanySearch"
                         Placeholder="Поиск..">
-                        <SearchBar.Behaviors>
-                            <toolkit:EventToCommandBehavior
+                    <SearchBar.Behaviors>
+                        <toolkit:EventToCommandBehavior
                                 EventName="TextChanged"
                                     Command="{Binding PerformSearchCommand}"
                                     CommandParameter="{Binding Text, Source={x:Reference CompanySearch}}"/>
-                        </SearchBar.Behaviors>
-                    </SearchBar>
+                    </SearchBar.Behaviors>
+                </SearchBar>
                 <ImageButton Grid.Column="1" Source="update_guests.png" ToolTipProperties.Text="Обновить список" Command="{Binding UpdateCommand}"/>
             </Grid>
-                <!--<SearchBar Grid.Row="0" 
-                           x:Name="CompanySearch"
-                           Placeholder="Поиск..">
-                 <SearchBar.Behaviors>
-                       <toolkit:EventToCommandBehavior
-                                EventName="TextChanged"
-                                Command="{Binding PerformSearchCommand}"
-                                CommandParameter="{Binding Text, Source={x:Reference CompanySearch}}"/>
-                        </SearchBar.Behaviors>
-                </SearchBar>-->
-               
-            
 
             <CollectionView Grid.Row="1" 
             AbsoluteLayout.LayoutFlags="All"
@@ -56,79 +30,79 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type model:Guest}">
                         <Frame CornerRadius="5" MaximumHeightRequest="70"  MinimumHeightRequest="70" BorderColor="Gray" BackgroundColor="{AppThemeBinding Light=White, Dark=#1f1f1f }">
-                                <Grid ColumnDefinitions="*,100">
-                                    <Label Grid.Column="0">
-                                        <Label.Text>
-                                            <MultiBinding StringFormat="{} {0} {1} {2} ">
-                                                <Binding Path="User.Surname" Mode="TwoWay" />
-                                                <Binding Path="User.Name"  Mode="TwoWay" />
-                                                <Binding Path="User.Patronymic"  Mode="TwoWay" />
-                                            </MultiBinding>
-                                        </Label.Text>
-                                    </Label>
+                            <Grid ColumnDefinitions="*,100">
+                                <Label Grid.Column="0">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="{} {0} {1} {2} ">
+                                            <Binding Path="User.Surname" Mode="TwoWay" />
+                                            <Binding Path="User.Name"  Mode="TwoWay" />
+                                            <Binding Path="User.Patronymic"  Mode="TwoWay" />
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
 
-                                    <HorizontalStackLayout Grid.Column="1" VerticalOptions="Start" HorizontalOptions="End" Spacing="2">
-                                        <Image x:Name="imageValidMail" IsVisible="False" Source="image_valid_mail.png" ToolTipProperties.Text="Ошибка в домене или формате почты!">
-                                            <Image.Triggers>
-                                                <DataTrigger TargetType="Image"
+                                <HorizontalStackLayout Grid.Column="1" VerticalOptions="Start" HorizontalOptions="End" Spacing="2">
+                                    <Image x:Name="imageValidMail" IsVisible="False" Source="image_valid_mail.png" ToolTipProperties.Text="Ошибка в домене или формате почты!">
+                                        <Image.Triggers>
+                                            <DataTrigger TargetType="Image"
                                                          Binding="{Binding  Mode=TwoWay, Path=Mail.IsValidMail}" Value="False">
-                                                    <Setter  Property="IsVisible" Value="True" />
-                                                </DataTrigger>
-                                                <DataTrigger TargetType="Image"
+                                                <Setter  Property="IsVisible" Value="True" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Image"
                                                          Binding="{Binding Source={x:Reference isScannerQRCode}, Mode=TwoWay, Path=IsVisible}" Value="True">
-                                                    <Setter  Property="IsVisible" Value="False" />
-                                                </DataTrigger>
-                                            </Image.Triggers>
-                                        </Image>
-                                        <Image x:Name="imageSendQRCode" IsVisible="False" Source="dont_qr_code_send.png" ToolTipProperties.Text="QR-код не отправлен!" >
-                                            <Image.Triggers>
-                                                <DataTrigger TargetType="Image"
+                                                <Setter  Property="IsVisible" Value="False" />
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                    </Image>
+                                    <Image x:Name="imageSendQRCode" IsVisible="False" Source="dont_qr_code_send.png" ToolTipProperties.Text="QR-код не отправлен!" >
+                                        <Image.Triggers>
+                                            <DataTrigger TargetType="Image"
                                                          Binding="{Binding  Mode=TwoWay, Path=Mail.IsMessageSent}" Value="False">
-                                                    <Setter  Property="IsVisible" Value="True" />
-                                                </DataTrigger>
-                                                <DataTrigger TargetType="Image"
+                                                <Setter  Property="IsVisible" Value="True" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Image"
                                                          Binding="{Binding Source={x:Reference isScannerQRCode}, Mode=TwoWay, Path=IsVisible}" Value="True">
-                                                    <Setter  Property="IsVisible" Value="False" />
-                                                </DataTrigger>
-                                            </Image.Triggers>
-                                        </Image>
+                                                <Setter  Property="IsVisible" Value="False" />
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                    </Image>
 
-                                        <Image x:Name="isScannerQRCode" IsVisible="{Binding  VrificatQRCode.IsVerifiedQRCode}" Source="qr_code_send.png" ToolTipProperties.Text ="QR-код проверен!"/>
-                                    </HorizontalStackLayout>
+                                    <Image x:Name="isScannerQRCode" IsVisible="{Binding  VrificatQRCode.IsVerifiedQRCode}" Source="qr_code_send.png" ToolTipProperties.Text ="QR-код проверен!"/>
+                                </HorizontalStackLayout>
 
-                                    <FlyoutBase.ContextFlyout>
-                                        <MenuFlyout>
-                                            <MenuFlyoutItem Text="Редектировать" 
+                                <FlyoutBase.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Редектировать" 
                                                     Command="{Binding Path=ChangeCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
                                                     CommandParameter="{Binding .}"/>
-                                            <MenuFlyoutItem Text="Отправить приглашение" 
+                                        <MenuFlyoutItem Text="Отправить приглашение" 
                                                     Command="{Binding Path=SendGuestCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
                                                     CommandParameter="{Binding .}"/>
-                                            <MenuFlyoutItem Text="Удалить" 
+                                        <MenuFlyoutItem Text="Удалить" 
                                                     Command="{Binding Path= DeleteCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
                                                     CommandParameter="{Binding .}"/>
 
-                                        </MenuFlyout>
-                                    </FlyoutBase.ContextFlyout>
-                                </Grid>
-                            </Frame>
+                                    </MenuFlyout>
+                                </FlyoutBase.ContextFlyout>
+                            </Grid>
+                        </Frame>
                     </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
-                <Grid Grid.Row="2" ColumnDefinitions="*,*,*" Padding="10" VerticalOptions="Center" HorizontalOptions="Start" ColumnSpacing="30">
+            <Grid Grid.Row="2" ColumnDefinitions="*,*,*" Padding="10" VerticalOptions="Center" HorizontalOptions="Start" ColumnSpacing="30">
                 <Label Grid.Column="0"  HorizontalOptions="End" Text="{Binding Guests.Count, StringFormat='Количество гостей - {0}'}"/>
-                    <Label Grid.Column="1">
-                        <Label.Text>
-                            <MultiBinding StringFormat="{} Отправлено сообщений {0} из {1}">
-                                <Binding Path="CountSendMessage" />
-                                <Binding Path="Guests.Count"  />
-                            </MultiBinding>
-                        </Label.Text>
-                    </Label>
+                <Label Grid.Column="1">
+                    <Label.Text>
+                        <MultiBinding StringFormat="{} Отправлено сообщений {0} из {1}">
+                            <Binding Path="CountSendMessage" />
+                            <Binding Path="Guests.Count"  />
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
                 <Label Grid.Column="3"  HorizontalOptions="End" Text="{Binding CountNotValidMail, StringFormat='Некорректных Email - {0}'}"/>
-                </Grid>
             </Grid>
+        </Grid>
 
         <Grid RowDefinitions="100,*" Grid.Column="1" BackgroundColor="{AppThemeBinding Light=White, Dark=#1f1f1f }">
             <Grid   Grid.Row="0" ColumnDefinitions="100,100,100"  ColumnSpacing="20" VerticalOptions="Start" HorizontalOptions="Center">
@@ -157,8 +131,6 @@
                     </Grid>
                 </StackLayout>
             </Frame>
-            <!--PlaceholderColor="Wheat"-->
         </Grid>
     </Grid>
-    <!--</Grid>-->
 </ContentPage>

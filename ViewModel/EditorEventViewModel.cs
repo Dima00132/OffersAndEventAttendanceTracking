@@ -26,12 +26,12 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         [ObservableProperty]
         private DateTime _minDate = DateTime.Now;
 
-
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ChangeScheduledEventCommand))]
         private DateTime _date;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(ChangeScheduledEventCommand))]
         private TimeSpan _time;
 
         [ObservableProperty]
@@ -64,8 +64,9 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             if(_scheduledEvent is null)
                 return false;
-            return !string.IsNullOrEmpty(NameEvent) & Date >= DateTime.Now & !string.IsNullOrEmpty(MessageText) 
-                & !string.IsNullOrEmpty(OrganizationData);
+            var newDate = new DateTime(Date.Year, Date.Month, Date.Day, Time.Hours, Time.Minutes, 0);
+            return !string.IsNullOrEmpty(NameEvent) & newDate >= DateTime.Now & !string.IsNullOrEmpty(MessageText) 
+                & !string.IsNullOrEmpty(OrganizationData) ;
         }
 
         public override Task OnNavigatingToAsync(object parameter, object parameterSecond = null)

@@ -16,8 +16,6 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
 {
     public sealed partial class MailingViewModel : ViewModelBase
     {
-        //private readonly INavigationService _navigationService;
-        //private readonly ILocalDbService _localDbService;
         private readonly IPopupService _popupService;
         private readonly MailAccount _mailAccount;
 
@@ -38,22 +36,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
   
         public MailingViewModel(INavigationService navigationService, ILocalDbService localDbService, IPopupService popupService)
         {
-            //_navigationService = navigationService;
-            //_localDbService = localDbService;
             _popupService = popupService;
-            //_mailAccount = localDbService.GetMailAccount();
-
-            //var mailAccount = new MailAccount();
-            //mailAccount.Create("6686967", "testsend@nizhny.online", "6a8dtydwniakm3fgmy1zrn1q93yd1o176k39b96y",
-            //new User("Иванов", "Иван", "Иванович"),
-            //new MailServer("smtp.go1.unisender.ru", 465, true));
-            //localDbService.Delete(_mailAccount);
-
-            //localDbService.Create(mailAccount.MailServer);
-            //localDbService.Create(mailAccount.UserData);
-            //localDbService.Create(mailAccount);
-
-
             _mailAccount = localDbService.GetMailAccount();
         }
 

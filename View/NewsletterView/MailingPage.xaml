@@ -29,7 +29,7 @@
             <Grid ColumnDefinitions="*,*">
                 <Image Grid.Column="1" Source="{Binding ImageFile}" HorizontalOptions="Center"  VerticalOptions="Center" MaximumWidthRequest="400" MaximumHeightRequest="300"  />
 
-                <Button Grid.Column="0" BackgroundColor="#D48055"  VerticalOptions="Center" HorizontalOptions="Start" Text="Добвить картинку" Command="{Binding AddImageCommand}"/>
+                <Button Grid.Column="0" BackgroundColor="#D48055"  VerticalOptions="Center" HorizontalOptions="Start" Text="Добавить картинку" Command="{Binding AddImageCommand}"/>
             </Grid>
 
             <Button Text="Отправить"

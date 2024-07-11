@@ -21,19 +21,11 @@ namespace ScannerAndDistributionOfQRCodes
     {
         public static MauiAppBuilder ConfigureServices(this MauiAppBuilder builder)
         {
-
             builder.Services.AddTransient<ScannerQRCodeViewModel>().AddTransient<ScannerQRCodePage>();
             builder.Services.AddTransient<GuestListViewModel>().AddTransient<GuestListPage>();
             builder.Services.AddTransient<EditorEventViewModel>().AddTransient<EditorEventPage>();
             builder.Services.AddTransient<StatisticsViewModel>().AddTransient<StatisticsPage>();
             builder.Services.AddTransient<MailingViewModel>().AddTransient<MailingPage>();
-            //var mailAccaunt = new MailAccount("TestMailSendr@yandex.ru", "cwufaysygkohokyr",
-            //    new User("Иванов", "Иван", "Иванович"),
-            //    new MailServer("smtp.yandex.ru", 465, true));
-
-            //var mailAccaunt = new MailAccount("6686967", "testsend@nizhny.online", "6a8dtydwniakm3fgmy1zrn1q93yd1o176k39b96y",
-            //new User("Иванов", "Иван", "Иванович"),
-            //new MailServer("smtp.go1.unisender.ru", 465, true));
             builder.Services.AddSingleton<IMailAccount, MailAccount>();
             builder.Services.AddSingleton<IPopupService, PopupService>()
                 .AddTransientPopup<GuestListFromDocumentPopup, GuestListFromDocumentViewModel>()

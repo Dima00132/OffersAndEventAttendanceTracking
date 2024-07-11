@@ -4,12 +4,24 @@
              x:Class="ScannerAndDistributionOfQRCodes.View.NewsletterView.MessageBroadcastDisplayPopup"
               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                xmlns:mail = "clr-namespace:ScannerAndDistributionOfQRCodes.Data.Message"
-               xmlns:model = "clr-namespace:ScannerAndDistributionOfQRCodes.Model"
+               xmlns:model = "clr-namespace:ScannerAndDistributionOfQRCodes.Data.Message.Mail"
                xmlns:view ="clr-namespace:ScannerAndDistributionOfQRCodes.View"
-               xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel"
+               xmlns:viewmodel ="clr-namespace:ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel"
                CanBeDismissedByTappingOutsideOfPopup ="False"
                x:Name="messageBroadcastDisplayPopup"
                Color="{AppThemeBinding Light=#FFEAE7EC, Dark=#1f1f1f  }">
+
+    
+    <!--<toolkit:Popup.Resources>
+       <Style TargetType="{x:Type view:DisplayAlertSendingMessagesErrorPopup}">
+           <Setter Property="Size" Value="500,700" />
+           <Setter Property="Color" Value="Red" />
+           <Setter Property="HorizontalOptions" Value="Center" />
+           <Setter Property="VerticalOptions" Value="Start" />
+           <Setter Property="CanBeDismissedByTappingOutsideOfPopup" Value="True" />
+       </Style>
+   </toolkit:Popup.Resources>-->
+
 
     <Border Padding="0" 
             HeightRequest="600"
@@ -59,9 +71,32 @@
                         </Label.Text>
                     </Label>
                 </Grid>
-                <Frame IsVisible="{Binding IsErrorMessages}">
-                    <CollectionView  ItemsSource="{Binding ErrorMessages }"/>
-                </Frame>
+                
+                    
+                    <CollectionView  IsVisible="{Binding IsErrorMessages}"
+                            AbsoluteLayout.LayoutFlags="All"
+                            ItemsSource="{Binding ErrorMessages}">
+                            <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="{x:Type mail:ErrorMessage( model:Mail) }">
+                                    <Frame Padding="5">
+                                        <Grid RowDefinitions="20,*" >
+                                            <Label Grid.Row="0" 
+                                       FontSize="Caption"
+                                       Text="{Binding ErrorObject.MailAddress}"/>
+                                            <Button Grid.Row="1" 
+                                        HorizontalOptions="Start" 
+                                        FontSize="Body"
+                                        VerticalOptions="Start"
+                                        Text="Посмотреть сообщение ошибки" BackgroundColor="White"
+                                        ImageSource="erroe_image.png" TextColor="#ff3b1f" 
+                                        Command="{Binding Path= ViewErrorMessageCommand ,Source={RelativeSource AncestorType={x:Type viewmodel:MessageBroadcastDisplayViewModel}}}"
+                                        CommandParameter="{Binding .}"/>
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                 
             </StackLayout>
             <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="5">
                 <Button Grid.Column="1" BackgroundColor="#d48055" x:Name="sendButton" Text="Отправить" IsEnabled="{Binding IsReadyToShip}" Clicked="sendButton_Clicked" Command="{Binding SendCommand}"/>

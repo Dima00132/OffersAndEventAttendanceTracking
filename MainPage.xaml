@@ -9,16 +9,18 @@
 
 
 
-    <Grid RowDefinitions="50,*">
+    <Grid RowDefinitions="60,*">
         <Button Grid.Row="0"
                 Text="Настройки"
+                Margin="5"
+                VerticalOptions="Start"
                 BackgroundColor="#D48055"
                 HorizontalOptions="End" 
                 ImageSource="{AppThemeBinding Light=settings_black.png, Dark=settings_white.png }"  
                 Command="{Binding SettingsCommand}"/>
         
         <VerticalStackLayout  Grid.Row="1"  Spacing="15">
-            <Button Text="Мероприятие" 
+            <Button Text="Мероприятия" 
                     HorizontalOptions="Center"
                     FontSize="Large"
                     BackgroundColor="#D48055"

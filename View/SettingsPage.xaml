@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ScannerAndDistributionOfQRCodes.View.SettingsPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              Title="Настроки">
    
     <Grid ColumnDefinitions="*,*">
@@ -25,7 +26,7 @@
                             <TableSection>
                                 <TextCell Text="Пользователь" Tapped="User_TextCell_Tapped"/>
                                 <TextCell Text="Маил сервер" Tapped="Mail_Server_TextCell_Tapped" />
-                                <TextCell Text="Доменная почта" Tapped="Domain_Dail_TextCell_Tapped"/>
+                                <!--<TextCell Text="Доменная почта" Tapped="Domain_Dail_TextCell_Tapped"/>-->
                                 <TextCell Text="Unisender GO" Tapped="Unisender_GO_TextCell_Tapped"/>
                             </TableSection>
                         </TableRoot>
@@ -78,7 +79,7 @@
                     </StackLayout>
                 </Frame>
 
-                <Frame x:Name="domainDailFrame" IsVisible="False">
+                <!--<Frame x:Name="domainDailFrame" IsVisible="False">
                     <StackLayout Spacing="5">
                         <TableView >
                             <TableView.Root>
@@ -90,11 +91,11 @@
                             </TableView.Root>
                         </TableView>
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="5">
-                            <Button Grid.Column="1" BackgroundColor="#D48055"  Text="Сохранить" Command="{Binding SaveDomainDailCommand}"/>
+                            <Button Grid.Column="1" BackgroundColor="#D48055" Text="Сохранить" Command="{Binding SaveDomainDailCommand}"/>
                             <Button Grid.Column="0" BackgroundColor="#D48055"  Text="Назад" Clicked="Cansel_Frame_Button_Clicked"/>
                         </Grid>
                     </StackLayout>
-                </Frame>
+                </Frame>-->
 
                 <Frame x:Name="uisenderGOFrame" IsVisible="False">
                     <StackLayout Spacing="5">
@@ -102,6 +103,7 @@
                             <TableView.Root>
                                 <TableRoot>
                                     <TableSection Title="Unisender GO">
+                                        <EntryCell  Label="Доменная почта" Keyboard="Default"  Text="{Binding MailAddress}"/>
                                         <EntryCell  Label="ID" Keyboard="Default"  Text="{Binding MailID}" />
                                         <EntryCell  Label="Пароль" Keyboard="Default" Text="{Binding Password}"/>
                                     </TableSection>

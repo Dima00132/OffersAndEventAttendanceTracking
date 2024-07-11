@@ -12,7 +12,7 @@ public sealed partial class SettingsPage : ContentPage
     {
         InitializeComponent();
         BindingContext = settingsViewModel;
-        _frames.AddRange([userFrame, mailServerFrame, domainDailFrame, uisenderGOFrame]);
+        _frames.AddRange([userFrame, mailServerFrame, uisenderGOFrame]);
        
     }
 
@@ -38,11 +38,11 @@ public sealed partial class SettingsPage : ContentPage
         CloseFrames(mailServerFrame);
         mailServerFrame.IsVisible = true;
     }
-    private void Domain_Dail_TextCell_Tapped(object sender, EventArgs e)
-    {
-        CloseFrames(domainDailFrame); 
-        domainDailFrame.IsVisible = true;
-    }
+    //private void Domain_Dail_TextCell_Tapped(object sender, EventArgs e)
+    //{
+    ////    CloseFrames(domainDailFrame);
+    ////    domainDailFrame.IsVisible = true;
+    //}
     private void Unisender_GO_TextCell_Tapped(object sender, EventArgs e)
     {
         CloseFrames(uisenderGOFrame);

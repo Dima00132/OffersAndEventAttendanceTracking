@@ -50,7 +50,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
      
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveDomainDailCommand))]
+        [NotifyCanExecuteChangedFor(nameof(SaveUisenderGOCommand))]
         public string _mailAddress;
         
         [ObservableProperty]
@@ -61,8 +61,6 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         [NotifyCanExecuteChangedFor(nameof(SaveUisenderGOCommand))]
         public string _password;
 
-
- 
         public SettingsViewModel(INavigationService navigationService, ILocalDbService localDbService)
         {
             _navigationService = navigationService;
@@ -101,6 +99,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             _mailAccount.UserData.Change(Surname, Name, Patronymic);
             _localDbService.Update(_mailAccount.UserData);
+            Application.Current.MainPage.DisplayAlert("", "Сохранено", "OK");
         }
 
         private bool CheckUser() 
@@ -116,6 +115,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             _mailAccount.MailServer.Change(Server, Port, ConnectionProtection);
             _localDbService.Update(_mailAccount.MailServer);
+            Application.Current.MainPage.DisplayAlert("", "Сохранено", "OK");
         }
 
         private bool CheckMailServer() => _mailAccount.MailServer.Server.CompareTo(Server)
@@ -124,28 +124,30 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
 
 
 
-        [RelayCommand(CanExecute = nameof(CheckDomainDail))]
-        public void SaveDomainDail()
-        {
-            _mailAccount.Change(MailID, MailAddress, Password);
-            _localDbService.Update(_mailAccount);
-        }
+        //[RelayCommand(CanExecute = nameof(CheckDomainDail))]
+        //public void SaveDomainDail()
+        //{
+        //    _mailAccount.Change(MailID, MailAddress, Password);
+        //    _localDbService.Update(_mailAccount);
+        //}
 
-        private bool CheckDomainDail()
-        {
-           return _mailAccount.MailServer.Server.CompareTo(Server) + _mailAccount.MailServer.Port.CompareTo(Port) != 0;
-        }
+        //private bool CheckDomainDail()
+        //{
+       
+        //    return _mailAccount.MailAddress.CompareTo(MailAddress) != 0;
+        //    //return _mailAccount.MailServer.Server.CompareTo(Server) + _mailAccount.MailServer.Port.CompareTo(Port) != 0;
+        //}
 
         [RelayCommand(CanExecute = nameof(CheckUisenderGO))]
         public void SaveUisenderGO()
         {
             _mailAccount.Change(MailID, MailAddress, Password);
             _localDbService.Update(_mailAccount);
+            Application.Current.MainPage.DisplayAlert("", "Сохранено", "OK");
         }
-
         private bool CheckUisenderGO()
         {
-            return _mailAccount.MailID.CompareTo(MailID) + _mailAccount.Password.CompareTo(Password) != 0;
+            return _mailAccount.MailID.CompareTo(MailID) + _mailAccount.Password.CompareTo(Password) + _mailAccount.MailAddress.CompareTo(MailAddress) != 0;
         }
 
         private void UpdateMailAccount(MailAccount mailAccount)

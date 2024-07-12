@@ -7,7 +7,8 @@
              xmlns:view="clr-namespace:ScannerAndDistributionOfQRCodes.View"
              x:DataType="viewModel:GuestVerificationTableViewModel">
 
-    <view:ScannerQRCodePage IconImageSource="scanner_qr_code.png"  BindingContext="{Binding ScannerQRCodeViewModel}" Title="Сканер"/>
+
+    <view:ScannerQRCodePage IconImageSource="scanner_qr_code.png"   BindingContext="{Binding ScannerQRCodeViewModel}" Title="Сканер"/>
     <view:GuestListPage IconImageSource="guest_list.png" BindingContext="{Binding GuestListViewModel}" Title="Список гостей"/>
 
 </TabbedPage>

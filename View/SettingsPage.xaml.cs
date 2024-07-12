@@ -20,12 +20,10 @@ public sealed partial class SettingsPage : ContentPage
     {
         CloseFrames();
         listMinu.IsVisible = !listMinu.IsVisible;
-
         if (listMinu.IsVisible)
             image.SetAppTheme<FileImageSource>(Image.SourceProperty, "caret_up_black.png", "caret_up_white.png");
         else
             image.SetAppTheme<FileImageSource>(Image.SourceProperty, "caret_down_black.png", "caret_down_white.png");
-        //Light = caret_up_black.png, Dark = caret_up_white.png
     }
 
     private void User_TextCell_Tapped(object sender, EventArgs e)
@@ -38,11 +36,6 @@ public sealed partial class SettingsPage : ContentPage
         CloseFrames(mailServerFrame);
         mailServerFrame.IsVisible = true;
     }
-    //private void Domain_Dail_TextCell_Tapped(object sender, EventArgs e)
-    //{
-    ////    CloseFrames(domainDailFrame);
-    ////    domainDailFrame.IsVisible = true;
-    //}
     private void Unisender_GO_TextCell_Tapped(object sender, EventArgs e)
     {
         CloseFrames(uisenderGOFrame);

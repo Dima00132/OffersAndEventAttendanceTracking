@@ -18,6 +18,7 @@ using System.Security.Policy;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.IdentityModel.Tokens;
 using ScannerAndDistributionOfQRCodes.Data.Parser.Interface;
+using ScannerAndDistributionOfQRCodes.Data.Parser;
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel
 {
@@ -93,7 +94,14 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                 DisplayAlertError("Количество уникальных гостей 0");
         }
 
-        private bool CheckName() => !string.IsNullOrEmpty(Name) & !string.IsNullOrEmpty(Surname) & !string.IsNullOrEmpty(Patronymic) & !string.IsNullOrEmpty(Mail);
+        private bool CheckName()
+        {
+            Mail = Translit.TranslitColumnName(Mail);
+            Name = Translit.TranslitColumnName(Name);
+            Surname = Translit.TranslitColumnName(Surname);
+            Patronymic = Translit.TranslitColumnName(Patronymic);
+            return !string.IsNullOrEmpty(Name) & !string.IsNullOrEmpty(Surname) & !string.IsNullOrEmpty(Patronymic) & !string.IsNullOrEmpty(Mail);
+        }  
 
         private List<Guest> GetGuests(List<Dictionary<string, string>> listxlsxParser)
         {

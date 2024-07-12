@@ -117,7 +117,9 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             Guests =  ScheduledEvent.Guests;
         });   
         public RelayCommand<Guest> DeleteCommand => new((guest) =>
-        {
+        { 
+            if (guest.Equals(Guest))
+                Cancel();
             Guests.Remove(guest);
             _localDbService.Update(ScheduledEvent);
         });

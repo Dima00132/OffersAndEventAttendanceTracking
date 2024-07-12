@@ -42,7 +42,6 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             {
                 ScannerQRCodeViewModel?.OnNavigatingToAsync(scheduledEvent);
                 GuestListViewModel?.OnNavigatingToAsync(scheduledEvent);
-
             }
             return base.OnNavigatingToAsync(parameter);
         }

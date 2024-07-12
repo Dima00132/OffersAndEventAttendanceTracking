@@ -9,6 +9,7 @@ using ScannerAndDistributionOfQRCodes.Data.Parser.Interface;
 using ScannerAndDistributionOfQRCodes.Model;
 using ScannerAndDistributionOfQRCodes.Navigation;
 using ScannerAndDistributionOfQRCodes.ViewModel.Base;
+using System.Text;
 
 
 namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
@@ -67,6 +68,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
 
         public RelayCommand TextChangedCommand => new(() =>
         {
+            ColumnNumber = Translit.TranslitColumnName(ColumnNumber);
             IsReadyToShip = false;
         });
 
@@ -150,6 +152,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel.NewsletterViewModel
         private bool CheckingListFilling(List<Dictionary<string, string>> listxlsxParser)
         {
             ListMail.Clear();
+            
             foreach (var item in listxlsxParser)
             {
                 if (item.TryGetValue(ColumnNumber, out string value))

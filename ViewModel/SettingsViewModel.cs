@@ -32,10 +32,6 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         [NotifyCanExecuteChangedFor(nameof(SaveUserCommand))]
         private string _patronymic= string.Empty;
 
-       // [ObservableProperty]
-       //// [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
-       // private string _mail = string.Empty;
-
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveMailServerCommand))]
         public string _server;
@@ -65,31 +61,14 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         {
             _navigationService = navigationService;
             _localDbService = localDbService;
-            //_mailAccount = localDbService.GetMailAccount();
-
-            //var mailAccount = new MailAccount();
-            //mailAccount.Create("6686967", "testsend@nizhny.online", "6a8dtydwniakm3fgmy1zrn1q93yd1o176k39b96y",
-            //new User("Иванов", "Иван", "Иванович"),
-            //new MailServer("smtp.go1.unisender.ru", 465, true));
-            //localDbService.Delete(_mailAccount);
-
-            //localDbService.Create(mailAccount.MailServer);
-            //localDbService.Create(mailAccount.UserData);
-            //localDbService.Create(mailAccount);
-
-
             _mailAccount = localDbService.GetMailAccount();
-
             Name = _mailAccount.UserData.Name;
             Surname = _mailAccount.UserData.Surname;
             Patronymic = _mailAccount.UserData.Patronymic;
-
             Server = _mailAccount.MailServer.Server;
             Port = _mailAccount.MailServer.Port;
             ConnectionProtection = _mailAccount.MailServer.ConnectionProtection;
-
             MailAddress = _mailAccount.MailAddress;
-
             MailID = _mailAccount.MailID;
             Password = _mailAccount.Password;
         }
@@ -122,21 +101,6 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                 + _mailAccount.MailServer.Port.CompareTo(Port)
                 + _mailAccount.MailServer.Server.CompareTo(Server) + _mailAccount.MailServer.Port.CompareTo(Port) != 0;
 
-
-
-        //[RelayCommand(CanExecute = nameof(CheckDomainDail))]
-        //public void SaveDomainDail()
-        //{
-        //    _mailAccount.Change(MailID, MailAddress, Password);
-        //    _localDbService.Update(_mailAccount);
-        //}
-
-        //private bool CheckDomainDail()
-        //{
-       
-        //    return _mailAccount.MailAddress.CompareTo(MailAddress) != 0;
-        //    //return _mailAccount.MailServer.Server.CompareTo(Server) + _mailAccount.MailServer.Port.CompareTo(Port) != 0;
-        //}
 
         [RelayCommand(CanExecute = nameof(CheckUisenderGO))]
         public void SaveUisenderGO()

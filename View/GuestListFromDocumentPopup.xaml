@@ -20,7 +20,7 @@
         </Style>
     </toolkit:Popup.Resources>-->
 
-    <Border Padding="0" HeightRequest="700"
+    <Border Padding="0" HeightRequest="650"
            WidthRequest="500"
            Stroke="Transparent"
            BackgroundColor="#FFEAE7EC">
@@ -51,23 +51,23 @@
                         </DataTrigger>
                     </StackLayout.Triggers>
                     <Grid ColumnDefinitions="*,60"  ColumnSpacing="5" >
-                        <Label Grid.Column="0" Text="Укажите колонку под Фамитию" FontSize="Subtitle" VerticalOptions="Center"/>
+                        <Label Grid.Column="0" Text="Под Фамилию" FontSize="Subtitle" VerticalOptions="Center"/>
                         <Entry Grid.Column="1" HorizontalOptions="End" Text="{Binding Surname}" MaxLength="2" TextTransform="Uppercase"/>
                     </Grid>
                     <Grid ColumnDefinitions="*,60"  ColumnSpacing="5" >
-                        <Label Grid.Column="0" Text="Укажите колонку под Имя" FontSize="Subtitle" VerticalOptions="Center"/>
+                        <Label Grid.Column="0" Text="Под Имя" FontSize="Subtitle" VerticalOptions="Center"/>
                         <Entry Grid.Column="1" HorizontalOptions="End" Text="{Binding Name}" MaxLength="2" TextTransform="Uppercase"/>
                     </Grid>
                     <Grid ColumnDefinitions="*,60"  ColumnSpacing="5" >
-                        <Label Grid.Column="0" Text="Укажите колонку под Отчества" FontSize="Subtitle" VerticalOptions="Center"/>
+                        <Label Grid.Column="0" Text="Под Отчество" FontSize="Subtitle" VerticalOptions="Center"/>
                         <Entry Grid.Column="1" HorizontalOptions="End" Text="{Binding Patronymic}"  MaxLength="2" TextTransform="Uppercase"/>
                     </Grid>
                     <Grid ColumnDefinitions="*,60"  ColumnSpacing="5" >
-                        <Label Grid.Column="0" Text="Укажите колонку под Mail" FontSize="Subtitle" VerticalOptions="Center"/>
+                        <Label Grid.Column="0" Text="Под Mail" FontSize="Subtitle" VerticalOptions="Center"/>
                         <Entry Grid.Column="1" HorizontalOptions="End" Text="{Binding Mail}" MaxLength="2" TextTransform="Uppercase"/>
                     </Grid>
-                    <Grid ColumnDefinitions="*,60"  ColumnSpacing="5" >
-                        <Label Grid.Column="0" Text="Пропуститьпервую строку?" FontSize="Subtitle" VerticalOptions="Center"/>
+                    <Grid ColumnDefinitions="*,80"  ColumnSpacing="5"   >
+                        <Label Grid.Column="0" Text="Пропустить первую строку?" FontSize="Subtitle" VerticalOptions="Center"/>
                         <Switch  Grid.Column="1" IsToggled="{Binding IsSkipFirstLine}" />
                     </Grid>
 

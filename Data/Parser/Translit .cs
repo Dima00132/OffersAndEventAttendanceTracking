@@ -8,7 +8,6 @@ namespace ScannerAndDistributionOfQRCodes.Data.Parser
 {
     public static  class Translit
     {
-
          private static readonly  Dictionary<string, string> _dictionaryChar = new()
             {
                 {"Й","Q"},
@@ -41,13 +40,10 @@ namespace ScannerAndDistributionOfQRCodes.Data.Parser
 
         public static string TranslitColumnName(string source)
         {
-            if(string.IsNullOrEmpty(source))
-                return string.Empty;
-            if (source.Length > 1)
-                return TranslitLongColumnName(source);
-            if (_dictionaryChar.TryGetValue(source, out string value))
-                return value;
-            return source;
+            var upperValue = source?.ToUpper();
+            return string.IsNullOrEmpty(upperValue) ? string.Empty 
+                : source.Length > 1 ? TranslitLongColumnName(upperValue)
+                : _dictionaryChar.TryGetValue(upperValue, out string value) ? value : upperValue;
         }
 
         private static string TranslitLongColumnName(string source)

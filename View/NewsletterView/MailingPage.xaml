@@ -5,31 +5,38 @@
              Title="Рассылка">
 
     <ScrollView >
-        <StackLayout Spacing="10">
-            
+        <StackLayout Spacing="10" Margin="10">
             <Frame>
-                <StackLayout>
+                <StackLayout Spacing="5">
                     <Label Text="Tема"/>
-                    <Editor Text="{Binding Subject}"/>
+                    <Editor Text="{Binding Subject}"  AutoSize="TextChanges"/>
                 </StackLayout>
             </Frame>
             <Frame>
-                <StackLayout>
+                <StackLayout Spacing="5">
                     <Label Text="Cообщения"/>
                     <Editor Text="{Binding TextMessage}" AutoSize="TextChanges"/>
                 </StackLayout>
             </Frame>
             <Frame>
-                <StackLayout>
+                <StackLayout Spacing="5">
                     <Label Text="Данные организации (Обязательно)"/>
                     <Editor Text="{Binding OrganizationData}" AutoSize="TextChanges"/>
                 </StackLayout>
             </Frame>
 
             <Grid ColumnDefinitions="*,*">
-                <Image Grid.Column="1" Source="{Binding ImageFile}" HorizontalOptions="Center"  VerticalOptions="Center" MaximumWidthRequest="400" MaximumHeightRequest="300"  />
-
-                <Button Grid.Column="0" BackgroundColor="#D48055"  VerticalOptions="Center" HorizontalOptions="Start" Text="Добавить картинку" Command="{Binding AddImageCommand}"/>
+                <Image Grid.Column="1" Source="{Binding ImageFile}" 
+                       HorizontalOptions="Center"  
+                       VerticalOptions="Center" 
+                       MaximumWidthRequest="400" 
+                       MaximumHeightRequest="300"  />
+                <Button Grid.Column="0" 
+                        BackgroundColor="#D48055"  
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Start" 
+                        Text="Добавить картинку" 
+                        Command="{Binding AddImageCommand}"/>
             </Grid>
 
             <Button Text="Отправить"

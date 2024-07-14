@@ -11,25 +11,13 @@
                x:Name="messageBroadcastDisplayPopup"
                Color="{AppThemeBinding Light=#FFEAE7EC, Dark=#1f1f1f  }">
 
-    
-    <!--<toolkit:Popup.Resources>
-       <Style TargetType="{x:Type view:DisplayAlertSendingMessagesErrorPopup}">
-           <Setter Property="Size" Value="500,700" />
-           <Setter Property="Color" Value="Red" />
-           <Setter Property="HorizontalOptions" Value="Center" />
-           <Setter Property="VerticalOptions" Value="Start" />
-           <Setter Property="CanBeDismissedByTappingOutsideOfPopup" Value="True" />
-       </Style>
-   </toolkit:Popup.Resources>-->
-
-
     <Border Padding="0" 
             HeightRequest="600"
             WidthRequest="450"
             Stroke="Transparent"
             BackgroundColor="{AppThemeBinding Light=#FFEAE7EC, Dark=#1f1f1f  }">
-        <Grid RowDefinitions="*,50" 
-              Margin="5">
+        <Grid RowDefinitions="165,*,50" 
+              Margin="5" ColumnSpacing="5">
             <StackLayout Grid.Column="0" 
                          Margin="10" 
                          Spacing="15" >
@@ -50,7 +38,7 @@
                     <Button x:Name="parserButton" Grid.Column="0"  BackgroundColor="#d48055"  Text="Добавить файл" Command="{Binding ParserCommand}" Clicked="Button_Clicked" />
                     <Image Grid.Column="1" x:Name="imageButton" IsVisible="{Binding IsReadyToShip}" Source="check_mark.png"/>
                 </Grid>
-                <Grid IsVisible="{Binding IsReadyToShip}"  ColumnDefinitions="*,40" ColumnSpacing="5">
+                <Grid IsVisible="{Binding IsReadyToShip}" >
                     <Label>
                         <Label.Text>
                             <MultiBinding StringFormat="{} Всего данных  {0}    Валидных  {1} ">
@@ -60,10 +48,10 @@
                         </Label.Text>
                     </Label>
                 </Grid>
-                <Grid x:Name="stateSend"  IsVisible="False"  ColumnDefinitions="*,40" ColumnSpacing="5">
+                <Grid x:Name="stateSend"  IsVisible="False">
                     <Label>
                         <Label.Text>
-                            <MultiBinding StringFormat="{} Отправлено соооющений  {0} из {1}  : Ошибок  {2} ">
+                            <MultiBinding StringFormat="{} Отправлено сообщений  {0} из {1}  : Ошибок  {2} ">
                                 <Binding Path="CountSendMessages" />
                                 <Binding Path="CountOfCorrectMils"/>
                                 <Binding Path="CountUnsendMessages"  />
@@ -71,19 +59,19 @@
                         </Label.Text>
                     </Label>
                 </Grid>
-                
-                    
-                    <CollectionView  IsVisible="{Binding IsErrorMessages}"
+            </StackLayout>
+
+            <CollectionView VerticalOptions="Start" Grid.Row="1" IsVisible="{Binding IsErrorMessages}"
                             AbsoluteLayout.LayoutFlags="All"
                             ItemsSource="{Binding ErrorMessages}">
-                            <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="{x:Type mail:ErrorMessage( model:Mail) }">
-                                    <Frame Padding="5">
-                                        <Grid RowDefinitions="20,*" >
-                                            <Label Grid.Row="0" 
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type mail:ErrorMessage( model:Mail) }">
+                        <Frame Padding="5">
+                            <Grid RowDefinitions="20,*" >
+                                <Label Grid.Row="0" 
                                        FontSize="Caption"
                                        Text="{Binding ErrorObject.MailAddress}"/>
-                                            <Button Grid.Row="1" 
+                                <Button Grid.Row="1" 
                                         HorizontalOptions="Start" 
                                         FontSize="Body"
                                         VerticalOptions="Start"
@@ -91,14 +79,12 @@
                                         ImageSource="erroe_image.png" TextColor="#ff3b1f" 
                                         Command="{Binding Path= ViewErrorMessageCommand ,Source={RelativeSource AncestorType={x:Type viewmodel:MessageBroadcastDisplayViewModel}}}"
                                         CommandParameter="{Binding .}"/>
-                                        </Grid>
-                                    </Frame>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                 
-            </StackLayout>
-            <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="5">
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="5">
                 <Button Grid.Column="1" BackgroundColor="#d48055" x:Name="sendButton" Text="Отправить" IsEnabled="{Binding IsReadyToShip}" Clicked="sendButton_Clicked" Command="{Binding SendCommand}"/>
                 <Button Grid.Column="0" BackgroundColor="#d48055" Text="Назад" IsEnabled="{Binding IsMessagesDoNotSend}"  Command="{Binding CancelCommand}" CommandParameter="{Binding Source={x:Reference messageBroadcastDisplayPopup}}"/>
             </Grid>

@@ -49,7 +49,7 @@
 		<AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
 		<GenerateTestArtifacts>True</GenerateTestArtifacts>
 		<AppInstallerUri>C:\Release</AppInstallerUri>
-		<HoursBetweenUpdateChecks>168</HoursBetweenUpdateChecks>
+		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
 		<PlatformTarget>x64</PlatformTarget>
 		<PackageCertificateKeyFile>ScannerAndDistributionOfQRCodes_TemporaryKey.pfx</PackageCertificateKeyFile>
 	</PropertyGroup>

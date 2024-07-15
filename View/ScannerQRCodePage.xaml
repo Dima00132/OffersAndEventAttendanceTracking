@@ -114,8 +114,8 @@
                              SelectedIndex="{Binding CurrentDeviceCameraName}" 
                              TextColor="Black" 
                              Title="Выбор камеры"/>
-                    
-                    <ImageButton Grid.Column="1" Source="update_guests.png" VerticalOptions="End" ToolTipProperties.Text="Обновить список" Command="{Binding UpdateCommand}"/>
+
+                    <ImageButton Grid.Column="1" Source="update_guests.png" VerticalOptions="End" ToolTipProperties.Text="Обновить список" Command="{Binding UpdateVideoDeviceCommand}"/>
                 </Grid>
                    
 

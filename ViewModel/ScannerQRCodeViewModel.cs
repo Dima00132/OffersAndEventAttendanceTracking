@@ -46,16 +46,14 @@ namespace ScannerAndDistributionOfQRCodes
 
         private bool _isChangesDeviceCamera = false;
         private bool _isConnecting = false;
-        private  ScannerQR _scannerQR;
+        private readonly ScannerQR _scannerQR;
         private Dictionary<string, string> _monikerStringName = [];
         private readonly ILocalDbService _localDbService;
 
         public ScannerQRCodeViewModel(ILocalDbService localDbService)
         {
             _scannerQR = new ScannerQR(UpdateQrCode);
-            var filterInfoCollection = _scannerQR.GetVideoInputDevice();
-            SetMonikerStringName(filterInfoCollection);
-            SetItemsPicker();
+            UpdateVideoDevice();
             SetImageOfCameraOn();
             _localDbService = localDbService;
         }
@@ -135,7 +133,7 @@ namespace ScannerAndDistributionOfQRCodes
 
         private  bool CheckingAvailabilityOfCameras()
         {
-            Update();
+            UpdateVideoDevice();
             if (ItemsPicker.Count != 0)
                 return false;
             Application.Current.MainPage.DisplayAlert("Уведомление", "Отсутствует модуль камеры!", "ОK");
@@ -143,7 +141,7 @@ namespace ScannerAndDistributionOfQRCodes
         }
 
         [RelayCommand]
-        public void Update()
+        public void UpdateVideoDevice()
         {
             var filterInfoCollection = _scannerQR.GetVideoInputDevice();
             SetMonikerStringName(filterInfoCollection);
@@ -153,7 +151,6 @@ namespace ScannerAndDistributionOfQRCodes
         [RelayCommand]
         public  void StartScanner()
         {
-            
             if (CheckingAvailabilityOfCameras())
                 return;  
             if (ConnectingCamera())
@@ -172,10 +169,10 @@ namespace ScannerAndDistributionOfQRCodes
             return true;
         }
         private bool TurnOffCamera()
-        {
-            SetImageOfCameraOn();
+        { 
             _isChangesDeviceCamera = true;
-            _scannerQR.StopCamera();    
+            _scannerQR.StopCamera();
+            SetImageOfCameraOn();
             return false;
         }
 

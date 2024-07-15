@@ -109,13 +109,28 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
             UpdateCountProperty();
             _localDbService.Update(ScheduledEvent);
         });
-        public RelayCommand UpdateCommand => new(() =>
+        public RelayCommand<Guest> MarkAsPresentCommand => new( async (gueet) =>
+        {
+            var result =  await Application.Current.MainPage.DisplayAlert("", $"Вы уверены что хотите отметить {gueet.User} как присутствующего на мероприятие?", "Да", "Нет");
+            if (result)
+            {
+                gueet.VrificatQRCode.IsVerifiedQRCode = true;
+                gueet.ArrivalTime = DateTime.Now;
+                _localDbService.Update(gueet);
+                _localDbService.Update(gueet.VrificatQRCode);
+                _localDbService.Update(ScheduledEvent);
+                Update();
+            }
+        });
+
+        [RelayCommand]
+        public void Update()
         {
             if (ScheduledEvent is null)
                 return;
             Guests = null;
             Guests =  ScheduledEvent.Guests;
-        });   
+        }
         public RelayCommand<Guest> DeleteCommand => new((guest) =>
         { 
             if (guest.Equals(Guest))

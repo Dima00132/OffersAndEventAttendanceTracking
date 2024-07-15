@@ -109,10 +109,15 @@
 
 
             <StackLayout Grid.Column="0" Spacing="10"  >
-                    <Picker  ItemsSource="{Binding ItemsPicker}" 
-                     SelectedIndex="{Binding CurrentDeviceCameraName}" 
-                     TextColor="Black" 
-                     Title="Выбор камеры"/>
+                <Grid ColumnDefinitions="*,50">
+                    <Picker Grid.Column="0"  ItemsSource="{Binding ItemsPicker}" 
+                             SelectedIndex="{Binding CurrentDeviceCameraName}" 
+                             TextColor="Black" 
+                             Title="Выбор камеры"/>
+                    
+                    <ImageButton Grid.Column="1" Source="update_guests.png" VerticalOptions="End" ToolTipProperties.Text="Обновить список" Command="{Binding UpdateCommand}"/>
+                </Grid>
+                   
 
                     <Image  x:Name="caemtra" 
                     Source="{Binding QRImage}" 

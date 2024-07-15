@@ -30,8 +30,8 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         private ScheduledEvent _scheduledEvent;
         [ObservableProperty]
         public List<StatisticsGuest> _guests = [];
-        [ObservableProperty]
-        public bool _isEventWasHeld;
+        //[ObservableProperty]
+        //public bool _isEventWasHeld;
         [ObservableProperty]
         public int _countArrivedGuests;
 
@@ -80,7 +80,7 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
                 ScheduledEvent = scheduledEvent;
                 foreach (var item in scheduledEvent.Guests)
                     Guests.Add(item.GetStatisticsGuest());
-                IsEventWasHeld = scheduledEvent.IsEventWasHeld;
+                //IsEventWasHeld = scheduledEvent.IsEventWasHeld;
                 CountArrivedGuests = scheduledEvent.Guests.Count(x=>x.VrificatQRCode.IsVerifiedQRCode);
             }
             return base.OnNavigatingToAsync(parameter, parameterSecond);

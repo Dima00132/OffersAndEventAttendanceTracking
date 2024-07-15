@@ -38,6 +38,7 @@ namespace ScannerAndDistributionOfQRCodes
             get => _currentDeviceCameraName;
             set
             {
+                IsCameraLaunched = TurnOffCamera();
                 SetProperty(ref _currentDeviceCameraName, value);
                 _isChangesDeviceCamera = true;
             }
@@ -45,7 +46,7 @@ namespace ScannerAndDistributionOfQRCodes
 
         private bool _isChangesDeviceCamera = false;
         private bool _isConnecting = false;
-        private readonly ScannerQR _scannerQR;
+        private  ScannerQR _scannerQR;
         private Dictionary<string, string> _monikerStringName = [];
         private readonly ILocalDbService _localDbService;
 
@@ -58,6 +59,8 @@ namespace ScannerAndDistributionOfQRCodes
             SetImageOfCameraOn();
             _localDbService = localDbService;
         }
+
+
 
         public override Task OnNavigatingToAsync(object parameter, object parameterSecond = null)
         {
@@ -93,13 +96,30 @@ namespace ScannerAndDistributionOfQRCodes
         }
         private void SetItemsPicker()
         {
+
             for (int i = 0; i < _monikerStringName.Count; i++)
+            {
+                if (ItemsPicker.Contains(_monikerStringName.ElementAt(i).Key))
+                    continue;
                 ItemsPicker.Add(_monikerStringName.ElementAt(i).Key);
+            }
+
+            if(_monikerStringName.Count != ItemsPicker.Count)
+            {
+                for (int i = 0; i < ItemsPicker.Count; i++)
+                {
+                    if (_monikerStringName.ContainsKey(ItemsPicker[i]))
+                        continue;
+                    ItemsPicker.RemoveAt(i);
+                }
+            }
         }
         private void SetMonikerStringName(FilterInfoCollection filterInfoCollection)
         {
+            _monikerStringName = [];
             for (int i = 0; i < filterInfoCollection.Count; i++)
-                _monikerStringName[filterInfoCollection[i].Name] = filterInfoCollection[i].MonikerString;
+                _monikerStringName[filterInfoCollection[i].Name] = filterInfoCollection[i].MonikerString; 
+            
         }
 
         private bool CheckingConnectionAndChangingCamera()
@@ -112,8 +132,10 @@ namespace ScannerAndDistributionOfQRCodes
             Application.Current.MainPage.DisplayAlert("Уведомление", "Выберите камеру!", "ОK");
             return true;
         }
+
         private  bool CheckingAvailabilityOfCameras()
         {
+            Update();
             if (ItemsPicker.Count != 0)
                 return false;
             Application.Current.MainPage.DisplayAlert("Уведомление", "Отсутствует модуль камеры!", "ОK");
@@ -121,8 +143,17 @@ namespace ScannerAndDistributionOfQRCodes
         }
 
         [RelayCommand]
+        public void Update()
+        {
+            var filterInfoCollection = _scannerQR.GetVideoInputDevice();
+            SetMonikerStringName(filterInfoCollection);
+            SetItemsPicker();
+        }
+
+        [RelayCommand]
         public  void StartScanner()
         {
+            
             if (CheckingAvailabilityOfCameras())
                 return;  
             if (ConnectingCamera())
@@ -143,6 +174,7 @@ namespace ScannerAndDistributionOfQRCodes
         private bool TurnOffCamera()
         {
             SetImageOfCameraOn();
+            _isChangesDeviceCamera = true;
             _scannerQR.StopCamera();    
             return false;
         }
@@ -198,10 +230,10 @@ namespace ScannerAndDistributionOfQRCodes
             }
         }
 
-        private void CheckForRepeatedEventAttendance(VerificationQRCode verificationQR)
+        private void CheckForRepeatedEventAttendance(VerificationQRCode verificationQR,DateTime datetime)
         {
             if (verificationQR.IsVerifiedQRCode)
-               Application.Current.MainPage.DisplayAlert("Предепреждение", "Данный гость уже присутствует на мероприятие!", "Ок");
+               Application.Current.MainPage.DisplayAlert("Предепреждение", $"Данный гость уже присутствует на мероприятии! Время прибытия в {datetime}", "Ок");
         }
 
         private bool SearchByQRHash(string value)
@@ -209,7 +241,7 @@ namespace ScannerAndDistributionOfQRCodes
             if(ScheduledEvent.SearchForGuestByQRHashCode(value) is Guest guest)
             {
                 Guest = guest;
-                MainThread.BeginInvokeOnMainThread(()=>CheckForRepeatedEventAttendance(Guest.VrificatQRCode));
+                MainThread.BeginInvokeOnMainThread(()=>CheckForRepeatedEventAttendance(Guest.VrificatQRCode, Guest.ArrivalTime));
                 return IsEditor = true;
             }
             MainThread.BeginInvokeOnMainThread(() =>

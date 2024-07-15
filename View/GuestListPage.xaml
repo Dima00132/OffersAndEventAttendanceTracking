@@ -78,6 +78,9 @@
                                         <MenuFlyoutItem Text="Отправить приглашение" 
                                                     Command="{Binding Path=SendGuestCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
                                                     CommandParameter="{Binding .}"/>
+                                        <MenuFlyoutItem Text="Отметить как присутствующего" 
+                                                        Command="{Binding Path=MarkAsPresentCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
+                                                        CommandParameter="{Binding .}"/>
                                         <MenuFlyoutItem Text="Удалить" 
                                                     Command="{Binding Path= DeleteCommand, Source={RelativeSource AncestorType={x:Type viewmodel:GuestListViewModel}}}"
                                                     CommandParameter="{Binding .}"/>

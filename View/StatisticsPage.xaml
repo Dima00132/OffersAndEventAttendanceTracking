@@ -15,7 +15,7 @@
                     <Label Text="{Binding CountArrivedGuests, StringFormat='Пришло гостей - {0}'}" FontSize="Medium"/>
                 </StackLayout>
 
-                <Frame  Grid.Column="1" VerticalOptions="Start" IsVisible="{Binding IsEventWasHeld}" BackgroundColor="{AppThemeBinding Light=White, Dark=#1f1f1f }" BorderColor="{AppThemeBinding Light=White, Dark=#1f1f1f }">
+                <Frame  Grid.Column="1" VerticalOptions="Start"  BackgroundColor="{AppThemeBinding Light=White, Dark=#1f1f1f }" BorderColor="{AppThemeBinding Light=White, Dark=#1f1f1f }">
                     <Button Text="Печать в Xlsx формате" BackgroundColor="#D48055" Command="{Binding SealCommand}" />
                 </Frame>
             </Grid>

@@ -111,11 +111,10 @@ namespace ScannerAndDistributionOfQRCodes.ViewModel
         });
         public RelayCommand<Guest> MarkAsPresentCommand => new( async (gueet) =>
         {
-            var result =  await Application.Current.MainPage.DisplayAlert("", $"Вы уверены что хотите отметить {gueet.User} как присутствующего на мероприятие?", "Да", "Нет");
+            var result =  await Application.Current.MainPage.DisplayAlert("", $"Вы уверены что хотите отметить гостя \"{gueet.User}\" как присутствующего на мероприятие?", "Да", "Нет");
             if (result)
             {
-                gueet.VrificatQRCode.IsVerifiedQRCode = true;
-                gueet.ArrivalTime = DateTime.Now;
+                gueet.MarkAsAttendingEvent(DateTime.Now);
                 _localDbService.Update(gueet);
                 _localDbService.Update(gueet.VrificatQRCode);
                 _localDbService.Update(ScheduledEvent);

@@ -1,18 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using DocumentFormat.OpenXml.EMMA;
 using DocumentFormat.OpenXml.Wordprocessing;
-using Microsoft.Maui.Animations;
-using ScannerAndDistributionOfQRCodes.Service.Interface;
+//using Microsoft.Maui.Animations;
+//using ScannerAndDistributionOfQRCodes.Service.Interface;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
-using System;
-using System.Collections.Generic;
+//using System;
+//using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
+//using System.ComponentModel.DataAnnotations.Schema;
+//using System.Linq;
+//using System.Security.Policy;
+//using System.Text;
+//using System.Threading.Tasks;
 using ColumnAttribute = SQLite.ColumnAttribute;
 using ForeignKeyAttribute = SQLiteNetExtensions.Attributes.ForeignKeyAttribute;
 using TableAttribute = SQLite.TableAttribute;
@@ -62,9 +62,6 @@ namespace ScannerAndDistributionOfQRCodes.Model
             {
                 var timeOfEvent1 = Date.ToUniversalTime() - DateTime.Now.ToUniversalTime();
                 return timeOfEvent1.TotalHours < -12;
-                //var g = timeOfEvent1.TotalHours;
-                //var timeOfEvent = Date - DateTime.Now.AddDays(1);
-                //return timeOfEvent.Days < -1;
             }
         }
 

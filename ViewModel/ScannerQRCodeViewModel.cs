@@ -58,8 +58,6 @@ namespace ScannerAndDistributionOfQRCodes
             _localDbService = localDbService;
         }
 
-
-
         public override Task OnNavigatingToAsync(object parameter, object parameterSecond = null)
         {
             if (parameter is ScheduledEvent scheduledEvent)
@@ -77,8 +75,7 @@ namespace ScannerAndDistributionOfQRCodes
             var currentCameraName = GetMonikerString(CurrentDeviceCameraName);
             if (CameraNameValidityCheck(currentCameraName))
                 return true;
-       
-                    
+    
             _scannerQR.ConnectingCamera(currentCameraName);
             _isConnecting = true;
             _isChangesDeviceCamera = false;
@@ -121,7 +118,7 @@ namespace ScannerAndDistributionOfQRCodes
         }
 
         private bool CheckingConnectionAndChangingCamera()
-    => _isConnecting & !_isChangesDeviceCamera;
+            => _isConnecting & !_isChangesDeviceCamera;
 
         private bool CameraNameValidityCheck(string currentCameraName)
         {
@@ -159,9 +156,7 @@ namespace ScannerAndDistributionOfQRCodes
         }
 
         private void TurnCamera(bool turnOnOrOff)
-        {
-            IsCameraLaunched = turnOnOrOff ? TurnOffCamera() : TurnOnCamera();
-        }
+            =>IsCameraLaunched = turnOnOrOff ? TurnOffCamera() : TurnOnCamera();
 
         private bool TurnOnCamera()
         {
@@ -198,9 +193,10 @@ namespace ScannerAndDistributionOfQRCodes
         {
             IsEditor = false;
             CountHowManyGuestsHaveArrived();
-            Guest.VrificatQRCode.IsVerifiedQRCode = true;
-            Guest.ArrivalTime = DateTime.Now;
-            ScheduledEvent.CountArrivedGuests++;
+            Guest.MarkAsAttendingEvent(DateTime.Now);
+            //Guest.VrificatQRCode.IsVerifiedQRCode = true;
+            ////Guest.ArrivalTime = DateTime.Now;
+            //ScheduledEvent.CountArrivedGuests++;
             _localDbService.Update(Guest.VrificatQRCode);
             _localDbService.Update(Guest);
             _localDbService.Update(ScheduledEvent);

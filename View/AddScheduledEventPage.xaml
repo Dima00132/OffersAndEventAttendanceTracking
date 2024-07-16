@@ -13,7 +13,11 @@
 
                 <Frame >
                     <Editor Text="{Binding NameEvent,Mode=TwoWay}"
-                            Placeholder ="Название мероприятия" FontAutoScalingEnabled="False" VerticalTextAlignment="Center" MaxLength="150"/>
+                            Placeholder ="Название мероприятия"
+                            AutoSize="TextChanges"
+                            FontAutoScalingEnabled="False" 
+                            VerticalTextAlignment="Center" 
+                            MaxLength="150"/>
                 </Frame>
                 <Frame >
                     <StackLayout >
@@ -24,11 +28,15 @@
                 </Frame>
 
                 <Frame >
-                    <Editor Text="{Binding MessageText}" VerticalTextAlignment="Center"
-                     Placeholder ="Укажите текст приглашения"/>
+                    <Editor Text="{Binding MessageText}"
+                            VerticalTextAlignment="Center"
+                            Placeholder ="Укажите текст приглашения" 
+                            AutoSize="TextChanges"/>
                 </Frame>
                 <Frame >
-                    <Editor Text="{Binding OrganizationData}" VerticalTextAlignment="Center"
+                    <Editor Text="{Binding OrganizationData}" 
+                            AutoSize="TextChanges" 
+                            VerticalTextAlignment="Center"
                             Placeholder ="Данные организации (обязатебно)"/>
                 </Frame>
                 

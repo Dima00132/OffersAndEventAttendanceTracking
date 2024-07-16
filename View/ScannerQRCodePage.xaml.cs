@@ -14,6 +14,12 @@ public sealed partial class ScannerQRCodePage : ContentPage
 
     }
 
+    protected override void OnAppearing()
+    {
+        if (BindingContext is ScannerQRCodeViewModel viewModel)
+            viewModel.CountHowManyGuestsHaveArrived();
+        base.OnAppearing();
+    }
     protected override void OnDisappearing()
     {
         if (BindingContext is ScannerQRCodeViewModel viewModel)

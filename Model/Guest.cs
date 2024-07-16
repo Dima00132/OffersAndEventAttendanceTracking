@@ -47,10 +47,18 @@ namespace ScannerAndDistributionOfQRCodes.Model
         }
         public DateTime ArrivalTime { get; set; }
 
+
+
         public Guest()
         {
         }
 
+
+        public void MarkAsAttendingEvent(DateTime dateTime)
+        {
+            ArrivalTime = dateTime;
+            VrificatQRCode.IsVerifiedQRCode = true;
+        }
         public Guest SetSurname(string surname)
         {
             User.Surname = RemoveSpaces(surname);

@@ -6,7 +6,7 @@
              xmlns:cv ="clr-namespace:Camera.MAUI;assembly=Camera.MAUI">
 
  
-    <Grid RowDefinitions="50,*">
+    <Grid RowDefinitions="60,*">
 
         
         <Grid Grid.Row="0" ColumnDefinitions="750,*" ColumnSpacing="5">

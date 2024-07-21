@@ -19,7 +19,7 @@ https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74
 ScannerQR принимает делигат UpdateQrCode
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/ViewModel/ScannerQRCodeViewModel.cs#L205-L224
 
-UpdateQrCode получаем изображение с камеры и устанавливаем его в QRImage тем самом оно выводится на экран , полсле проверяет на начилие в нем qr кода и если он присутствует то провемяем на соответствие в списки гостей. Если код совпал то камера выключается а гость указывается как прибывшим с отметкой времяни прибытия
+UpdateQrCode, получаем изображение с камеры и устанавливаем его в QRImage. Затем оно выводится на экран. После этого проверяем наличие QR-кода в изображении. Если он присутствует, тогда проверяем соответствие его списку гостей. В случае совпадения кода, камера выключается, а гость отмечается как прибывший с указанием времени прибытия.
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/ViewModel/ScannerQRCodeViewModel.cs#L207-L223
 
 Проверка совпадений кода со списком гостей 
@@ -33,4 +33,18 @@ https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74
 ### DecodeQRCode 
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/Data/QRCode/DecodeQRCode.cs#L19-L36
 
-# Основные функции приложения
+## Парсер XLSX файла
+Для парсера использовалась библиотека [Open-XML-SDK](https://github.com/dotnet/Open-XML-SDK/tree/main) .
+Предназначен для добавления группы гостей
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/981bf3b46c23016299c2f840e8131beb65fed4d3/Data/Parser/XlsxParser.cs#L20-L103
+
+## Запись в  XLSX файл
+Для записи в XLSX файл использовалась библиотека [Aspose.Cells-for-.NET](https://github.com/aspose-cells/Aspose.Cells-for-.NET) .
+Предназначен для создания XLSX файла со статистикой гостей по данному мероприятию 
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/981bf3b46c23016299c2f840e8131beb65fed4d3/Data/Record%20File/RecordXlsx.cs#L13-L43
+
+
+
+# Основные задачи приложения
+### *Создания  (редактрования , удаления) мепоприятей
+В приложении присутствуют возможности создавать, редактировать и удалять мероприятия. Также имеется просмотр статистики, включающий список гостей с отметкой о присутствии на мероприятии, времени прибытия, отправке сообщения с приглашением.

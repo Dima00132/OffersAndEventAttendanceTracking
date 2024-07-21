@@ -3,5 +3,5 @@ OffersAndEventAttendanceTracking - это приложения для Корпо
 
 # Основуные библиотеки при создание приложжения
 ## Рассылка сообщений
-Для рассылки использовалась библиотека  [GitHub Pages](https://github.com/jstedfast/MailKit) 
+Для рассылки использовалась библиотека  [MailKit](https://github.com/jstedfast/MailKit) 
 

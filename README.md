@@ -6,5 +6,5 @@ OffersAndEventAttendanceTracking - это приложения MAUI C# для К
 -Для рассылки использовалась библиотека  [MailKit](https://github.com/jstedfast/MailKit) .
 Рассылку р=реализована слудующем оброзом.
 
-   https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/master/Data/Message/EmailMessage.cs
+   [https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/master/Data/Message/EmailMessage.cs](https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/master/Data/Message/EmailMessage.cs)
 

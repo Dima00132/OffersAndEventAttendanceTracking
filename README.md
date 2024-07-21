@@ -33,4 +33,4 @@ https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74
 ### DecodeQRCode 
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/Data/QRCode/DecodeQRCode.cs#L19-L36
 
-
+# Основные функции приложения

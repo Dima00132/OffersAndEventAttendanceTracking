@@ -95,7 +95,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message.Mail
 
         public void  SendingMessages(string subject, MessageText messageText, IMailAccount mailAccount, string userName = "", Stream stream = null)
         {
-            var emailSetnd = new EmailYandexMessage(subject, messageText, userName, MailAddress,
+            var emailSetnd = new EmailMessage(subject, messageText, userName, MailAddress,
                 mailAccount, stream);
             try
             {

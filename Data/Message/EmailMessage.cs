@@ -41,7 +41,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.Message
 
 
 
-    public sealed class EmailYandexMessage(string subject, MessageText messageText, string receiverName, string toAddress, IMailAccount from, Stream sreamImage) : IEmailMessage, IImageMessage
+    public sealed class EmailMessage(string subject, MessageText messageText, string receiverName, string toAddress, IMailAccount from, Stream sreamImage) : IEmailMessage, IImageMessage
     {
         public string Subject { get; } = subject;
         public MessageText MessageText { get; } = messageText;

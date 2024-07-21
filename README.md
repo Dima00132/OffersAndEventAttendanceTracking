@@ -3,8 +3,9 @@ OffersAndEventAttendanceTracking - это приложения MAUI C# для К
 
 # Основуные библиотеки при создание приложжения
 ## Рассылка сообщений
-Для рассылки использовалась библиотека  [MailKit](https://github.com/jstedfast/MailKit) 
-public sealed class EmailYandexMessage(string subject, MessageText messageText, string receiverName, string toAddress, IMailAccount from, Stream sreamImage) : IEmailMessage, IImageMessage
+-Для рассылки использовалась библиотека  [MailKit](https://github.com/jstedfast/MailKit) 
+
+    public sealed class EmailYandexMessage(string subject, MessageText messageText, string receiverName, string toAddress, IMailAccount from, Stream sreamImage) : IEmailMessage, IImageMessage
     {
         public string Subject { get; } = subject;
         public MessageText MessageText { get; } = messageText;
@@ -23,7 +24,8 @@ public sealed class EmailYandexMessage(string subject, MessageText messageText, 
                 htmlImage = $"<img src=\"cid:{imageFoot.ContentId}\"/><br /><div style=\"border-top:3px solid #61028d\">&nbsp;";
             }
             body.HtmlBody = $@"<p>{ReceiverName}</p><br/><p>{MessageText.Text}</p>{htmlImage}</div><p>{MessageText.OrganizationData}</p>";
-            //body.HtmlBody = $@"<p>{ReceiverName}</p><br/><p>{MessageText.Text}</p><img src=""cid:{imageFoot.ContentId}""/><br /><div style=""border-top:3px solid #61028d"">&nbsp;</div><p>{MessageText.OrganizationData}</p>";
+            //body.HtmlBody = $@"<p>{ReceiverName}</p><br/><p>{MessageText.Text}</p><img src=""cid:{imageFoot.ContentId}""/><br /><div style=""border-top:3px solid #61028d"">&nbsp;</div><p
+            {MessageText.OrganizationData}</p>";
             return body.ToMessageBody();
         }
 

@@ -22,7 +22,7 @@ https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74
 UpdateQrCode получаем изображение с камеры и устанавливаем его в QRImage тем самом оно выводится на экран , полсле проверяет на начилие в нем qr кода и если он присутствует то провемяем на соответствие в списки гостей. Если код совпал то камера выключается а гость указывается как прибывшим с отметкой времяни прибытия
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/ViewModel/ScannerQRCodeViewModel.cs#L207-L223
 
-Проверка совпадений кода со списком гостей
+Проверка совпадений кода со списком гостей 
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/ViewModel/ScannerQRCodeViewModel.cs#L226-L245
 
 ## Кодинг и  Декодинг QR кода

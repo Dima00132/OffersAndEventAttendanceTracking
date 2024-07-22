@@ -48,5 +48,5 @@ https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/981bf3b46c230
 # Основные задачи приложения
 ### *Создания  (редактрования , удаления) мепоприятей
 В приложении присутствуют возможности создавать, редактировать и удалять мероприятия. Также имеется просмотр статистики, включающий список гостей с отметкой о присутствии на мероприятии, времени прибытия, отправке сообщения с приглашением.
-![Screenshot of a comment on a GitHub issue showing an image, added in the Markdown, of an Octocat smiling and raising a tentacle.](https://github.com/Dima00132/Pictured-to-describe-the-scanner-application/blob/main/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202024-07-21%20203418.png{width=40pxheight=400px})
+![](https://github.com/Dima00132/Pictured-to-describe-the-scanner-application/blob/main/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202024-07-21%20203418.png{width=300pxheight=300px})
 

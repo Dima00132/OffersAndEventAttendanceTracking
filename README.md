@@ -8,7 +8,7 @@ OffersAndEventAttendanceTracking — это приложение на MAUI C# д
 -Для рассылки использовалась библиотека  [MailKit](https://github.com/jstedfast/MailKit) .
 Рассылку реализована следующем образом.
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/28022da1eaf6e9099ea075a946abf893a1e65198/Data/Message/EmailMessage.cs#L44-L88
-## Сканер QR-кода 
+## Камера и сканер QR-кода
 Для сканирования использовалась библиотека (доступ к камере ) [AForge.NET]( https://github.com/andrewkirillov/AForge.NET) .
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/07dcd011ba0bab0ed600d8f360b048d05b2878d7/Data/QRCode/ScannerQR.cs#L6-L48
 

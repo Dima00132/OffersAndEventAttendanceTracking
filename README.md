@@ -9,16 +9,16 @@ OffersAndEventAttendanceTracking — это приложение на MAUI C# д
 Рассылку реализована следующем образом.
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/28022da1eaf6e9099ea075a946abf893a1e65198/Data/Message/EmailMessage.cs#L44-L88
 ## Камера и сканер QR-кода
-Для сканирования использовалась библиотека (доступ к камере ) [AForge.NET]( https://github.com/andrewkirillov/AForge.NET) .
+Чтобы получить доступ к камере, используется библиотека [AForge.NET]( https://github.com/andrewkirillov/AForge.NET) .
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/07dcd011ba0bab0ed600d8f360b048d05b2878d7/Data/QRCode/ScannerQR.cs#L6-L48
 
-GetVideoInputDevice - возвращает FilterInfoCollection в котором находится список камер на данном устройстве
+GetVideoInputDevice возвращает FilterInfoCollection, в котором содержится список камер на данном устройстве.
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/Data/QRCode/ScannerQR.cs#L20-L24
 
-ConnectingCamera создает объект VideoCaptureDevice и подписывается на его события
+ConnectingCamera создаёт объект VideoCaptureDevice и подписывается на его события.
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/Data/QRCode/ScannerQR.cs#L25-L36
 
-ScannerQR принимает делигат UpdateQrCode
+ScannerQR принимает делегат UpdateQrCode.
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/ViewModel/ScannerQRCodeViewModel.cs#L205-L224
 
 В методе UpdateQrCode мы получаем изображение с камеры и устанавливаем его в QRImage. Затем изображение выводится на экран. После этого мы проверяем, есть ли на изображении QR-код. Если он присутствует, то мы сверяем его со списком гостей.

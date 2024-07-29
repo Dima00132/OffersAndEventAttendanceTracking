@@ -21,7 +21,9 @@ https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74
 ScannerQR принимает делигат UpdateQrCode
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/ViewModel/ScannerQRCodeViewModel.cs#L205-L224
 
-UpdateQrCode, получаем изображение с камеры и устанавливаем его в QRImage. Затем оно выводится на экран. После этого проверяем наличие QR-кода в изображении. Если он присутствует, тогда проверяем соответствие его списку гостей. В случае совпадения кода, камера выключается, а гость отмечается как прибывший с указанием времени прибытия.
+В методе UpdateQrCode мы получаем изображение с камеры и устанавливаем его в QRImage. Затем изображение выводится на экран. После этого мы проверяем, есть ли на изображении QR-код. Если он присутствует, то мы сверяем его со списком гостей.
+
+Если код совпадает с одним из кодов из списка, камера выключается, а гость отмечается как прибывший с указанием времени прибытия.
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/ViewModel/ScannerQRCodeViewModel.cs#L207-L223
 
 Проверка совпадений кода со списком гостей 

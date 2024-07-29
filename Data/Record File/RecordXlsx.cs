@@ -20,7 +20,6 @@ namespace ScannerAndDistributionOfQRCodes.Data.Record_File
         }
         public void Record(List<string[]> strings, string filePath)
         {
-            //////
             using Workbook workbook = new Workbook(filePath);
             RecordXlsxFile(strings, workbook);
             workbook.Save(filePath, SaveFormat.Xlsx);

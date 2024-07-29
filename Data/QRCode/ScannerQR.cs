@@ -10,11 +10,13 @@ namespace ScannerAndDistributionOfQRCodes.Data.QRCode
         private FilterInfoCollection _infoCollection;
         private VideoCaptureDevice _captureDevice;
         private readonly NewFrameEventHandler _frameEventHandler;
+        private readonly VideoSourceErrorEventHandler _sourceErrorEventArgs;
         public bool IsCameraLaunched { get; private set; }
 
-        public ScannerQR(NewFrameEventHandler frameEventHandler)
+        public ScannerQR(NewFrameEventHandler frameEventHandler , VideoSourceErrorEventHandler sourceErrorEventArgs)
         {
             _frameEventHandler = frameEventHandler;
+            _sourceErrorEventArgs = sourceErrorEventArgs;
         }
 
         public FilterInfoCollection GetVideoInputDevice()
@@ -32,6 +34,7 @@ namespace ScannerAndDistributionOfQRCodes.Data.QRCode
             _captureDevice = new VideoCaptureDevice(videoDevice);
             _captureDevice.NewFrame -= _frameEventHandler;
             _captureDevice.NewFrame += _frameEventHandler;
+            _captureDevice.VideoSourceError += new VideoSourceErrorEventHandler(_sourceErrorEventArgs);
             return this;
         }
 

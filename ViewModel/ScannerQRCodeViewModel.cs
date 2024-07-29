@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using ScannerAndDistributionOfQRCodes.Model;
 using ScannerAndDistributionOfQRCodes.Service.Interface;
 using ScannerAndDistributionOfQRCodes.Data.QRCode;
+using System;
 
 
 
@@ -52,11 +53,18 @@ namespace ScannerAndDistributionOfQRCodes
 
         public ScannerQRCodeViewModel(ILocalDbService localDbService)
         {
-            _scannerQR = new ScannerQR(UpdateQrCode);
+            _scannerQR = new ScannerQR(UpdateQrCode, ErrorCamera);
             UpdateVideoDevice();
             SetImageOfCameraOn();
             _localDbService = localDbService;
         }
+
+        private void ErrorCamera(object obj, VideoSourceErrorEventArgs errorEventArgs)
+        {
+            TurnCamera(true);
+            Application.Current.MainPage.DisplayAlert("", $"Video feed source error: {errorEventArgs.Description}", "ОK");
+        }
+
 
         public override Task OnNavigatingToAsync(object parameter, object parameterSecond = null)
         {
@@ -194,9 +202,6 @@ namespace ScannerAndDistributionOfQRCodes
             IsEditor = false;
             CountHowManyGuestsHaveArrived();
             Guest.MarkAsAttendingEvent(DateTime.Now);
-            //Guest.VrificatQRCode.IsVerifiedQRCode = true;
-            ////Guest.ArrivalTime = DateTime.Now;
-            //ScheduledEvent.CountArrivedGuests++;
             _localDbService.Update(Guest.VrificatQRCode);
             _localDbService.Update(Guest);
             _localDbService.Update(ScheduledEvent);
@@ -210,7 +215,6 @@ namespace ScannerAndDistributionOfQRCodes
             var old = stream.ToArray();
             if (old is not null)
             {
-
                 using Stream streamImage = new MemoryStream(old);
                 QRImage = ImageSource.FromStream(() => streamImage);
                 var result = DecodeQRCode.Decode(bitmap);

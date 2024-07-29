@@ -18,7 +18,9 @@ https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74
 ConnectingCamera создаёт объект VideoCaptureDevice и подписывается на его события.
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/Data/QRCode/ScannerQR.cs#L25-L36
 
-ScannerQR принимает делегат UpdateQrCode.
+ScannerQR принимает делегат NewFrameEventHandler(UpdateQrCode) и VideoSourceErrorEventHandler(ErrorCamera).
+ NewFrameEventHandler(UpdateQrCode) подписывается на события _captureDevice.NewFrame для захвата изображения с веб-камеры.
+VideoSourceErrorEventHandler подписывается на события _captureDevice.VideoSourceError и срабатывает если при запуске веб-камеры возникает ошибка.
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/ViewModel/ScannerQRCodeViewModel.cs#L205-L224
 
 В методе UpdateQrCode мы получаем изображение с камеры и устанавливаем его в QRImage. Затем изображение выводится на экран. После этого мы проверяем, есть ли на изображении QR-код. Если он присутствует, то мы сверяем его со списком гостей.

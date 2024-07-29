@@ -58,5 +58,5 @@ https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/981bf3b46c230
 В приложении есть функции для создания, изменения и удаления мероприятий.
 Также доступен просмотр статистики — списка гостей, информации о присутствующих на мероприятии и времени их прибытия. Ещё можно отправить приглашения.
 Статистику можно вывести в файл формата xlsx.
-![](https://github.com/Dima00132/Pictured-to-describe-the-scanner-appliction/blob/main/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202024-07-21%20203418.png)
+
 

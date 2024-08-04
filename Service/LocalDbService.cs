@@ -25,7 +25,6 @@ namespace ScannerAndDistributionOfQRCodes.Service
             SQLiteOpenFlags.Create  |
             SQLiteOpenFlags.SharedCache;
 
-
         public void Init()
         {
             if (_connection is not null)
@@ -40,7 +39,6 @@ namespace ScannerAndDistributionOfQRCodes.Service
                 throw;
             }
             
-
             try
             {
                 _ = _connection.CreateTable<WholeEvent>();
@@ -62,7 +60,6 @@ namespace ScannerAndDistributionOfQRCodes.Service
             }
             
         }
-
         public MailAccount GetMailAccount()
         {
             Init();
@@ -84,8 +81,6 @@ namespace ScannerAndDistributionOfQRCodes.Service
             }
             return mailAccount;
         }
-
-
         public WholeEvent GetWholeEvent()
         {
             Init();
@@ -118,8 +113,6 @@ namespace ScannerAndDistributionOfQRCodes.Service
             Delete(valueDelete);
             Update(valueUpdate);
         }
-
-  
 
         public void Create<T>(T value)
         {

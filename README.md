@@ -61,7 +61,7 @@ https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/7ea1c0efe9e76
 В основном следует обратить внимание на свойство для навигации (Navigation) и на readonly поле (IServiceProvider)_services.
 *Основная задача навигации, как следует из названия, — переход по страницам. Свойство всегда возвращает текущую навигацию (Application.Current?.MainPage?.Navigation).
 *(IServiceProvider) _services мы получаем в конструкторе класса, он позволяет использовать встроенные зависимости.
-https://github.com/D(IServiceProvider)dima00132/OffersAndEventAttendanceTracking/blob/7ea1c0efe9e7667d384ae205cfb9634e335997f8/Navigation/NavigationService.cs#L9-L159
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/7ea1c0efe9e7667d384ae205cfb9634e335997f8/Navigation/NavigationService.cs#L9-L159
 ## Внедрения зависимостей 
 Внедрение зависимостей происходит в методе расширения MauiAppBuilder ConfigureServices.
 
@@ -69,6 +69,14 @@ https://github.com/D(IServiceProvider)dima00132/OffersAndEventAttendanceTracking
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/7ea1c0efe9e7667d384ae205cfb9634e335997f8/MauiProgram.cs#L20-L45
 
 # Загрузка и сохранение данных
+Тип сохранения обговорён с Корпоративным университетом Правительства Нижегородской области, и выбран вариант сохранения на запускаемое устройство. Возможно реализовать сохранение в базу данных.
+
+Сохранения реализуются через [SQLite](https://learn.microsoft.com/ru-ru/dotnet/standard/data/sqlite/?tabs=netcore-cli). Есть класс LocalDbService, реализующий интерфейс ILocalDbService. Всё взаимодействие с ILocalDbService происходит при получении сервиса View Model. ILocalDbService передаётся как зависимость класса при создании (если такая зависимость имеется).
+
+### ILocalDbService
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/c73d6d980eb174504d832331dbfdd51e33dbb11d/Service/Interface/ILocalDbService.cs#L7-L21
+### LocalDbService
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/c73d6d980eb174504d832331dbfdd51e33dbb11d/Service/LocalDbService.cs#L19-L172
 
 # Основные задачи приложения
 ## Создания  (редактрования , сатистика , удаления) мепоприятей

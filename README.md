@@ -7,7 +7,7 @@ OffersAndEventAttendanceTracking — это приложение на MAUI C# д
 ## Рассылка сообщений
 -Для рассылки использовалась библиотека  [MailKit](https://github.com/jstedfast/MailKit) .
 Рассылку реализована следующем образом.
-https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/28022da1eaf6e9099ea075a946abf893a1e65198/Data/Message/EmailMessage.cs#L44-L88
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/Data/Message/EmailMessage.cs#L44-L88
 ## Камера и сканер QR-кода
 Чтобы получить доступ к камере, используется библиотека [AForge.NET]( https://github.com/andrewkirillov/AForge.NET) .
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/Data/QRCode/ScannerQR.cs#L6-L48
@@ -16,57 +16,57 @@ GetVideoInputDevice возвращает FilterInfoCollection, в котором
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/Data/QRCode/ScannerQR.cs#L20-L24
 
 ConnectingCamera создаёт объект VideoCaptureDevice и подписывается на его события.
-https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/Data/QRCode/ScannerQR.cs#L25-L36
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/Data/QRCode/ScannerQR.cs#L25-L36
 
 ScannerQR принимает делегаты NewFrameEventHandler (UpdateQrCode) и VideoSourceErrorEventHandler (ErrorCamera).
 
 NewFrameEventHandler (UpdateQrCode) подписывается на события _captureDevice.NewFrame для захвата изображения с веб-камеры.
 
 VideoSourceErrorEventHandler подписывается на события _captureDevice.VideoSourceError и срабатывает, если при запуске веб-камеры возникает ошибка.
-https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/ViewModel/ScannerQRCodeViewModel.cs#L205-L224
-https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46db5c9c4aaefcf57942c8fead2cf8c4d0f4ee88/ViewModel/ScannerQRCodeViewModel.cs#L62-L66
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/ViewModel/ScannerQRCodeViewModel.cs#L205-L224
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/ViewModel/ScannerQRCodeViewModel.cs#L62-L66
 
 В методе UpdateQrCode мы получаем изображение с камеры и устанавливаем его в QRImage. Затем изображение выводится на экран. После этого мы проверяем, есть ли на изображении QR-код. Если он присутствует, то мы сверяем его со списком гостей.
 
 Если код совпадает с одним из кодов из списка, камера выключается, а гость отмечается как прибывший с указанием времени прибытия.
-https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/ViewModel/ScannerQRCodeViewModel.cs#L207-L223
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/ViewModel/ScannerQRCodeViewModel.cs#L207-L223
 
 Проверка совпадений QR кода со списком гостей 
-https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/ViewModel/ScannerQRCodeViewModel.cs#L226-L245
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/ViewModel/ScannerQRCodeViewModel.cs#L226-L245
 
 ## Кодинг и  Декодинг QR кода
 Для кодирования использовалась библиотека [QRCoder](https://github.com/codebude/QRCoder) .
 Для декодирова ния использовалась библиотека [ZXing.Net](https://github.com/micjahn/ZXing.Net).
 ### EncodeQRCode 
-https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/Data/QRCode/EncodeQRCode.cs#L7-L37
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/Data/QRCode/EncodeQRCode.cs#L7-L37
 ### DecodeQRCode 
-https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/46ef395ee7a74febf29d8d576c917a87da17e11d/Data/QRCode/DecodeQRCode.cs#L19-L36
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/Data/QRCode/DecodeQRCode.cs#L19-L36
 
 ## Парсер XLSX файла
 Для парсера использовалась библиотека [Open-XML-SDK](https://github.com/dotnet/Open-XML-SDK/tree/main).Она предназначена для добавления группы гостей.
-https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/981bf3b46c23016299c2f840e8131beb65fed4d3/Data/Parser/XlsxParser.cs#L20-L103
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/Data/Parser/XlsxParser.cs#L20-L103
 
 ## Запись в  XLSX файл
 Для записи в XLSX файл использовалась библиотека [Aspose.Cells-for-.NET](https://github.com/aspose-cells/Aspose.Cells-for-.NET) .
 Предназначен для создания XLSX файла со статистикой гостей по данному мероприятию 
-https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/981bf3b46c23016299c2f840e8131beb65fed4d3/Data/Record%20File/RecordXlsx.cs#L13-L43
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/Data/Record%20File/RecordXlsx.cs#L13-L43
 
 # Навигация
 ## Интерфейс навигации
 Навигация в приложении реализована следующим образом.
 Класс навигации должен реализовывать интерфейс INavigationService, который указывает основное поведение. При создании приложения использовался паттерн [MVVM](https://ru.wikipedia.org/wiki/Model-View-ViewModel). В этом паттерне главное правило заключается в том, что ViewModel не должен знать о View. В интерфейсе указывается способ перехода. На момент написания для проверки использовался переход по View, но также возможен переход по ViewModel.
-https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/7ea1c0efe9e7667d384ae205cfb9634e335997f8/Navigation/INavigationService.cs#L10-L18
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/Navigation/INavigationService.cs#L10-L18
 
 ## Класс реализующий интерфейс INavigationService
 В основном следует обратить внимание на свойство для навигации (Navigation) и на readonly поле (IServiceProvider)_services.
 *Основная задача навигации, как следует из названия, — переход по страницам. Свойство всегда возвращает текущую навигацию (Application.Current?.MainPage?.Navigation).
 *(IServiceProvider) _services мы получаем в конструкторе класса, он позволяет использовать встроенные зависимости.
-https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/7ea1c0efe9e7667d384ae205cfb9634e335997f8/Navigation/NavigationService.cs#L9-L159
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/Navigation/NavigationService.cs#L9-L159
 ## Внедрения зависимостей 
 Внедрение зависимостей происходит в методе расширения MauiAppBuilder ConfigureServices.
 
 В нём мы добавляем основные сервисы в IServiceCollection, такие как View-ViewModel, NavigationService — INavigationService, IPopupService — PopupService, IMailAccount — MailAccount, IDataService — DataService, ILocalDbService — LocalDbService.
-https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/7ea1c0efe9e7667d384ae205cfb9634e335997f8/MauiProgram.cs#L20-L45
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/MauiProgram.cs#L20-L45
 
 # Загрузка и сохранение данных
 Тип сохранения обговорён с Корпоративным университетом Правительства Нижегородской области, и выбран вариант сохранения на запускаемое устройство. Возможно реализовать сохранение в базу данных.

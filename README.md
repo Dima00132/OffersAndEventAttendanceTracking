@@ -51,6 +51,25 @@ https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/981bf3b46c230
 Предназначен для создания XLSX файла со статистикой гостей по данному мероприятию 
 https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/981bf3b46c23016299c2f840e8131beb65fed4d3/Data/Record%20File/RecordXlsx.cs#L13-L43
 
+# Навигация
+## Интерфейс навигации
+Навигация в приложении реализована следующим образом.
+Класс навигации должен реализовывать интерфейс INavigationService, который указывает основное поведение. При создании приложения использовался паттерн [MVVM](https://ru.wikipedia.org/wiki/Model-View-ViewModel)]. В этом паттерне главное правило заключается в том, что ViewModel не должен знать о View. В интерфейсе указывается способ перехода. На момент написания для проверки использовался переход по View, но также возможен переход по ViewModel.
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/7ea1c0efe9e7667d384ae205cfb9634e335997f8/Navigation/INavigationService.cs#L10-L18
+
+## Класс реализующий интерфейс INavigationService
+В основном следует обратить внимание на свойство для навигации (Navigation) и на readonly поле (IServiceProvider)_services.
+*Основная задача навигации, как следует из названия, — переход по страницам. Свойство всегда возвращает текущую навигацию (Application.Current?.MainPage?.Navigation).
+*(IServiceProvider) _services мы получаем в конструкторе класса, он позволяет использовать встроенные зависимости.
+https://github.com/D(IServiceProvider)dima00132/OffersAndEventAttendanceTracking/blob/7ea1c0efe9e7667d384ae205cfb9634e335997f8/Navigation/NavigationService.cs#L9-L159
+## Внедрения зависимостей 
+Внедрение зависимостей происходит в методе расширения MauiAppBuilder ConfigureServices.
+
+В нём мы добавляем основные сервисы в IServiceCollection, такие как View-ViewModel, NavigationService — INavigationService, IPopupService — PopupService, IMailAccount — MailAccount, IDataService — DataService, ILocalDbService — LocalDbService.
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/7ea1c0efe9e7667d384ae205cfb9634e335997f8/MauiProgram.cs#L20-L45
+
+# Загрузка и сохранение данных
+
 # Основные задачи приложения
 ## Создания  (редактрования , сатистика , удаления) мепоприятей
 В приложении есть функции для создания, изменения и удаления мероприятий.

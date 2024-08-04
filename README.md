@@ -74,9 +74,9 @@ https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/7ea1c0efe9e76
 Сохранения реализуются через [SQLite](https://learn.microsoft.com/ru-ru/dotnet/standard/data/sqlite/?tabs=netcore-cli). Есть класс LocalDbService, реализующий интерфейс ILocalDbService. Всё взаимодействие с ILocalDbService происходит при получении сервиса View Model. ILocalDbService передаётся как зависимость класса при создании (если такая зависимость имеется).
 
 ### ILocalDbService
-https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/fa0e5ac04f4f4e4bf587aebb6762faa4af100b62/Service/Interface/ILocalDbService.cs#L7-L21
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/Service/Interface/ILocalDbService.cs#L7-L21
 ### LocalDbService
-https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/c73d6d980eb174504d832331dbfdd51e33dbb11d/Service/LocalDbService.cs#L19-L172
+https://github.com/Dima00132/OffersAndEventAttendanceTracking/blob/e6d5617e05fb7a344fab799348fdc6db48b4c3f9/Service/LocalDbService.cs#L19-L172
 
 # Основные задачи приложения
 ## Создания  (редактрования , сатистика , удаления) мепоприятей

@@ -5,6 +5,8 @@ OffersAndEventAttendanceTracking — это приложение на MAUI C# д
 
 [Оценка заказчика по итогам проделанной работы](https://github.com/Dima00132/Pictured-to-describe-the-scanner-application/blob/main/Certificate.pdf)
 
+https://www.youtube.com/watch?v=5r3muGbvDN4
+
 
 # Основные библиотеки при создание приложения
 ## Рассылка сообщений

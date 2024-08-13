@@ -29,16 +29,8 @@ namespace ScannerAndDistributionOfQRCodes
 
         public MainPage(MainViewModel mainViewModel)
         {
-            try
-            {
-                InitializeComponent();
-            }
-            catch (Exception)
-            {
 
-                throw;
-            }
-           
+            InitializeComponent();
             BindingContext = mainViewModel;
             _mainViewModel = mainViewModel;
         }
